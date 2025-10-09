@@ -3,5 +3,47 @@
     "products": "Productos",
     "clients": "Clientes",
     "language": "Idioma"
+  },
+  "routes": {
+    "products": "productos",
+    "clients": "clientes",
+    "add": "anadir"
+  },
+  "titles": {
+    "products": "Productos - MediSupply",
+    "addProduct": "Añadir Producto - MediSupply",
+    "home": "MediSupply"
+  },
+  "addProduct": {
+    "title": "Añadir Producto",
+    "form": {
+      "name": "Nombre",
+      "namePlaceholder": "Ingrese el nombre del producto",
+      "description": "Descripción",
+      "descriptionPlaceholder": "Ingrese la descripción del producto",
+      "category": "Categoría",
+      "categoryPlaceholder": "Seleccione una categoría",
+      "quantity": "Cantidad",
+      "quantityPlaceholder": "Ingrese la cantidad",
+      "expirationDate": "Fecha de Expiración",
+      "provider": "Proveedor",
+      "providerPlaceholder": "Ingrese el nombre del proveedor",
+      "price": "Precio",
+      "pricePlaceholder": "Ingrese el precio",
+      "required": "Este campo es requerido",
+      "minValue": "El valor debe ser mayor a 0",
+      "invalidDate": "Fecha inválida"
+    },
+    "categories": {
+      "medicines": "Medicinas",
+      "equipment": "Equipos",
+      "supplies": "Suministros",
+      "personal_care": "Cuidado Personal",
+      "emergency": "Emergencia"
+    },
+    "actions": {
+      "cancel": "Cancelar",
+      "create": "Añadir Producto"
+    }
   }
 }

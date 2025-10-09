@@ -1,3 +1,16 @@
-<div class="container mx-auto p-8">
-  <p class="mt-4">products works!</p>
+<div class="products-container" *transloco="let t">
+  <div class="products-header">
+    <h1 class="products-title">{{ t('header.products') }}</h1>
+    <button 
+      mat-raised-button 
+      color="primary"
+      class="add-button"
+      (click)="navigateToAddProduct()">
+      <mat-icon>add</mat-icon>
+      {{ t('addProduct.title') }}
+    </button>
+  </div>
+  
+  <div class="products-content">
+  </div>
 </div>

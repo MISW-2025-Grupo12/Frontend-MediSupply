@@ -3,5 +3,47 @@
     "products": "Products",
     "clients": "Clients",
     "language": "Language"
+  },
+  "routes": {
+    "products": "products",
+    "clients": "clients",
+    "add": "add"
+  },
+  "titles": {
+    "products": "Products - MediSupply",
+    "addProduct": "Add Product - MediSupply",
+    "home": "MediSupply"
+  },
+  "addProduct": {
+    "title": "Add Product",
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "Enter product name",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter product description",
+      "category": "Category",
+      "categoryPlaceholder": "Select a category",
+      "quantity": "Quantity",
+      "quantityPlaceholder": "Enter quantity",
+      "expirationDate": "Expiration Date",
+      "provider": "Provider",
+      "providerPlaceholder": "Enter provider name",
+      "price": "Price",
+      "pricePlaceholder": "Enter price",
+      "required": "This field is required",
+      "minValue": "Value must be greater than 0",
+      "invalidDate": "Invalid date"
+    },
+    "categories": {
+      "medicines": "Medicines",
+      "equipment": "Equipment",
+      "supplies": "Supplies",
+      "personal_care": "Personal Care",
+      "emergency": "Emergency"
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "create": "Add Product"
+    }
   }
 }

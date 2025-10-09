@@ -9,10 +9,16 @@
 
       <!-- Navigation -->
       <nav class="hidden md:flex items-center space-x-4">
-        <a routerLink="/products" routerLinkActive="active" class="header-nav-link">
+        <a [routerLink]="getProductsRoute()" 
+           routerLinkActive="active" 
+           [routerLinkActiveOptions]="{ matrixParams: 'exact', queryParams: 'exact', paths: 'subset', fragment: 'ignored' }"
+           class="header-nav-link">
           {{ t('header.products') }}
         </a>
-        <a routerLink="#" routerLinkActive="active" class="header-nav-link">
+        <a [routerLink]="getClientsRoute()" 
+           routerLinkActive="active" 
+           [routerLinkActiveOptions]="{ matrixParams: 'exact', queryParams: 'exact', paths: 'subset', fragment: 'ignored' }"
+           class="header-nav-link">
           {{ t('header.clients') }}
         </a>
          <!-- Language Switcher -->
