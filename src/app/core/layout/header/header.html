@@ -1,0 +1,32 @@
+<header class="bg-white shadow-md sticky top-0 z-50" *transloco="let t">
+  <div class="container mx-auto px-4 py-4">
+    <div class="flex items-center justify-between">
+      <!-- Logo/Brand -->
+      <div class="flex items-center space-x-2">
+        <mat-icon svgIcon="logo-header" class="header-brand"></mat-icon>
+        <span class="text-2xl font-bold header-brand">MediSupply</span>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="hidden md:flex items-center space-x-4">
+        <a [routerLink]="getProductsRoute()" 
+           routerLinkActive="active" 
+           [routerLinkActiveOptions]="{ matrixParams: 'exact', queryParams: 'exact', paths: 'subset', fragment: 'ignored' }"
+           class="header-nav-link">
+          {{ t('header.products') }}
+        </a>
+        <a [routerLink]="getClientsRoute()" 
+           routerLinkActive="active" 
+           [routerLinkActiveOptions]="{ matrixParams: 'exact', queryParams: 'exact', paths: 'subset', fragment: 'ignored' }"
+           class="header-nav-link">
+          {{ t('header.clients') }}
+        </a>
+         <!-- Language Switcher -->
+         <button (click)="switchLanguage()" class="language-switcher" [title]="t('header.language')">
+           <span class="language-code">{{ currentLang.toUpperCase() }}</span>
+         </button>
+      </nav>
+
+    </div>
+  </div>
+</header>

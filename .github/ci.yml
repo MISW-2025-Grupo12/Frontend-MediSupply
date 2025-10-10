@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  pull_request:
+    branches: ["**"]          # run on all PRs
+  push:
+    branches: ["main", "develop"]  # optional: verify after merge
+
+jobs:
+  # ❌ Block PRs that target main/develop
+  block_direct_prs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Disallow PRs to main/develop
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="${{ github.base_ref }}"
+            if [ "$base" = "main" ] || [ "$base" = "develop" ]; then
+              echo "PRs directly to '$base' are not allowed."
+              exit 1
+            fi
+          fi
+          echo "OK"
+
+  # ✅ Build + test must pass or merge is blocked
+  build_and_test:
+    needs: block_direct_prs
+    if: ${{ needs.block_direct_prs.result == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install deps
+        run: npm ci
+
+      # Lint (optional but recommended to gate merges)
+      - name: Lint
+        run: npm run lint --if-present
+
+      # Unit tests — must fail the job if any test fails
+      - name: Test
+        run: npm run test -- --watch=false --browsers=ChromeHeadless
+
+      # Build — must fail the job if build fails
+      - name: Build
+        run: npm run build -- --configuration=production

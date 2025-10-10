@@ -1,0 +1,5 @@
+@use './colors' as *;
+
+.mat-datepicker-content {
+  background-color: $bg-input !important;
+}
