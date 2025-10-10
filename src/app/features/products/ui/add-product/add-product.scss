@@ -1,3 +1,4 @@
+@use 'sass:color';
 @import '../../../../../styles/colors.scss';
 @import '../../../../../styles/spacing.scss';
 
@@ -105,7 +106,7 @@
   background-color: $primary-color !important;
   
   &:hover:not(:disabled) {
-    background-color: darken($primary-color, 10%) !important;
+    background-color: color.adjust($primary-color, $lightness: -10%) !important;
   }
 
   &:disabled {

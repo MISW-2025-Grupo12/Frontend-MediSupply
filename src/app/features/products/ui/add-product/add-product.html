@@ -44,8 +44,8 @@
             formControlName="category"
             [placeholder]="t('addProduct.form.categoryPlaceholder')"
             required>
-            <mat-option *ngFor="let category of categories" [value]="category.value">
-              {{ t(category.translationKey) }}
+            <mat-option *ngFor="let category of categories" [value]="category.id">
+              {{ category.name }}
             </mat-option>
           </mat-select>
           <mat-error *ngIf="productForm.get('category')?.invalid">
@@ -108,7 +108,7 @@
             formControlName="providerId"
             [placeholder]="t('addProduct.form.providerPlaceholder')"
             required>
-            <mat-option *ngIf="loadingProviders" disabled>
+            <mat-option *ngIf="loading" disabled>
               <mat-spinner diameter="20"></mat-spinner>
               Loading providers...
             </mat-option>

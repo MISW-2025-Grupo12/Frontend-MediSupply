@@ -15,6 +15,12 @@ import { TranslocoDirective } from '@ngneat/transloco';
 import { LocaleRouteService } from '../../../../core/services/locale-route.service';
 import { ApiClientService } from '../../../../core/services/api-client.service';
 import { Provider } from '../../../../shared/models/provider.model';
+import { Category } from '../../../../shared/models/category.model';
+import { CategoryDTO } from '../../../../shared/DTOs/categoryDTO.model';
+import { ProviderDTO } from '../../../../shared/DTOs/providerDTO.model';
+import { map } from 'rxjs';
+import { ProductsService } from '../../services/products.service';
+import { Product } from '../../../../shared/models/product.model';
 
 interface ProductCategory {
   value: string;
@@ -45,38 +51,47 @@ export class AddProduct implements OnInit {
   private router = inject(Router);
   private localeRouteService = inject(LocaleRouteService);
   private apiClient = inject(ApiClientService);
+  private productsService = inject(ProductsService); 
 
   productForm!: FormGroup;
   providers: Provider[] = [];
-  loadingProviders = false;
-
-  categories: ProductCategory[] = [
-    { value: 'medicines', translationKey: 'addProduct.categories.medicines' },
-    { value: 'equipment', translationKey: 'addProduct.categories.equipment' },
-    { value: 'supplies', translationKey: 'addProduct.categories.supplies' },
-    { value: 'personal_care', translationKey: 'addProduct.categories.personal_care' },
-    { value: 'emergency', translationKey: 'addProduct.categories.emergency' }
-  ];
+  categories: Category[] = [];
+  loading = false;
 
   ngOnInit(): void {
     this.initForm();
     this.loadProviders();
+    this.loadCategories();
   }
 
   private loadProviders(): void {
-    this.loadingProviders = true;
-    
-    // TODO: Update the endpoint path based on your API
-    this.apiClient.get<Provider[]>('/proveedores', 'users').subscribe({
+    this.loading = true;
+
+    this.productsService.getProviders().subscribe({
       next: (providers) => {
         this.providers = providers;
-        this.loadingProviders = false;
+        this.loading = false;
       },
       error: (error) => {
         console.error('Error loading providers:', error);
-        this.loadingProviders = false;
-        // Fallback to empty array if API fails
+        this.loading = false;
         this.providers = [];
+      }
+    });    
+  }
+
+  private loadCategories(): void {
+    this.loading = true;
+
+    this.productsService.getCategories().subscribe({
+      next: (categories) => {
+        this.categories = categories;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error loading categories:', error);
+        this.loading = false;
+        this.categories = [];
       }
     });
   }
@@ -110,10 +125,26 @@ export class AddProduct implements OnInit {
   onSubmit(): void {
     if (this.productForm.valid) {
       console.log('Product data:', this.productForm.value);
-      // TODO: Add API call to create product
+
+      const product: Product = {
+        ...this.productForm.value,
+        category: this.categories.find(c => c.id === this.productForm.value.category),
+        provider: this.providers.find(p => p.id === this.productForm.value.providerId)
+      }
+
+      console.log('Product:', product);
+
+      this.productsService.addProduct(product).subscribe({
+        next: (product) => {
+          console.log('Product added:', product);
+        },
+        error: (error) => {
+          console.error('Error adding product:', error);
+        }
+      });
+
       this.onCancel();
     } else {
-      // Mark all fields as touched to show validation errors
       Object.keys(this.productForm.controls).forEach(key => {
         this.productForm.get(key)?.markAsTouched();
       });

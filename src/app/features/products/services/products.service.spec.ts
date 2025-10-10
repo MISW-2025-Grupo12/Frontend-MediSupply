@@ -2,10 +2,10 @@ import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
-import { IconService } from './icon-service';
+import { ProductsService } from './products.service';
 
-describe('IconService', () => {
-  let service: IconService;
+describe('ProductsService', () => {
+  let service: ProductsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -15,7 +15,7 @@ describe('IconService', () => {
         provideHttpClientTesting()
       ]
     });
-    service = TestBed.inject(IconService);
+    service = TestBed.inject(ProductsService);
   });
 
   it('should be created', () => {
