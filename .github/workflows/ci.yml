@@ -2,9 +2,9 @@ name: CI
 
 on:
   pull_request:
-    branches: ["**"]             # run on all PRs
+    branches: ["**"]
   push:
-    branches: ["**"]             # so we can block direct pushes to protected branches
+    branches: ["**"]
 
 jobs:
   policy_checks:
@@ -12,35 +12,47 @@ jobs:
     steps:
       - name: Enforce branch/PR policy
         run: |
-          echo "Event: ${{ github.event_name }}"
+          echo "event=${{ github.event_name }}"
+          echo "ref=${{ github.ref }} ref_name=${{ github.ref_name }}"
+          echo "base_ref=${{ github.base_ref }} head_ref=${{ github.head_ref }}"
+
           if [ "${{ github.event_name }}" = "push" ]; then
             branch="${{ github.ref_name }}"
             if [ "$branch" = "main" ] || [ "$branch" = "develop" ]; then
-              echo "❌ Direct pushes to '$branch' are not allowed. Open a PR instead."
+              echo "❌ Direct pushes to '$branch' are not allowed. Open a PR."
               exit 1
             fi
             echo "✅ Push allowed to '$branch'."
-          elif [ "${{ github.event_name }}" = "pull_request" ]; then
+            exit 0
+          fi
+
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
             base="${{ github.base_ref }}"
             head="${{ github.head_ref }}"
-            echo "PR head='$head' -> base='$base'"
 
-            # Rule 1: PRs to 'develop' are allowed
+            # ✅ Rule 1: PRs to 'develop' are allowed
             if [ "$base" = "develop" ]; then
-              echo "✅ PRs to 'develop' are allowed."
+              echo "✅ PR to 'develop' allowed."
               exit 0
             fi
 
-            # Rule 2: PRs to 'main' only from 'develop'
-            if [ "$base" = "main" ] && [ "$head" != "develop" ]; then
-              echo "❌ Only PRs from 'develop' can target 'main'. Current head='$head'."
-              exit 1
+            # ✅ Rule 2: PRs to 'main' ONLY from 'develop'
+            if [ "$base" = "main" ]; then
+              if [ "$head" = "develop" ]; then
+                echo "✅ PR from 'develop' → 'main' allowed."
+                exit 0
+              else
+                echo "❌ Only PRs from 'develop' can target 'main'. Current head='$head'."
+                exit 1
+              fi
             fi
 
-            echo "✅ PR policy passed."
-          else
-            echo "ℹ️ Event not subject to policy; continuing."
+            # Other targets (feature/release/hotfix etc.) pass
+            echo "✅ PR policy passed for base='$base'."
+            exit 0
           fi
+
+          echo "ℹ️ Event not subject to policy; continuing."
 
   build_and_test:
     needs: policy_checks
@@ -48,21 +60,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-
       - name: Install deps
         run: npm ci
-
       - name: Lint
         run: npm run lint --if-present
-
       - name: Test
         run: npm run test -- --watch=false --browsers=ChromeHeadless
-
       - name: Build
         run: npm run build -- --configuration=production
