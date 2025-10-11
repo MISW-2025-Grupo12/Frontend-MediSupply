@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  pull_request:
+    branches: ["**"]             # run on all PRs
+  push:
+    branches: ["**"]             # so we can block direct pushes to protected branches
+
+jobs:
+  policy_checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enforce branch/PR policy
+        run: |
+          echo "Event: ${{ github.event_name }}"
+          if [ "${{ github.event_name }}" = "push" ]; then
+            branch="${{ github.ref_name }}"
+            if [ "$branch" = "main" ] || [ "$branch" = "develop" ]; then
+              echo "❌ Direct pushes to '$branch' are not allowed. Open a PR instead."
+              exit 1
+            fi
+            echo "✅ Push allowed to '$branch'."
+          elif [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="${{ github.base_ref }}"
+            head="${{ github.head_ref }}"
+            echo "PR head='$head' -> base='$base'"
+
+            # Rule 1: PRs to 'develop' are allowed
+            if [ "$base" = "develop" ]; then
+              echo "✅ PRs to 'develop' are allowed."
+              exit 0
+            fi
+
+            # Rule 2: PRs to 'main' only from 'develop'
+            if [ "$base" = "main" ] && [ "$head" != "develop" ]; then
+              echo "❌ Only PRs from 'develop' can target 'main'. Current head='$head'."
+              exit 1
+            fi
+
+            echo "✅ PR policy passed."
+          else
+            echo "ℹ️ Event not subject to policy; continuing."
+          fi
+
+  build_and_test:
+    needs: policy_checks
+    if: ${{ needs.policy_checks.result == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint --if-present
+
+      - name: Test
+        run: npm run test -- --watch=false --browsers=ChromeHeadless
+
+      - name: Build
+        run: npm run build -- --configuration=production
