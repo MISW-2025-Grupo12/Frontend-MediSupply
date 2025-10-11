@@ -2,32 +2,50 @@ name: CI
 
 on:
   pull_request:
-    branches: ["**"]          # run on all PRs
+    branches: ["**"]             # run on all PRs
   push:
-    branches: ["main", "develop"]  # optional: verify after merge
+    branches: ["**"]             # so we can block direct pushes to protected branches
 
 jobs:
-  # ❌ Block PRs that target main/develop
-  block_direct_prs:
+  policy_checks:
     runs-on: ubuntu-latest
     steps:
-      - name: Disallow PRs to main/develop
+      - name: Enforce branch/PR policy
         run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            base="${{ github.base_ref }}"
-            if [ "$base" = "main" ] || [ "$base" = "develop" ]; then
-              echo "PRs directly to '$base' are not allowed."
+          echo "Event: ${{ github.event_name }}"
+          if [ "${{ github.event_name }}" = "push" ]; then
+            branch="${{ github.ref_name }}"
+            if [ "$branch" = "main" ] || [ "$branch" = "develop" ]; then
+              echo "❌ Direct pushes to '$branch' are not allowed. Open a PR instead."
               exit 1
             fi
+            echo "✅ Push allowed to '$branch'."
+          elif [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="${{ github.base_ref }}"
+            head="${{ github.head_ref }}"
+            echo "PR head='$head' -> base='$base'"
+
+            # Rule 1: PRs to 'develop' are allowed
+            if [ "$base" = "develop" ]; then
+              echo "✅ PRs to 'develop' are allowed."
+              exit 0
+            fi
+
+            # Rule 2: PRs to 'main' only from 'develop'
+            if [ "$base" = "main" ] && [ "$head" != "develop" ]; then
+              echo "❌ Only PRs from 'develop' can target 'main'. Current head='$head'."
+              exit 1
+            fi
+
+            echo "✅ PR policy passed."
+          else
+            echo "ℹ️ Event not subject to policy; continuing."
           fi
-          echo "OK"
 
-  # ✅ Build + test must pass or merge is blocked
   build_and_test:
-    needs: block_direct_prs
-    if: ${{ needs.block_direct_prs.result == 'success' }}
+    needs: policy_checks
+    if: ${{ needs.policy_checks.result == 'success' }}
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -40,14 +58,11 @@ jobs:
       - name: Install deps
         run: npm ci
 
-      # Lint (optional but recommended to gate merges)
       - name: Lint
         run: npm run lint --if-present
 
-      # Unit tests — must fail the job if any test fails
       - name: Test
         run: npm run test -- --watch=false --browsers=ChromeHeadless
 
-      # Build — must fail the job if build fails
       - name: Build
         run: npm run build -- --configuration=production
