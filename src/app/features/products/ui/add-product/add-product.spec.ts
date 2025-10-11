@@ -11,6 +11,7 @@ import { LocaleRouteService } from '../../../../core/services/locale-route.servi
 import { Provider } from '../../../../shared/models/provider.model';
 import { Category } from '../../../../shared/models/category.model';
 import { TranslocoTestingModule } from '@ngneat/transloco';
+import { Product } from '../../../../shared/models/product.model';
 
 describe('AddProduct', () => {
   let component: AddProduct;
@@ -29,7 +30,7 @@ describe('AddProduct', () => {
   ];
 
   beforeEach(async () => {
-    const productsServiceSpy = jasmine.createSpyObj('ProductsService', ['getProviders', 'getCategories', 'createProduct']);
+    const productsServiceSpy = jasmine.createSpyObj('ProductsService', ['getProviders', 'getCategories', 'createProduct', 'addProduct']);
     const localeRouteServiceSpy = jasmine.createSpyObj('LocaleRouteService', ['navigateToRoute']);
 
     productsServiceSpy.getProviders.and.returnValue(of(mockProviders));
@@ -172,15 +173,24 @@ describe('AddProduct', () => {
       component.productForm.patchValue({
         name: 'Test Product',
         description: 'This is a test product description',
-        category: 1,
+        category: {
+          id: 1,
+          name: 'Medicines',
+          description: 'Medical products'
+        },
         quantity: 10,
         expirationDate: new Date('2025-12-31'),
-        providerId: 1,
+        providerId: {
+          id: 1,
+          name: 'Provider 1',
+          email: 'provider1@test.com'
+        },
         price: 99.99
       });
     });
 
     it('should call onCancel when form is valid and submitted', () => {
+      productsService.addProduct.and.returnValue(of({} as Product));
       spyOn(component, 'onCancel');
       component.onSubmit();
       expect(component.onCancel).toHaveBeenCalled();
@@ -206,6 +216,7 @@ describe('AddProduct', () => {
     });
 
     it('should log product data when form is valid', () => {
+      productsService.addProduct.and.returnValue(of({} as Product));
       spyOn(console, 'log');
       
       component.onSubmit();
