@@ -2,10 +2,10 @@
   <div class="container mx-auto px-4 py-4">
     <div class="flex items-center justify-between">
       <!-- Logo/Brand -->
-      <div class="flex items-center space-x-2">
+      <a [routerLink]="['/']" class="header-logo-link flex items-center space-x-2 cursor-pointer">
         <mat-icon svgIcon="logo-header" class="header-brand"></mat-icon>
         <span class="text-2xl font-bold header-brand">MediSupply</span>
-      </div>
+      </a>
 
       <!-- Navigation -->
       <nav class="hidden md:flex items-center space-x-4">

@@ -1,0 +1,48 @@
+<div class="dashboard-container" *transloco="let t">
+  <!-- Header Section -->
+  <div class="dashboard-header">
+    <div class="welcome-section">
+      <h1 class="dashboard-title">{{ t('dashboard.welcome') }}, {{ dashboardState.userName() }}!</h1>
+      <p class="dashboard-subtitle">{{ t('dashboard.subtitle') }}</p>
+    </div>
+    <button 
+      mat-raised-button 
+      class="logout-button"
+      (click)="onLogout()">
+      <mat-icon>logout</mat-icon>
+      {{ t('dashboard.logout') }}
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="dashboardState.isLoading()" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>{{ t('dashboard.loading') }}</p>
+  </div>
+
+  <!-- Features Grid -->
+  <div *ngIf="!dashboardState.isLoading()" class="features-grid">
+    <mat-card 
+      *ngFor="let card of dashboardState.availableFeatures()"
+      class="feature-card"
+      [class.feature-card--disabled]="!card.enabled"
+      (click)="onCardClick(card)">
+      <mat-card-content>
+        <div class="card-icon-container" [style.background-color]="card.color">
+          <mat-icon class="card-icon">{{ card.icon }}</mat-icon>
+        </div>
+        <h3 class="card-title">{{ t(card.titleKey) }}</h3>
+        <p class="card-description">{{ t(card.descriptionKey) }}</p>
+        
+        <div class="card-status" *ngIf="!card.enabled">
+          <span class="coming-soon-badge">{{ t('dashboard.comingSoon') }}</span>
+        </div>
+        
+        <div class="card-action" *ngIf="card.enabled">
+          <span class="action-text">{{ t('dashboard.clickToOpen') }}</span>
+          <mat-icon>arrow_forward</mat-icon>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

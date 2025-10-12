@@ -1,8 +1,23 @@
 @use 'sass:color';
 @use '../../../../styles/colors' as *;
 
+// Logo link styling
+.header-logo-link {
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+  
+  &:hover {
+    opacity: 0.8;
+    
+    .header-brand {
+      color: $primary-color;
+    }
+  }
+}
+
 .header-brand {
   color: $main-dark;
+  transition: color 0.2s ease-in-out;
   
   &.mat-icon {
     width: 1rem;

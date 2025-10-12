@@ -1,0 +1,74 @@
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" *transloco="let t">
+  <div class="app-form-header">
+    <h2 class="app-form-title">{{ t('login.welcome') }}</h2>
+    <p class="app-form-subtitle">{{ t('login.subtitle') }}</p>
+  </div>
+
+  <div class="app-form-fields">
+    <!-- Email Field -->
+    <mat-form-field class="app-form-field">
+      <mat-label>{{ t('login.form.email') }}</mat-label>
+      <input 
+        matInput 
+        type="email" 
+        formControlName="email"
+        [placeholder]="t('login.form.emailPlaceholder')"
+        autocomplete="email">
+      <mat-icon matSuffix>email</mat-icon>
+      <mat-error *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+        {{ t(getErrorMessage('email')) }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Password Field -->
+    <mat-form-field class="app-form-field">
+      <mat-label>{{ t('login.form.password') }}</mat-label>
+      <input 
+        matInput 
+        [type]="hidePassword ? 'password' : 'text'"
+        formControlName="password"
+        [placeholder]="t('login.form.passwordPlaceholder')"
+        autocomplete="current-password">
+      <button 
+        mat-icon-button 
+        matSuffix 
+        type="button"
+        (click)="togglePasswordVisibility()"
+        [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hidePassword">
+        <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+      <mat-error *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+        {{ t(getErrorMessage('password')) }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <!-- Submit Button -->
+  <div class="app-form-actions">
+    <button 
+      mat-raised-button 
+      color="primary"
+      type="submit"
+      class="app-btn app-btn--primary app-btn--full-width"
+      [disabled]="isLoading">
+      <div class="app-btn-content">
+        <mat-spinner 
+          *ngIf="isLoading" 
+          diameter="20" 
+          class="app-btn-spinner">
+        </mat-spinner>
+        <span [class.app-btn-text-hidden]="isLoading">
+          {{ t('login.form.loginButton') }}
+        </span>
+      </div>
+    </button>
+  </div>
+
+  <!-- Forgot Password Link -->
+  <div class="app-form-footer">
+    <a href="#" class="app-form-link">
+      {{ t('login.form.forgotPassword') }}
+    </a>
+  </div>
+</form>
