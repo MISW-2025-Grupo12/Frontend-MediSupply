@@ -1,5 +1,84 @@
 @use './colors' as *;
 
+// Datepicker styling
 .mat-datepicker-content {
   background-color: $bg-input !important;
+}
+
+// ============================================
+// Material Design Input Field Overrides
+// ============================================
+
+// Override MDC filled text fields (Material 3 default)
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: $bg-input !important;
+  
+  .mdc-text-field__input {
+    color: $input-color !important;
+  }
+  
+  &::before {
+    background-color: $bg-input !important;
+  }
+}
+
+// Override for the floating label background
+.mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::after {
+  border-bottom-color: $primary-color !important;
+}
+
+// Ensure the background stays consistent when focused
+.mdc-text-field--filled.mdc-text-field--focused:not(.mdc-text-field--disabled) {
+  background-color: $bg-input !important;
+}
+
+// Override for textarea
+.mdc-text-field--filled.mdc-text-field--textarea:not(.mdc-text-field--disabled) {
+  background-color: $bg-input !important;
+}
+
+// Override for outlined text fields (if used)
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) {
+  background-color: $bg-input !important;
+  
+  .mdc-text-field__input {
+    color: $input-color !important;
+  }
+}
+
+// Angular Material form field specific overrides
+.mat-mdc-form-field {
+  // Text field wrapper
+  .mat-mdc-text-field-wrapper {
+    background-color: $bg-input !important;
+    
+    &.mdc-text-field--filled,
+    &.mdc-text-field--outlined {
+      background-color: $bg-input !important;
+    }
+  }
+  
+  // Focus overlay
+  .mat-mdc-form-field-focus-overlay {
+    background-color: $bg-input !important;
+  }
+  
+  // Input element
+  .mat-mdc-input-element {
+    color: $input-color !important;
+    
+    &::placeholder {
+      color: rgba($input-color, 0.6);
+    }
+  }
+  
+  // Select trigger
+  .mat-mdc-select-trigger {
+    color: $input-color !important;
+  }
+  
+  // Ensure select value text is visible
+  .mat-mdc-select-value-text {
+    color: $input-color !important;
+  }
 }

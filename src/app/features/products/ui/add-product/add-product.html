@@ -9,139 +9,142 @@
     <mat-card-content>
       <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
         
-        <!-- Name Field -->
-        <mat-form-field class="full-width">
-          <mat-label>{{ t('addProduct.form.name') }}</mat-label>
-          <input 
-            matInput 
-            formControlName="name"
-            [placeholder]="t('addProduct.form.namePlaceholder')"
-            required>
-          <mat-error *ngIf="productForm.get('name')?.invalid">
-            {{ t(getErrorMessage('name')) }}
-          </mat-error>
-        </mat-form-field>
-
-        <!-- Description Field -->
-        <mat-form-field class="full-width">
-          <mat-label>{{ t('addProduct.form.description') }}</mat-label>
-          <textarea 
-            matInput 
-            formControlName="description"
-            [placeholder]="t('addProduct.form.descriptionPlaceholder')"
-            rows="4"
-            required>
-          </textarea>
-          <mat-error *ngIf="productForm.get('description')?.invalid">
-            {{ t(getErrorMessage('description')) }}
-          </mat-error>
-        </mat-form-field>
-
-        <!-- Category Field -->
-        <mat-form-field class="full-width">
-          <mat-label>{{ t('addProduct.form.category') }}</mat-label>
-          <mat-select 
-            formControlName="category"
-            [placeholder]="t('addProduct.form.categoryPlaceholder')"
-            required>
-            <mat-option *ngFor="let category of categories" [value]="category.id">
-              {{ category.name }}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="productForm.get('category')?.invalid">
-            {{ t(getErrorMessage('category')) }}
-          </mat-error>
-        </mat-form-field>
-
-        <!-- Quantity and Price Row -->
-        <div class="form-row">
-          <mat-form-field class="half-width">
-            <mat-label>{{ t('addProduct.form.quantity') }}</mat-label>
+        <div class="app-form-fields app-form-fields--compact">
+          <!-- Name Field -->
+          <mat-form-field class="app-form-field">
+            <mat-label>{{ t('addProduct.form.name') }}</mat-label>
             <input 
               matInput 
-              type="number"
-              formControlName="quantity"
-              [placeholder]="t('addProduct.form.quantityPlaceholder')"
-              min="1"
+              formControlName="name"
+              [placeholder]="t('addProduct.form.namePlaceholder')"
               required>
-            <mat-error *ngIf="productForm.get('quantity')?.invalid">
-              {{ t(getErrorMessage('quantity')) }}
+            <mat-error *ngIf="productForm.get('name')?.invalid">
+              {{ t(getErrorMessage('name')) }}
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field class="half-width">
-            <mat-label>{{ t('addProduct.form.price') }}</mat-label>
+          <!-- Description Field -->
+          <mat-form-field class="app-form-field">
+            <mat-label>{{ t('addProduct.form.description') }}</mat-label>
+            <textarea 
+              matInput 
+              formControlName="description"
+              [placeholder]="t('addProduct.form.descriptionPlaceholder')"
+              rows="4"
+              required>
+            </textarea>
+            <mat-error *ngIf="productForm.get('description')?.invalid">
+              {{ t(getErrorMessage('description')) }}
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Category Field -->
+          <mat-form-field class="app-form-field">
+            <mat-label>{{ t('addProduct.form.category') }}</mat-label>
+            <mat-select 
+              formControlName="category"
+              [placeholder]="t('addProduct.form.categoryPlaceholder')"
+              required>
+              <mat-option *ngFor="let category of categories" [value]="category.id">
+                {{ category.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="productForm.get('category')?.invalid">
+              {{ t(getErrorMessage('category')) }}
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Quantity and Price Row -->
+          <div class="app-form-fields app-form-fields--horizontal">
+            <mat-form-field class="app-form-field">
+              <mat-label>{{ t('addProduct.form.quantity') }}</mat-label>
+              <input 
+                matInput 
+                type="number"
+                formControlName="quantity"
+                [placeholder]="t('addProduct.form.quantityPlaceholder')"
+                min="1"
+                required>
+              <mat-error *ngIf="productForm.get('quantity')?.invalid">
+                {{ t(getErrorMessage('quantity')) }}
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="app-form-field">
+              <mat-label>{{ t('addProduct.form.price') }}</mat-label>
+              <input 
+                matInput 
+                type="number"
+                formControlName="price"
+                [placeholder]="t('addProduct.form.pricePlaceholder')"
+                min="0.01"
+                step="0.01"
+                required>
+              <span matTextPrefix>$&nbsp;</span>
+              <mat-error *ngIf="productForm.get('price')?.invalid">
+                {{ t(getErrorMessage('price')) }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- Expiration Date Field -->
+          <mat-form-field class="app-form-field">
+            <mat-label>{{ t('addProduct.form.expirationDate') }}</mat-label>
             <input 
               matInput 
-              type="number"
-              formControlName="price"
-              [placeholder]="t('addProduct.form.pricePlaceholder')"
-              min="0.01"
-              step="0.01"
+              [matDatepicker]="picker"
+              formControlName="expirationDate"
               required>
-            <span matTextPrefix>$&nbsp;</span>
-            <mat-error *ngIf="productForm.get('price')?.invalid">
-              {{ t(getErrorMessage('price')) }}
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="productForm.get('expirationDate')?.invalid">
+              {{ t(getErrorMessage('expirationDate')) }}
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Provider Field -->
+          <mat-form-field class="app-form-field">
+            <mat-label>{{ t('addProduct.form.provider') }}</mat-label>
+            <mat-select 
+              formControlName="providerId"
+              [placeholder]="t('addProduct.form.providerPlaceholder')"
+              required>
+              <mat-option *ngIf="loading" disabled>
+                <mat-spinner diameter="20"></mat-spinner>
+                Loading providers...
+              </mat-option>
+              <mat-option *ngFor="let provider of providers" [value]="provider.id">
+                {{ provider.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="productForm.get('providerId')?.invalid">
+              {{ t(getErrorMessage('providerId')) }}
             </mat-error>
           </mat-form-field>
         </div>
 
-        <!-- Expiration Date Field -->
-        <mat-form-field class="full-width">
-          <mat-label>{{ t('addProduct.form.expirationDate') }}</mat-label>
-          <input 
-            matInput 
-            [matDatepicker]="picker"
-            formControlName="expirationDate"
-            required>
-          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-          <mat-error *ngIf="productForm.get('expirationDate')?.invalid">
-            {{ t(getErrorMessage('expirationDate')) }}
-          </mat-error>
-        </mat-form-field>
-
-        <!-- Provider Field -->
-        <mat-form-field class="full-width">
-          <mat-label>{{ t('addProduct.form.provider') }}</mat-label>
-          <mat-select 
-            formControlName="providerId"
-            [placeholder]="t('addProduct.form.providerPlaceholder')"
-            required>
-            <mat-option *ngIf="loading" disabled>
-              <mat-spinner diameter="20"></mat-spinner>
-              Loading providers...
-            </mat-option>
-            <mat-option *ngFor="let provider of providers" [value]="provider.id">
-              {{ provider.name }}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="productForm.get('providerId')?.invalid">
-            {{ t(getErrorMessage('providerId')) }}
-          </mat-error>
-        </mat-form-field>
-
       </form>
     </mat-card-content>
 
-    <mat-card-actions class="card-actions">
-      <button 
-        mat-stroked-button 
-        type="button"
-        (click)="onCancel()"
-        class="cancel-button">
-        {{ t('addProduct.actions.cancel') }}
-      </button>
-      
-      <button 
-        mat-raised-button 
-        color="primary"
-        type="submit"
-        (click)="onSubmit()"
-        [disabled]="productForm.invalid"
-        class="submit-button">
-        {{ t('addProduct.actions.create') }}
-      </button>
+    <mat-card-actions class="card-actions justify-end">
+      <div class="app-form-actions app-form-actions--horizontal">
+        <button 
+          mat-stroked-button 
+          type="button"
+          (click)="onCancel()"
+          class="app-btn app-btn--secondary">
+          {{ t('addProduct.actions.cancel') }}
+        </button>
+        
+        <button 
+          mat-raised-button 
+          type="submit"
+          (click)="onSubmit()"
+          [disabled]="productForm.invalid"
+          class="app-btn app-btn--primary">
+          {{ t('addProduct.actions.create') }}
+        </button>
+      </div>
     </mat-card-actions>
   </mat-card>
 </div>

@@ -7,12 +7,57 @@
   "routes": {
     "products": "products",
     "clients": "clients",
-    "add": "add"
+    "add": "add",
+    "dashboard": "dashboard"
   },
   "titles": {
     "products": "Products - MediSupply",
     "addProduct": "Add Product - MediSupply",
+    "login": "Login - MediSupply",
+    "dashboard": "Dashboard - MediSupply",
     "home": "MediSupply"
+  },
+  "login": {
+    "title": "Login",
+    "welcome": "Welcome",
+    "subtitle": "Sign in to your account",
+    "form": {
+      "email": "Email",
+      "emailPlaceholder": "Enter your email address",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "required": "This field is required",
+      "invalidEmail": "Please enter a valid email address",
+      "minLength": "Password must be at least 6 characters",
+      "loginButton": "Sign In",
+      "forgotPassword": "Forgot your password?"
+    }
+  },
+  "dashboard": {
+    "welcome": "Welcome",
+    "subtitle": "Select a module to get started",
+    "logout": "Logout",
+    "loading": "Loading dashboard...",
+    "comingSoon": "Coming Soon",
+    "clickToOpen": "Click to open",
+    "cards": {
+      "products": {
+        "title": "Products",
+        "description": "Manage your product inventory, add new items, and track stock levels"
+      },
+      "clients": {
+        "title": "Clients",
+        "description": "View and manage customer information, orders, and history"
+      },
+      "orders": {
+        "title": "Orders",
+        "description": "Track and manage customer orders, shipments, and delivery status"
+      },
+      "reports": {
+        "title": "Reports",
+        "description": "View analytics, generate reports, and analyze business performance"
+      }
+    }
   },
   "addProduct": {
     "title": "Add Product",

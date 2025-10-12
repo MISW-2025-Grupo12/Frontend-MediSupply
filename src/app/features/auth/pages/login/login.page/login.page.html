@@ -1,0 +1,16 @@
+<div class="login-page" *transloco="let t">
+  <div class="login-container">
+    <!-- MediSupply Logo -->
+    <div class="logo-section">
+      <img 
+        src="assets/images/MediSupplyLogo.png" 
+        alt="MediSupply Logo" 
+        class="logo-image">
+    </div>
+
+    <!-- Login Form -->
+    <div class="form-section">
+      <app-login-form (loginSubmitted)="onLogin($event)"></app-login-form>
+    </div>
+  </div>
+</div>

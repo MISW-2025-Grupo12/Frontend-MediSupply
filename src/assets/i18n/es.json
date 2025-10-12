@@ -7,12 +7,57 @@
   "routes": {
     "products": "productos",
     "clients": "clientes",
-    "add": "anadir"
+    "add": "anadir",
+    "dashboard": "panel"
   },
   "titles": {
     "products": "Productos - MediSupply",
     "addProduct": "Añadir Producto - MediSupply",
+    "login": "Iniciar Sesión - MediSupply",
+    "dashboard": "Panel de Control - MediSupply",
     "home": "MediSupply"
+  },
+  "login": {
+    "title": "Iniciar Sesión",
+    "welcome": "Bienvenido",
+    "subtitle": "Inicia sesión en tu cuenta",
+    "form": {
+      "email": "Correo Electrónico",
+      "emailPlaceholder": "Ingresa tu correo electrónico",
+      "password": "Contraseña",
+      "passwordPlaceholder": "Ingresa tu contraseña",
+      "required": "Este campo es requerido",
+      "invalidEmail": "Por favor ingresa un correo electrónico válido",
+      "minLength": "La contraseña debe tener al menos 6 caracteres",
+      "loginButton": "Iniciar Sesión",
+      "forgotPassword": "¿Olvidaste tu contraseña?"
+    }
+  },
+  "dashboard": {
+    "welcome": "Bienvenido",
+    "subtitle": "Selecciona un módulo para comenzar",
+    "logout": "Cerrar Sesión",
+    "loading": "Cargando panel de control...",
+    "comingSoon": "Próximamente",
+    "clickToOpen": "Haz clic para abrir",
+    "cards": {
+      "products": {
+        "title": "Productos",
+        "description": "Gestiona tu inventario de productos, añade nuevos artículos y controla niveles de stock"
+      },
+      "clients": {
+        "title": "Clientes",
+        "description": "Visualiza y gestiona información de clientes, pedidos e historial"
+      },
+      "orders": {
+        "title": "Pedidos",
+        "description": "Rastrea y gestiona pedidos de clientes, envíos y estado de entrega"
+      },
+      "reports": {
+        "title": "Informes",
+        "description": "Visualiza analíticas, genera informes y analiza el rendimiento del negocio"
+      }
+    }
   },
   "addProduct": {
     "title": "Añadir Producto",

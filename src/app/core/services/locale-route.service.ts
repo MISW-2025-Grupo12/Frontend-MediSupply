@@ -30,14 +30,18 @@ export class LocaleRouteService {
     // Direct mapping without translations
     const routeMap: Record<string, Record<string, string>> = {
       'en': {
+        'dashboard': 'dashboard',
         'products': 'products',
         'add': 'add',
-        'clients': 'clients'
+        'clients': 'clients',
+        'login': 'login'
       },
       'es': {
+        'dashboard': 'panel',
         'products': 'productos',
         'add': 'anadir',
-        'clients': 'clientes'
+        'clients': 'clientes',
+        'login': 'login'
       }
     };
     
@@ -68,25 +72,32 @@ export class LocaleRouteService {
     // Map of route translations
     const routeMap: Record<string, Record<string, string>> = {
       'en': {
+        'dashboard': 'dashboard',
         'products': 'products',
         'add': 'add',
-        'clients': 'clients'
+        'clients': 'clients',
+        'login': 'login'
       },
       'es': {
+        'panel': 'panel',
         'productos': 'productos',
         'anadir': 'anadir',
-        'clientes': 'clientes'
+        'clientes': 'clientes',
+        'login': 'login'
       }
     };
     
     // Reverse map for looking up keys
     const reverseMap: Record<string, string> = {
+      'dashboard': 'panel',
+      'panel': 'dashboard',
       'products': 'productos',
       'productos': 'products',
       'add': 'anadir',
       'anadir': 'add',
       'clients': 'clientes',
-      'clientes': 'clients'
+      'clientes': 'clients',
+      'login': 'login'
     };
     
     // Build new URL by translating each segment
@@ -123,14 +134,18 @@ export class LocaleRouteService {
     // Direct mapping without translations
     const routeMap: Record<string, Record<string, string>> = {
       'en': {
+        'dashboard': 'dashboard',
         'products': 'products',
         'add': 'add',
-        'clients': 'clients'
+        'clients': 'clients',
+        'login': 'login'
       },
       'es': {
+        'dashboard': 'panel',
         'products': 'productos',
         'add': 'anadir',
-        'clients': 'clientes'
+        'clients': 'clientes',
+        'login': 'login'
       }
     };
     

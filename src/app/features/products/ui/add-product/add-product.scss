@@ -1,6 +1,5 @@
 @use 'sass:color';
 @import '../../../../../styles/colors.scss';
-@import '../../../../../styles/spacing.scss';
 
 .add-product-container {
   max-width: 800px;
@@ -22,7 +21,7 @@
   }
 
   mat-card-actions {
-    padding: 1rem 1.5rem 1.5rem 1.5rem !important;
+    padding: 1rem 1.5rem 0 1.5rem !important;
   }
 }
 
@@ -35,101 +34,17 @@
 }
 
 .product-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
   margin-top: 1.5rem;
 }
 
-.full-width {
-  width: 100%;
-}
-
-.form-row {
-  display: flex;
-  gap: 1rem;
-  width: 100%;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    gap: 1rem;
-  }
-}
-
-.half-width {
-  flex: 1;
-  min-width: 0;
-
-  @media (max-width: 768px) {
-    width: 100%;
-  }
-}
-
 .card-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 2rem;
   border-top: 1px solid $gray-200;
   padding-top: 1.5rem !important;
-
-  @media (max-width: 768px) {
-    flex-direction: column-reverse;
-    
-    button {
-      width: 100%;
-    }
-  }
 }
 
-.cancel-button {
-  color: $main-dark !important;
-  font-weight: 500 !important;
-  padding: 0.5rem 1rem !important;
-  border-radius: 0.5rem !important;
-  transition: all 0.2s ease-in-out !important;
-  border: none !important;
-  background-color: transparent !important;
-  
-  &:hover {
-    background-color: rgba($primary-color, 0.1) !important;
-    color: $primary-color !important;
-  }
-}
-
-.submit-button {
-  color: white !important;
-  font-weight: 500 !important;
-  padding: 0.5rem 1rem !important;
-  border-radius: 0.5rem !important;
-  transition: all 0.2s ease-in-out !important;
-  background-color: $primary-color !important;
-  
-  &:hover:not(:disabled) {
-    background-color: color.adjust($primary-color, $lightness: -10%) !important;
-  }
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-}
-
-// Material form field customization
+// Product-specific form customizations
 ::ng-deep {
-  .mat-mdc-text-field-wrapper {
-    background-color: $bg-input !important;
-    
-    .mat-mdc-form-field-focus-overlay {
-      background-color: $bg-input !important;
-    }
-  }
-
-  .mat-mdc-form-field-subscript-wrapper {
-    background-color: transparent;
-  }
-
-  // Fix for mat-select dropdown
+  // Fix for mat-select dropdown in add-product context
   .mat-mdc-select-panel {
     background-color: $white !important;
     max-height: 256px !important;
@@ -144,15 +59,6 @@
     
     &.mat-mdc-option-active {
       background-color: rgba($primary-color, 0.1) !important;
-    }
-  }
-
-  .mat-mdc-outlined-button {
-    border-color: $gray-300 !important;
-    color: $gray-700 !important;
-
-    &:hover {
-      background-color: $gray-50 !important;
     }
   }
 }
