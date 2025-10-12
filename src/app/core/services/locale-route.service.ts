@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
+import { AppStore } from '../state/app.store';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,7 @@ import { TranslocoService } from '@ngneat/transloco';
 export class LocaleRouteService {
   private router = inject(Router);
   private translocoService = inject(TranslocoService);
+  private appStore = inject(AppStore);
 
   private readonly SUPPORTED_LOCALES = ['en', 'es'];
   private readonly DEFAULT_LOCALE = 'en';
@@ -16,9 +18,23 @@ export class LocaleRouteService {
    * Get the current locale from the URL
    */
   getCurrentLocale(): string {
-    const urlSegments = this.router.url.split('/');
-    const locale = urlSegments[1];
-    return this.SUPPORTED_LOCALES.includes(locale) ? locale : this.DEFAULT_LOCALE;
+    // During APP_INITIALIZER, router.url might not be ready yet
+    // Use window.location.pathname as fallback
+    let url = this.router.url;
+    if (!url || url === '/' || url === '') {
+      url = window.location.pathname;
+    }
+    
+    const urlSegments = url.split('/').filter(s => s);
+    const locale = urlSegments[0];
+    const detectedLocale = this.SUPPORTED_LOCALES.includes(locale) ? locale : this.DEFAULT_LOCALE;
+    
+    // Sync with AppStore if different
+    if (this.appStore.locale() !== detectedLocale) {
+      this.appStore.setLocale(detectedLocale as 'en' | 'es');
+    }
+    
+    return detectedLocale;
   }
 
   /**
@@ -62,6 +78,9 @@ export class LocaleRouteService {
       console.warn(`Locale ${newLocale} is not supported`);
       return;
     }
+
+    // Update the AppStore
+    this.appStore.setLocale(newLocale as 'en' | 'es');
 
     const currentLocale = this.getCurrentLocale();
     const currentUrl = this.router.url;

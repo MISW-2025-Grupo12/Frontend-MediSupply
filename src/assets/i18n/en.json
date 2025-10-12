@@ -23,8 +23,10 @@
     "subtitle": "Sign in to your account",
     "form": {
       "email": "Email",
+      "email*": "Email",
       "emailPlaceholder": "Enter your email address",
       "password": "Password",
+      "password*": "Password",
       "passwordPlaceholder": "Enter your password",
       "required": "This field is required",
       "invalidEmail": "Please enter a valid email address",
