@@ -13,15 +13,10 @@ export function initializeLocale(
 ): () => Promise<void> {
   return () => {
     return new Promise((resolve) => {
-      // Set locale immediately based on URL
-      const url = window.location.pathname;
-      const urlSegments = url.split('/').filter(s => s);
-      const locale = urlSegments[0] && ['en', 'es'].includes(urlSegments[0]) ? urlSegments[0] : 'es';
+      // Get the locale from the LocaleRouteService
+      const locale = localeRouteService.getCurrentLocale();
       
-      // Set the locale in AppStore
-      localeRouteService.getCurrentLocale(); // This updates AppStore
-      
-      // Set the active language in Transloco immediately
+      // Set the active language in Transloco if it's different
       if (locale !== translocoService.getActiveLang()) {
         translocoService.setActiveLang(locale);
       }

@@ -18,8 +18,15 @@ export class LocaleRouteService {
    * Get the current locale from the URL
    */
   getCurrentLocale(): string {
-    const urlSegments = this.router.url.split('/');
-    const locale = urlSegments[1];
+    // During APP_INITIALIZER, router.url might not be ready yet
+    // Use window.location.pathname as fallback
+    let url = this.router.url;
+    if (!url || url === '/' || url === '') {
+      url = window.location.pathname;
+    }
+    
+    const urlSegments = url.split('/').filter(s => s);
+    const locale = urlSegments[0];
     const detectedLocale = this.SUPPORTED_LOCALES.includes(locale) ? locale : this.DEFAULT_LOCALE;
     
     // Sync with AppStore if different
