@@ -1,0 +1,221 @@
+/* Browser Reset Styles */
+/* This file contains styles to reset browser defaults and ensure consistent cross-browser behavior */
+
+/* Box sizing reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Remove default margins and padding */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+}
+
+/* HTML and body base styles */
+html {
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  color-scheme: light only;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color-scheme: light only;
+}
+
+/* Semantic HTML elements */
+main {
+  display: block;
+}
+
+/* Typography reset */
+h1, h2, h3, h4, h5, h6 {
+  font-size: inherit;
+  font-weight: inherit;
+  margin: 0;
+}
+
+p, blockquote, pre {
+  margin: 0;
+}
+
+/* List styles */
+ul, ol, li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Link styles */
+a {
+  background-color: transparent;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Form elements reset */
+button, input, optgroup, select, textarea {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.15;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+
+button, input {
+  overflow: visible;
+}
+
+button, select {
+  text-transform: none;
+}
+
+/* Button specific styles */
+button, [type="button"], [type="reset"], [type="submit"] {
+  -webkit-appearance: button;
+  cursor: pointer;
+}
+
+button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+  border-style: none;
+  padding: 0;
+}
+
+button:-moz-focusring,
+[type="button"]:-moz-focusring,
+[type="reset"]:-moz-focusring,
+[type="submit"]:-moz-focusring {
+  outline: 1px dotted ButtonText;
+}
+
+/* Form field elements */
+fieldset {
+  padding: 0;
+  border: none;
+}
+
+legend {
+  box-sizing: border-box;
+  color: inherit;
+  display: table;
+  max-width: 100%;
+  padding: 0;
+  white-space: normal;
+}
+
+progress {
+  vertical-align: baseline;
+}
+
+textarea {
+  overflow: auto;
+  resize: vertical;
+}
+
+/* Input type specific styles */
+[type="checkbox"], [type="radio"] {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+[type="number"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+
+[type="search"] {
+  -webkit-appearance: textfield;
+  outline-offset: -2px;
+}
+
+[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  font: inherit;
+}
+
+/* Other elements */
+details {
+  display: block;
+}
+
+summary {
+  display: list-item;
+}
+
+template {
+  display: none;
+}
+
+[hidden] {
+  display: none;
+}
+
+/* Form styling to prevent browser defaults */
+input, textarea, select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border-radius: 0;
+  outline: none;
+}
+
+input[type="text"], 
+input[type="email"], 
+input[type="password"], 
+input[type="number"], 
+input[type="search"], 
+textarea, 
+select {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* Focus styles */
+*:focus {
+  outline: none;
+}
+
+/* Custom focus styles for accessibility */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--primary-color, #646116);
+  outline-offset: 2px;
+}
+
+/* Dark mode override - be more specific to avoid conflicts */
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: light only !important;
+  }
+  
+  body {
+    color-scheme: light only !important;
+    background-color: var(--bg-color, #f5f5f0) !important;
+    color: var(--text-primary, #111827) !important;
+  }
+  
+  /* Only override root elements, not all components */
+  :root {
+    color-scheme: light only !important;
+  }
+}

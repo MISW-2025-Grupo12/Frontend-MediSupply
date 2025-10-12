@@ -11,12 +11,14 @@
 @use './styles/colors' as *;
 @use './styles/forms' as *;
 @use './styles/mat.override' as *;
+@use './styles/browser-reset' as *;
 
 /* Tailwind CSS */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Angular Material Theme Configuration */
 html {
   @include mat.theme((
     color: (
@@ -28,26 +30,15 @@ html {
   ));
 }
 
+/* Application-specific body styles */
 body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
-  color-scheme: light;
-
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
-  color: var(--mat-sys-on-surface);
+  background-color: $bg-color !important;
+  color: var(--mat-sys-on-surface) !important;
   font: var(--mat-sys-body-medium);
-
-  // Reset the user agent margin.
-  margin: 0;
-}
-/* You can add global styles to this file, and also import other style files */
-
-html, body { height: 100%; }
-body { 
-  margin: 0; 
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-color: $bg-color !important; // Override Material background
+}
+
+/* Layout */
+html, body { 
+  height: 100%; 
 }

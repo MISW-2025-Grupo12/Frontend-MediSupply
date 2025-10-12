@@ -6,10 +6,14 @@ export const TRANSLOCO_PROVIDER: Provider[] = [
   provideTransloco({
     config: {
       availableLangs: ['en', 'es'],
-      defaultLang: 'en',
-      // Remove this option if your application doesn't support changing language in runtime.
+      defaultLang: 'es',
+      fallbackLang: 'es',
       reRenderOnLangChange: true,
       prodMode: !isDevMode(),
+      missingHandler: {
+        useFallbackTranslation: true,
+        logMissingKey: !isDevMode()
+      }
     },
     loader: TranslocoHttpLoader
   })

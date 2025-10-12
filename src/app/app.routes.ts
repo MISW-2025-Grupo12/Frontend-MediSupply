@@ -38,7 +38,7 @@ const localizedRoutes: Routes = LOCALES.map(locale => ({
 export const routes: Routes = [
   { 
     path: '', 
-    redirectTo: '/en/login', 
+    redirectTo: '/es/login', 
     pathMatch: 'full' 
   },
   ...localizedRoutes

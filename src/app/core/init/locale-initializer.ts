@@ -13,17 +13,15 @@ export function initializeLocale(
 ): () => Promise<void> {
   return () => {
     return new Promise((resolve) => {
-      // Wait a bit for router to be ready
-      setTimeout(() => {
-        const locale = localeRouteService.getCurrentLocale();
-        
-        // Set the active language in Transloco to match the URL
-        if (locale && locale !== translocoService.getActiveLang()) {
-          translocoService.setActiveLang(locale);
-        }
-        
-        resolve();
-      }, 0);
+      // Get the locale from the LocaleRouteService
+      const locale = localeRouteService.getCurrentLocale();
+      
+      // Set the active language in Transloco if it's different
+      if (locale !== translocoService.getActiveLang()) {
+        translocoService.setActiveLang(locale);
+      }
+      
+      resolve();
     });
   };
 }
