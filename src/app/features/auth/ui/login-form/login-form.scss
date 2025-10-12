@@ -1,25 +1,4 @@
 @import '../../../../../styles/colors.scss';
 
 // Login form specific styles
-// Most styling is now handled by the shared forms.scss
-
-// Ensure Material Design input backgrounds are applied in this component
-::ng-deep {
-  .app-form-field {
-    .mat-mdc-text-field-wrapper {
-      background-color: $bg-input !important;
-      
-      .mat-mdc-form-field-focus-overlay {
-        background-color: $bg-input !important;
-      }
-    }
-
-    .mat-mdc-form-field-subscript-wrapper {
-      background-color: transparent;
-    }
-
-    .mat-mdc-input-element {
-      color: $input-color !important;
-    }
-  }
-}
+// All form styling is handled by the shared forms.scss

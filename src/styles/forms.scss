@@ -61,7 +61,6 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  margin-bottom: 2rem;
 
   &--compact {
     gap: 1rem;
@@ -142,7 +141,6 @@
 
     // Input styling
     .mat-mdc-input-element {
-      color: $input-color;
       font-weight: 400;
       
       &::placeholder {
@@ -155,14 +153,8 @@
       }
     }
 
-    // Input field background styling (for filled appearance)
-    .mat-mdc-text-field-wrapper {
-      background-color: $bg-input !important;
-      
-      .mat-mdc-form-field-focus-overlay {
-        background-color: $bg-input !important;
-      }
-    }
+    // Note: Input field background colors are now handled globally in mat.override.scss
+    // This ensures consistent styling across all Material components
 
     .mat-mdc-form-field-subscript-wrapper {
       background-color: transparent;
