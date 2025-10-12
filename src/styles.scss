@@ -18,6 +18,9 @@
 @tailwind utilities;
 
 html {
+  // Force light color scheme to prevent dark mode
+  color-scheme: light only;
+  
   @include mat.theme((
     color: (
       primary: mat.$azure-palette,
@@ -29,15 +32,16 @@ html {
 }
 
 body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
-  color-scheme: light;
+  // Explicitly set light color scheme to override system preferences
+  color-scheme: light only;
+  
+  // Prevent any dark mode styling
+  background-color: $bg-color !important;
+  color: var(--mat-sys-on-surface) !important;
 
   // Set a default background, font and text colors for the application using
   // Angular Material's system-level CSS variables. Learn more about these
   // variables at https://material.angular.dev/guide/system-variables
-  color: var(--mat-sys-on-surface);
   font: var(--mat-sys-body-medium);
 
   // Reset the user agent margin.
@@ -50,4 +54,18 @@ body {
   margin: 0; 
   font-family: Roboto, "Helvetica Neue", sans-serif;
   background-color: $bg-color !important; // Override Material background
+}
+
+/* Force light theme for all elements */
+*, *::before, *::after {
+  color-scheme: light only;
+}
+
+/* Override any dark theme preferences */
+@media (prefers-color-scheme: dark) {
+  html, body, * {
+    color-scheme: light only !important;
+    background-color: $bg-color !important;
+    color: $text-primary !important;
+  }
 }
