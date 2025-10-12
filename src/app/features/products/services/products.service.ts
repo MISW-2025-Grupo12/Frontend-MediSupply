@@ -50,7 +50,7 @@ export class ProductsService {
       proveedor_id: product.provider.id.toString(),
     }
 
-    return this.apiClient.post<ProductDTO>('/productos', addProductDTO, 'products')
+    return this.apiClient.post<ProductDTO>('/productos/con-inventario', addProductDTO, 'products')
       .pipe(
         map(product => ({
             id: product.id,
