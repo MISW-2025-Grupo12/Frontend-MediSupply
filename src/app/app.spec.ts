@@ -5,6 +5,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslocoTestingModule } from '@ngneat/transloco';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 import { App } from './app';
 
 describe('App', () => {
@@ -15,8 +17,8 @@ describe('App', () => {
         NoopAnimationsModule,
         TranslocoTestingModule.forRoot({
           langs: { 
-            en: { header: { products: 'Products' } },
-            es: { header: { products: 'Productos' } }
+            en: { header: { products: 'Products', clients: 'Clients', language: 'Language' } },
+            es: { header: { products: 'Productos', clients: 'Clientes', language: 'Idioma' } }
           },
           translocoConfig: {
             availableLangs: ['en', 'es'],
@@ -31,6 +33,14 @@ describe('App', () => {
         provideHttpClientTesting()
       ]
     }).compileComponents();
+
+    // Register the logo-header icon to prevent console errors
+    const iconRegistry = TestBed.inject(MatIconRegistry);
+    const sanitizer = TestBed.inject(DomSanitizer);
+    iconRegistry.addSvgIcon(
+      'logo-header',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/logo-header.svg')
+    );
   });
 
   it('should create the app', () => {

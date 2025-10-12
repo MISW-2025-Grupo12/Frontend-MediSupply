@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideZonelessChangeDetection } from '@angular/core';
 import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
@@ -8,7 +8,10 @@ describe('AuthService', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AuthService]
+      imports: [AuthService],
+      providers: [
+        provideZonelessChangeDetection()
+      ]
     })
     .compileComponents();
 
