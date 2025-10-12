@@ -23,8 +23,10 @@
     "subtitle": "Inicia sesión en tu cuenta",
     "form": {
       "email": "Correo Electrónico",
+      "email*": "Correo Electrónico",
       "emailPlaceholder": "Ingresa tu correo electrónico",
       "password": "Contraseña",
+      "password*": "Contraseña",
       "passwordPlaceholder": "Ingresa tu contraseña",
       "required": "Este campo es requerido",
       "invalidEmail": "Por favor ingresa un correo electrónico válido",

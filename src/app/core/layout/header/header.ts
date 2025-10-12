@@ -3,6 +3,7 @@ import { Router, RouterLink, RouterLinkActive, NavigationEnd } from '@angular/ro
 import { MatIcon } from '@angular/material/icon';
 import { TranslocoDirective, TranslocoService } from '@ngneat/transloco';
 import { LocaleRouteService } from '../../services/locale-route.service';
+import { AppStore } from '../../state/app.store';
 import { filter } from 'rxjs/operators';
 
 @Component({
@@ -15,6 +16,7 @@ export class Header implements OnInit {
   private router = inject(Router);
   private translocoService = inject(TranslocoService);
   public localeRouteService = inject(LocaleRouteService);
+  public appStore = inject(AppStore);
 
   ngOnInit(): void {
     // Sync language with URL on route changes
@@ -35,7 +37,8 @@ export class Header implements OnInit {
   }
 
   get currentLang(): string {
-    return this.translocoService.getActiveLang();
+    // Now we can use AppStore for locale information
+    return this.appStore.locale();
   }
 
   switchLanguage(): void {
