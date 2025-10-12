@@ -24,6 +24,9 @@ export class Header implements OnInit {
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
         const locale = this.localeRouteService.getCurrentLocale();
+        // Update AppStore locale
+        this.localeRouteService.getCurrentLocale(); // This updates AppStore
+        
         if (locale && locale !== this.translocoService.getActiveLang()) {
           this.translocoService.setActiveLang(locale);
         }
@@ -31,6 +34,9 @@ export class Header implements OnInit {
     
     // Also sync on initial load
     const locale = this.localeRouteService.getCurrentLocale();
+    // Update AppStore locale
+    this.localeRouteService.getCurrentLocale(); // This updates AppStore
+    
     if (locale && locale !== this.translocoService.getActiveLang()) {
       this.translocoService.setActiveLang(locale);
     }
@@ -44,6 +50,10 @@ export class Header implements OnInit {
   switchLanguage(): void {
     const newLang = this.currentLang === 'en' ? 'es' : 'en';
     this.localeRouteService.changeLanguage(newLang);
+  }
+
+  getDashboardRoute(): string {
+    return this.localeRouteService.getLocalizedUrl('dashboard');
   }
 
   getProductsRoute(): string {
