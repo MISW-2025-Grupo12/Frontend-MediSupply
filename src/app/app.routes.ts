@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './core/guards/auth.guard';
+import { guestGuard } from './core/guards/guest.guard';
 
 // Available locales
 const LOCALES = ['en', 'es'];
@@ -8,14 +10,27 @@ const localizedRoutes: Routes = LOCALES.map(locale => ({
   path: locale,
   children: [
     { 
-      path: '', 
-      redirectTo: locale === 'en' ? 'products' : 'productos', 
-      pathMatch: 'full' 
+      path: locale === 'en' ? 'dashboard' : 'panel', 
+      loadChildren: () => import('./features/dashboard/routes').then(m => m.DASHBOARD_ROUTES),
+      canActivate: [authGuard],
+      data: { titleKey: 'titles.dashboard' }
     },
     { 
       path: locale === 'en' ? 'products' : 'productos', 
       loadChildren: () => import('./features/products/shell/products.routes').then(m => m.PRODUCTS_ROUTES),
+      canActivate: [authGuard],
       data: { titleKey: 'titles.products' }
+    },
+    { 
+      path: 'login', 
+      loadChildren: () => import('./features/auth/routes').then(m => m.LOGIN_ROUTES),
+      canActivate: [guestGuard],
+      data: { titleKey: 'titles.login' }
+    },
+    { 
+      path: '', 
+      redirectTo: locale === 'en' ? 'dashboard' : 'panel', 
+      pathMatch: 'full' 
     }
   ]
 }));
@@ -23,7 +38,7 @@ const localizedRoutes: Routes = LOCALES.map(locale => ({
 export const routes: Routes = [
   { 
     path: '', 
-    redirectTo: '/en', 
+    redirectTo: '/en/login', 
     pathMatch: 'full' 
   },
   ...localizedRoutes

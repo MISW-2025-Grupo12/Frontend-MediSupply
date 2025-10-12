@@ -1,0 +1,386 @@
+@use 'sass:color';
+@use './colors' as *;
+
+// Base form container styles
+.app-form {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid $gray-200;
+
+  @media (max-width: 640px) {
+    padding: 1.5rem;
+    margin: 0 1rem;
+    border-radius: 0.75rem;
+  }
+
+  &--wide {
+    max-width: 600px;
+  }
+
+  &--full {
+    max-width: 100%;
+    margin: 0;
+  }
+}
+
+// Form header styles
+.app-form-header {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  .app-form-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: $main-dark;
+    margin: 0 0 0.5rem 0;
+    
+    @media (max-width: 640px) {
+      font-size: 1.5rem;
+    }
+  }
+
+  .app-form-subtitle {
+    font-size: 1rem;
+    color: $gray-600;
+    margin: 0;
+    font-weight: 400;
+    
+    @media (max-width: 640px) {
+      font-size: 0.9rem;
+    }
+  }
+}
+
+// Form fields container
+.app-form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+
+  &--compact {
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  &--horizontal {
+    flex-direction: row;
+    flex-wrap: wrap;
+    
+    > * {
+      flex: 1;
+      min-width: 200px;
+    }
+    
+    @media (max-width: 640px) {
+      flex-direction: column;
+    }
+  }
+}
+
+// Individual form field styling (Material Design overrides)
+.app-form-field {
+  width: 100%;
+  
+  ::ng-deep {
+    .mat-mdc-form-field {
+      width: 100%;
+    }
+
+    .mat-mdc-text-field-wrapper {
+      border-radius: 0.5rem;
+    }
+
+    .mat-mdc-form-field-focus-overlay {
+      border-radius: 0.5rem;
+    }
+
+    // Default border styling
+    .mdc-notched-outline {
+      border-color: $gray-300;
+      
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__notch,
+      .mdc-notched-outline__trailing {
+        border-color: $gray-300;
+      }
+    }
+
+    // Focus state
+    .mdc-text-field--focused .mdc-notched-outline {
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__notch,
+      .mdc-notched-outline__trailing {
+        border-color: $primary-color;
+        border-width: 2px;
+      }
+    }
+
+    // Error state
+    .mdc-text-field--invalid .mdc-notched-outline {
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__notch,
+      .mdc-notched-outline__trailing {
+        border-color: $error-color;
+      }
+    }
+
+    // Label styling
+    .mat-mdc-form-field-label {
+      color: $gray-600;
+      font-weight: 500;
+    }
+
+    .mat-mdc-form-field-required-marker {
+      color: $error-color;
+    }
+
+    // Input styling
+    .mat-mdc-input-element {
+      color: $input-color;
+      font-weight: 400;
+      
+      &::placeholder {
+        color: $gray-400;
+      }
+
+      &:disabled {
+        color: $gray-500;
+        background-color: $gray-100;
+      }
+    }
+
+    // Input field background styling (for filled appearance)
+    .mat-mdc-text-field-wrapper {
+      background-color: $bg-input !important;
+      
+      .mat-mdc-form-field-focus-overlay {
+        background-color: $bg-input !important;
+      }
+    }
+
+    .mat-mdc-form-field-subscript-wrapper {
+      background-color: transparent;
+    }
+
+    // Error message styling
+    .mat-mdc-form-field-error {
+      color: $error-color;
+      font-size: 0.85rem;
+      margin-top: 0.25rem;
+      font-weight: 500;
+    }
+
+    // Icon styling
+    .mat-icon {
+      color: $gray-500;
+      
+      &:hover {
+        color: $primary-color;
+      }
+    }
+
+    // Select dropdown styling
+    .mat-mdc-select-value {
+      color: $main-dark;
+    }
+
+    .mat-mdc-select-placeholder {
+      color: $gray-400;
+    }
+  }
+
+  // Field variants
+  &--success {
+    ::ng-deep .mdc-notched-outline {
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__notch,
+      .mdc-notched-outline__trailing {
+        border-color: #10b981;
+      }
+    }
+  }
+
+  &--warning {
+    ::ng-deep .mdc-notched-outline {
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__notch,
+      .mdc-notched-outline__trailing {
+        border-color: #f59e0b;
+      }
+    }
+  }
+}
+
+// Form actions container
+.app-form-actions {
+  margin-bottom: 1.5rem;
+
+  &--horizontal {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+
+    @media (max-width: 640px) {
+      flex-direction: column-reverse;
+    }
+  }
+
+  &--centered {
+    text-align: center;
+  }
+
+  &--space-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @media (max-width: 640px) {
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+}
+
+// Button styles
+.app-btn {
+  font-weight: 600;
+  border-radius: 0.75rem !important;
+  text-transform: none !important;
+  transition: all 0.2s ease-in-out !important;
+  min-height: 44px;
+
+  &--primary {
+    color: white !important;
+    background-color: $primary-color !important;
+    
+    &:hover:not(:disabled) {
+      background-color: color.adjust($primary-color, $lightness: -10%) !important;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba($primary-color, 0.3);
+    }
+  }
+
+  &--secondary {
+    color: $primary-color !important;
+    background-color: transparent !important;
+    border: 2px solid $primary-color !important;
+    
+    &:hover:not(:disabled) {
+      background-color: $primary-color !important;
+      color: white !important;
+      transform: translateY(-2px);
+    }
+  }
+
+  &--danger {
+    color: white !important;
+    background-color: $error-color !important;
+    
+    &:hover:not(:disabled) {
+      background-color: color.adjust($error-color, $lightness: -10%) !important;
+      transform: translateY(-2px);
+    }
+  }
+
+  &--full-width {
+    width: 100%;
+    height: 48px;
+    font-size: 1rem;
+
+    @media (max-width: 640px) {
+      height: 44px;
+      font-size: 0.95rem;
+    }
+  }
+
+  &:disabled {
+    background-color: $gray-400 !important;
+    color: $gray-600 !important;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  // Button content with loading state
+  .app-btn-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    
+    .app-btn-spinner {
+      ::ng-deep .mdc-circular-progress__color-1 {
+        stroke: currentColor;
+      }
+    }
+    
+    .app-btn-text-hidden {
+      opacity: 0;
+    }
+  }
+}
+
+// Form footer
+.app-form-footer {
+  text-align: center;
+
+  .app-form-link {
+    color: $primary-color;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+    
+    &:hover {
+      color: color.adjust($primary-color, $lightness: -15%);
+      text-decoration: underline;
+    }
+
+    @media (max-width: 640px) {
+      font-size: 0.85rem;
+    }
+  }
+}
+
+// Form validation helpers
+.app-form-error-summary {
+  background-color: color.adjust($error-color, $lightness: 45%);
+  border: 1px solid $error-color;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  
+  .app-form-error-title {
+    color: $error-color;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  .app-form-error-list {
+    color: color.adjust($error-color, $lightness: -10%);
+    margin: 0;
+    padding-left: 1.25rem;
+    
+    li {
+      margin-bottom: 0.25rem;
+    }
+  }
+}
+
+// Loading state animations
+@keyframes app-form-fade {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.app-form--loading {
+  .app-form-fields {
+    animation: app-form-fade 2s infinite;
+  }
+}
