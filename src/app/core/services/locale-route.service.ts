@@ -48,6 +48,8 @@ export class LocaleRouteService {
       'en': {
         'dashboard': 'dashboard',
         'products': 'products',
+        'sales': 'sales',
+        'salesReport': 'salesReport',
         'add': 'add',
         'clients': 'clients',
         'login': 'login'
@@ -55,6 +57,8 @@ export class LocaleRouteService {
       'es': {
         'dashboard': 'panel',
         'products': 'productos',
+        'sales': 'ventas',
+        'salesReport': 'reporteDeVentas',
         'add': 'anadir',
         'clients': 'clientes',
         'login': 'login'
@@ -95,6 +99,7 @@ export class LocaleRouteService {
         'products': 'products',
         'add': 'add',
         'clients': 'clients',
+        'sales': 'sales',
         'login': 'login'
       },
       'es': {
@@ -102,6 +107,7 @@ export class LocaleRouteService {
         'productos': 'productos',
         'anadir': 'anadir',
         'clientes': 'clientes',
+        'sales': 'ventas',
         'login': 'login'
       }
     };
@@ -116,6 +122,8 @@ export class LocaleRouteService {
       'anadir': 'add',
       'clients': 'clientes',
       'clientes': 'clients',
+      'sales': 'ventas',
+      'ventas': 'sales',
       'login': 'login'
     };
     
@@ -157,6 +165,7 @@ export class LocaleRouteService {
         'products': 'products',
         'add': 'add',
         'clients': 'clients',
+        'sales': 'sales',
         'login': 'login'
       },
       'es': {
@@ -164,6 +173,7 @@ export class LocaleRouteService {
         'products': 'productos',
         'add': 'anadir',
         'clients': 'clientes',
+        'sales': 'ventas',
         'login': 'login'
       }
     };

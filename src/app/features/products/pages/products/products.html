@@ -1,17 +1,17 @@
-<div class="products-container" *transloco="let t">
-  <div class="products-header">
-    <h1 class="products-title">{{ t('header.products') }}</h1>
+<div class="page-container" *transloco="let t">
+  <div class="page-header">
+    <h1 class="page-title">{{ t('header.products') }}</h1>
     <button 
       mat-raised-button 
       color="primary"
-      class="add-button"
+      class="page-action-button"
       (click)="navigateToAddProduct()">
       <mat-icon>add</mat-icon>
       {{ t('addProduct.title') }}
     </button>
   </div>
   
-  <div class="products-content">
+  <div class="page-content">
     <app-product-list [products]="productsStore.products()" />
   </div>
 </div>

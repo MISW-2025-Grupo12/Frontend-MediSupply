@@ -1,0 +1,72 @@
+@use 'sass:color';
+@import './colors.scss';
+
+// General page container styles
+.page-container {
+  padding: 2rem 0;
+}
+
+// Header section with title and actions
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid $gray-200;
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+}
+
+// Page title
+.page-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: $main-dark;
+  margin: 0;
+
+  @media (max-width: 640px) {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+}
+
+// Action button (e.g., Add button)
+.page-action-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: white !important;
+  font-weight: 500 !important;
+  padding: 0.5rem 1.5rem !important;
+  border-radius: 0.5rem !important;
+  transition: all 0.2s ease-in-out !important;
+  background-color: $primary-color !important;
+  
+  mat-icon {
+    font-size: 1.25rem;
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  
+  &:hover {
+    background-color: color.adjust($primary-color, $lightness: -10%) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  @media (max-width: 640px) {
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+// Main content area
+.page-content {
+  margin-top: 2rem;
+}
+

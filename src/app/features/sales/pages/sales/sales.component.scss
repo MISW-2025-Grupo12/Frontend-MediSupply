@@ -1,0 +1,100 @@
+@import '../../../../../styles/page.scss';
+@import '../../../../../styles/colors.scss';
+
+// Sales-specific styles
+.sales-subtitle {
+  font-size: 1.125rem;
+  color: $gray-600;
+  margin: 0 0 2rem 0;
+}
+
+.sales-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sales-option-card {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border: 2px solid $gray-200;
+  border-radius: 0.75rem;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  
+  &:hover {
+    border-color: $primary-color;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    
+    .option-arrow {
+      color: $primary-color;
+      transform: translateX(4px);
+    }
+  }
+  
+  .option-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 0.5rem;
+    background: linear-gradient(135deg, $primary-color 0%, darken($primary-color, 10%) 100%);
+    flex-shrink: 0;
+    
+    mat-icon {
+      font-size: 2rem;
+      width: 2rem;
+      height: 2rem;
+      color: white;
+    }
+  }
+  
+  .option-content {
+    flex: 1;
+    
+    .option-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: $main-dark;
+      margin: 0 0 0.5rem 0;
+    }
+    
+    .option-description {
+      font-size: 0.875rem;
+      color: $gray-600;
+      margin: 0;
+      line-height: 1.5;
+    }
+  }
+  
+  .option-arrow {
+    display: flex;
+    align-items: center;
+    color: $gray-400;
+    transition: all 0.2s ease-in-out;
+    
+    mat-icon {
+      font-size: 1.5rem;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+  
+  @media (max-width: 640px) {
+    flex-direction: column;
+    text-align: center;
+    
+    .option-arrow {
+      display: none;
+    }
+  }
+}

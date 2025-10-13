@@ -22,6 +22,12 @@ const localizedRoutes: Routes = LOCALES.map(locale => ({
       data: { titleKey: 'titles.products' }
     },
     { 
+      path: locale === 'en' ? 'sales' : 'ventas', 
+      loadChildren: () => import('./features/sales/routes').then(m => m.SALES_ROUTES),
+      canActivate: [authGuard],
+      data: { titleKey: 'titles.sales' }
+    },
+    { 
       path: 'login', 
       loadChildren: () => import('./features/auth/routes').then(m => m.LOGIN_ROUTES),
       canActivate: [guestGuard],

@@ -16,6 +16,7 @@ export class Products {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private translocoService = inject(TranslocoService);
+  
   productsStore = inject(ProductsState);
 
   ngOnInit(): void {

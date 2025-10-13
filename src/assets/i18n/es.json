@@ -2,20 +2,24 @@
   "header": {
     "products": "Productos",
     "clients": "Clientes",
+    "sales": "Ventas",
     "language": "Idioma"
   },
   "routes": {
     "products": "productos",
     "clients": "clientes",
     "add": "anadir",
-    "dashboard": "panel"
+    "dashboard": "panel",
+    "sales": "ventas"
   },
   "titles": {
     "products": "Productos - MediSupply",
     "addProduct": "Añadir Producto - MediSupply",
     "login": "Iniciar Sesión - MediSupply",
     "dashboard": "Panel de Control - MediSupply",
-    "home": "MediSupply"
+    "home": "MediSupply",
+    "sales": "Ventas - MediSupply",
+    "salesReport": "Reporte de Ventas - MediSupply"
   },
   "login": {
     "title": "Iniciar Sesión",
@@ -58,6 +62,10 @@
       "reports": {
         "title": "Informes",
         "description": "Visualiza analíticas, genera informes y analiza el rendimiento del negocio"
+      },
+      "sales": {
+        "title": "Ventas",
+        "description": "Gestiona transacciones de ventas, rastrea ingresos y monitorea el rendimiento de ventas"
       }
     }
   },
@@ -105,5 +113,14 @@
   "productList": {
     "noProducts": "No hay productos disponibles",
     "loadingProducts": "Cargando productos..."
+  },
+  "sales": {
+    "subtitle": "Selecciona una opción para gestionar ventas",
+    "options": {
+      "salesReport": {
+        "title": "Reporte de Ventas",
+        "description": "Ver reportes detallados de ventas y analíticas"
+      }
+    }
   }
 }

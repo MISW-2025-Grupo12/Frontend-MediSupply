@@ -2,11 +2,13 @@
   "header": {
     "products": "Products",
     "clients": "Clients",
+    "sales": "Sales",
     "language": "Language"
   },
   "routes": {
     "products": "products",
     "clients": "clients",
+    "sales": "sales",
     "add": "add",
     "dashboard": "dashboard"
   },
@@ -15,7 +17,9 @@
     "addProduct": "Add Product - MediSupply",
     "login": "Login - MediSupply",
     "dashboard": "Dashboard - MediSupply",
-    "home": "MediSupply"
+    "home": "MediSupply",
+    "sales": "Sales - MediSupply",
+    "salesReport": "Sales Report - MediSupply"
   },
   "login": {
     "title": "Login",
@@ -58,6 +62,10 @@
       "reports": {
         "title": "Reports",
         "description": "View analytics, generate reports, and analyze business performance"
+      },
+      "sales": {
+        "title": "Sales",
+        "description": "Manage sales transactions, track revenue, and monitor sales performance"
       }
     }
   },
@@ -105,5 +113,14 @@
   "productList": {
     "noProducts": "No products available",
     "loadingProducts": "Loading products..."
+  },
+  "sales": {
+    "subtitle": "Select an option to manage sales",
+    "options": {
+      "salesReport": {
+        "title": "Sales Report",
+        "description": "View detailed sales reports and analytics"
+      }
+    }
   }
 }
