@@ -1,6 +1,6 @@
 import { Routes } from "@angular/router";
-import { Products } from "./products";
-import { AddProduct } from "../ui/add-product/add-product";
+import { Products } from "./pages/products/products";
+import { AddProduct } from "./ui/add-product/add-product";
 
 export const PRODUCTS_ROUTES: Routes = [
   { 

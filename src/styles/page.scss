@@ -1,11 +1,13 @@
 @use 'sass:color';
-@import '../../../../styles/colors.scss';
+@import './colors.scss';
 
-.products-container {
+// General page container styles
+.page-container {
   padding: 2rem 0;
 }
 
-.products-header {
+// Header section with title and actions
+.page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -20,7 +22,8 @@
   }
 }
 
-.products-title {
+// Page title
+.page-title {
   font-size: 2rem;
   font-weight: 600;
   color: $main-dark;
@@ -32,7 +35,8 @@
   }
 }
 
-.add-button {
+// Action button (e.g., Add button)
+.page-action-button {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -61,7 +65,8 @@
   }
 }
 
-.products-content {
+// Main content area
+.page-content {
   margin-top: 2rem;
 }
 

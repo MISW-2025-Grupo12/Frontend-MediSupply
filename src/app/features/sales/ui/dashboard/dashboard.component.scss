@@ -1,0 +1,126 @@
+@import '../../../../../styles/page.scss';
+@import '../../../../../styles/colors.scss';
+
+// Dashboard content (inherits page structure from page.scss)
+
+// Filters Section
+.filters-card {
+    margin-bottom: 2rem;
+
+    .filters-container {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+
+      .date-field {
+        flex: 1;
+        min-width: 200px;
+      }
+
+      .filter-actions {
+        display: flex;
+        gap: 0.75rem;
+        
+        button {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: stretch;
+
+        .date-field {
+          min-width: 100%;
+        }
+
+        .filter-actions {
+          justify-content: stretch;
+          
+          button {
+            flex: 1;
+            justify-content: center;
+          }
+        }
+      }
+    }
+  }
+
+
+  // Charts Section
+  .charts-section {
+    display: grid;
+    gap: 2rem;
+
+    .chart-card {
+      .chart-container {
+        height: 400px;
+        position: relative;
+        
+        canvas {
+          max-height: 100% !important;
+        }
+      }
+
+      mat-card-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: $main-dark;
+      }
+    }
+
+    // Responsive grid for charts
+    @media (min-width: 1200px) {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto auto;
+      
+      .chart-card:first-child {
+        // Company chart - smaller, doughnut
+        grid-row: 1 / 3;
+      }
+    }
+
+    @media (max-width: 1199px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+// Material overrides
+mat-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid $gray-200 !important;
+
+  &:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+  }
+}
+
+mat-card-header {
+  margin-bottom: 1rem !important;
+
+  mat-card-title {
+    font-size: 1.125rem !important;
+    font-weight: 600 !important;
+    color: $main-dark !important;
+  }
+}
+
+// Form field overrides
+mat-form-field {
+  .mat-mdc-form-field-bottom-align::before {
+    display: none;
+  }
+}
+
+// Button overrides
+button[mat-raised-button] {
+  text-transform: none !important;
+  font-weight: 500 !important;
+}
+
+button[mat-stroked-button] {
+  text-transform: none !important;
+  font-weight: 500 !important;
+}

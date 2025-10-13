@@ -1,0 +1,10 @@
+@use 'sass:color';
+@import '../../../../../styles/page.scss';
+
+// Sales-specific styles
+.sales-subtitle {
+  font-size: 1.125rem;
+  color: $gray-600;
+  margin: 0 0 2rem 0;
+}
+

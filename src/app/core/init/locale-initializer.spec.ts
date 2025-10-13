@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideZonelessChangeDetection } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { LocaleRouteService } from '../services/locale-route.service';
@@ -16,6 +17,7 @@ describe('initializeLocale', () => {
 
     TestBed.configureTestingModule({
       providers: [
+        provideZonelessChangeDetection(),
         { provide: Router, useValue: router },
         { provide: TranslocoService, useValue: translocoService },
         { provide: LocaleRouteService, useValue: localeRouteService }

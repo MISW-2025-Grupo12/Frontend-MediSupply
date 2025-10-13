@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { provideZonelessChangeDetection } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslocoTestingModule } from '@ngneat/transloco';
 import { Products } from './products';
@@ -27,7 +29,9 @@ describe('Products', () => {
       ],
       providers: [
         provideZonelessChangeDetection(),
-        provideRouter([])
+        provideRouter([]),
+        provideHttpClient(),
+        provideHttpClientTesting()
       ]
     }).compileComponents();
 
@@ -41,10 +45,11 @@ describe('Products', () => {
   });
 
   it('should navigate to add product page', () => {
-    spyOn(component['router'], 'navigate');
+    const router = TestBed.inject(Router);
+    spyOn(router, 'navigate');
     
     component.navigateToAddProduct();
     
-    expect(component['router'].navigate).toHaveBeenCalled();
+    expect(router.navigate).toHaveBeenCalled();
   });
 });

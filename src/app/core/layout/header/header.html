@@ -21,6 +21,12 @@
            class="header-nav-link">
           {{ t('header.clients') }}
         </a>
+        <a [routerLink]="getSalesRoute()" 
+           routerLinkActive="active" 
+           [routerLinkActiveOptions]="{ matrixParams: 'exact', queryParams: 'exact', paths: 'subset', fragment: 'ignored' }"
+           class="header-nav-link">
+          {{ t('header.sales') }}
+        </a>
          <!-- Language Switcher -->
          <button (click)="switchLanguage()" class="language-switcher" [title]="t('header.language')">
            <span class="language-code">{{ currentLang.toUpperCase() }}</span>
