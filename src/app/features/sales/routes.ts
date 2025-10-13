@@ -14,7 +14,7 @@ export const SALES_ROUTES: Routes = [
     data: { titleKey: 'titles.salesReport' }
   },
   {
-    path: 'reporteDeVentas',
+    path: 'reportes-de-ventas',
     component: SalesReportComponent,
     data: { titleKey: 'titles.salesReport' }
   }

@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { TranslocoDirective, TranslocoService } from '@ngneat/transloco';
+import { TranslocoDirective } from '@ngneat/transloco';
+import { LocaleRouteService } from '../../../../core/services/locale-route.service';
 import { ProductsState } from '../../state/products.store';
 import { ProductListComponent } from '../../ui/product-list.component/product-list.component';
 
@@ -13,9 +13,7 @@ import { ProductListComponent } from '../../ui/product-list.component/product-li
   styleUrl: './products.scss'
 })
 export class Products {
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
-  private translocoService = inject(TranslocoService);
+  private localeRouteService = inject(LocaleRouteService);
   
   productsStore = inject(ProductsState);
 
@@ -24,8 +22,7 @@ export class Products {
   }
 
   navigateToAddProduct(): void {
-    const currentLang = this.translocoService.getActiveLang();
-    const addPath = currentLang === 'es' ? 'anadir' : 'add';
-    this.router.navigate([addPath], { relativeTo: this.route });
+    // Use the enhanced API for nested route navigation
+    this.localeRouteService.navigateToNestedRoute(['products', 'add']);
   }
 }

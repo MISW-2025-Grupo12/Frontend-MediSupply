@@ -1,14 +1,19 @@
 {
+  "common": {
+    "comingSoon": "Coming Soon"
+  },
   "header": {
     "products": "Products",
     "clients": "Clients",
     "sales": "Sales",
+    "salesReport": "Sales Report",
     "language": "Language"
   },
   "routes": {
     "products": "products",
     "clients": "clients",
     "sales": "sales",
+    "salesReport": "sales-report",
     "add": "add",
     "dashboard": "dashboard"
   },
@@ -121,6 +126,26 @@
         "title": "Sales Report",
         "description": "View detailed sales reports and analytics"
       }
+    },
+    "dashboard": {
+      "title": "Sales Analytics Dashboard",
+      "filters": {
+        "title": "Date Filters",
+        "startDate": "Start Date",
+        "endDate": "End Date",
+        "apply": "Apply Filters",
+        "clear": "Clear Filters"
+      },
+      "summary": {
+        "totalSales": "Total Sales",
+        "myTotalSales": "My Total Sales"
+      },
+      "charts": {
+        "salesByCompany": "Sales by Company",
+        "salesByCustomer": "Sales by Customer",
+        "salesByProduct": "Sales by Product"
+      },
+      "salesAmount": "Sales Amount"
     }
   }
 }

@@ -6,19 +6,7 @@
   <p class="sales-subtitle">{{ t('sales.subtitle') }}</p>
   
   <div class="page-content">
-    <div class="sales-options">
-      <div class="sales-option-card" (click)="navigateToSalesReport()">
-        <div class="option-icon">
-          <mat-icon>assessment</mat-icon>
-        </div>
-        <div class="option-content">
-          <h3 class="option-title">{{ t('sales.options.salesReport.title') }}</h3>
-          <p class="option-description">{{ t('sales.options.salesReport.description') }}</p>
-        </div>
-        <div class="option-arrow">
-          <mat-icon>arrow_forward</mat-icon>
-        </div>
-      </div>
-    </div>
+    <app-sales-options></app-sales-options>    
+    <app-dashboard></app-dashboard>
   </div>
 </div>

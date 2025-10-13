@@ -1,16 +1,21 @@
 {
+  "common": {
+    "comingSoon": "Próximamente"
+  },
   "header": {
     "products": "Productos",
     "clients": "Clientes",
     "sales": "Ventas",
-    "language": "Idioma"
+    "language": "Idioma",
+    "salesReport": "Reporte de Ventas"
   },
   "routes": {
     "products": "productos",
     "clients": "clientes",
     "add": "anadir",
     "dashboard": "panel",
-    "sales": "ventas"
+    "sales": "ventas",
+    "salesReport": "reporte-de-ventas"
   },
   "titles": {
     "products": "Productos - MediSupply",
@@ -121,6 +126,26 @@
         "title": "Reporte de Ventas",
         "description": "Ver reportes detallados de ventas y analíticas"
       }
+    },
+    "dashboard": {
+      "title": "Panel de Análisis de Ventas",
+      "filters": {
+        "title": "Filtros de Fecha",
+        "startDate": "Fecha de Inicio",
+        "endDate": "Fecha de Fin",
+        "apply": "Aplicar Filtros",
+        "clear": "Limpiar Filtros"
+      },
+      "summary": {
+        "totalSales": "Ventas Totales",
+        "myTotalSales": "Mis Ventas Totales"
+      },
+      "charts": {
+        "salesByCompany": "Ventas por Empresa",
+        "salesByCustomer": "Ventas por Cliente",
+        "salesByProduct": "Ventas por Producto"
+      },
+      "salesAmount": "Monto de Ventas"
     }
   }
 }
