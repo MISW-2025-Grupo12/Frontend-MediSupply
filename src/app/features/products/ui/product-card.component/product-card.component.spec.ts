@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideZonelessChangeDetection } from '@angular/core';
 import { TranslocoTestingModule } from '@ngneat/transloco';
 import { ProductCardComponent } from './product-card.component';
 import { Product } from '../../../../shared/models/product.model';
@@ -41,6 +42,9 @@ describe('ProductCardComponent', () => {
             defaultLang: 'en'
           }
         })
+      ],
+      providers: [
+        provideZonelessChangeDetection()
       ]
     })
     .compileComponents();

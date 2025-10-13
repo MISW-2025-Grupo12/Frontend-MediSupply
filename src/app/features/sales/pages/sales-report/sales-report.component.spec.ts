@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideZonelessChangeDetection } from '@angular/core';
+import { TranslocoTestingModule } from '@ngneat/transloco';
 
 import { SalesReportComponent } from './sales-report.component';
 
@@ -8,7 +10,38 @@ describe('SalesReportComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SalesReportComponent]
+      imports: [
+        SalesReportComponent,
+        TranslocoTestingModule.forRoot({
+          langs: {
+            en: {
+              sales: {
+                report: {
+                  title: 'Sales Report',
+                  period: 'Period',
+                  total: 'Total'
+                }
+              }
+            },
+            es: {
+              sales: {
+                report: {
+                  title: 'Reporte de Ventas',
+                  period: 'Período',
+                  total: 'Total'
+                }
+              }
+            }
+          },
+          translocoConfig: {
+            availableLangs: ['en', 'es'],
+            defaultLang: 'en'
+          }
+        })
+      ],
+      providers: [
+        provideZonelessChangeDetection()
+      ]
     })
     .compileComponents();
 
