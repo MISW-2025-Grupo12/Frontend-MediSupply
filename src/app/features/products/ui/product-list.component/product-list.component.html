@@ -1,0 +1,11 @@
+<div class="product-list" *transloco="let t">
+  <div class="product-grid">
+    @for (product of products(); track product.id) {
+      <app-product-card [product]="product" />
+    } @empty {
+      <div class="empty-state">
+        <p>{{ t('productList.noProducts') }}</p>
+      </div>
+    }
+  </div>
+</div>

@@ -92,5 +92,18 @@
       "cancel": "Cancelar",
       "create": "Añadir Producto"
     }
+  },
+  "productCard": {
+    "price": "Precio",
+    "stock": "Stock",
+    "units": "unidades",
+    "provider": "Proveedor",
+    "expires": "Vence",
+    "lowStock": "Stock Bajo",
+    "nearExpiry": "Próximo a Vencer"
+  },
+  "productList": {
+    "noProducts": "No hay productos disponibles",
+    "loadingProducts": "Cargando productos..."
   }
 }

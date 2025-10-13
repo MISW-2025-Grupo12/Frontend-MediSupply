@@ -1,0 +1,47 @@
+<mat-card class="product-card">
+  <mat-card-header>
+    <mat-card-title>{{ product().name }}</mat-card-title>
+    <mat-card-subtitle>{{ product().category.name }}</mat-card-subtitle>
+  </mat-card-header>
+  
+  <mat-card-content>
+    <p class="product-description">{{ product().description }}</p>
+    
+    <div class="product-details">
+      <div class="detail-item">
+        <span class="detail-label">{{ translocoService.translate('productCard.price') }}:</span>
+        <span class="detail-value price">${{ product().price | number:'1.2-2' }}</span>
+      </div>
+      
+      <div class="detail-item">
+        <span class="detail-label">{{ translocoService.translate('productCard.stock') }}:</span>
+        <span class="detail-value" [class.low-stock]="product().stock < 10">
+          {{ product().stock }} {{ translocoService.translate('productCard.units') }}
+        </span>
+      </div>
+      
+      <div class="detail-item">
+        <span class="detail-label">{{ translocoService.translate('productCard.provider') }}:</span>
+        <span class="detail-value">{{ product().provider.name }}</span>
+      </div>
+      
+      <div class="detail-item">
+        <span class="detail-label">{{ translocoService.translate('productCard.expires') }}:</span>
+        <span class="detail-value" [class.near-expiry]="isNearExpiry(product().expirationDate)">
+          {{ product().expirationDate | date:'mediumDate' }}
+        </span>
+      </div>
+    </div>
+  </mat-card-content>
+  
+  <mat-card-actions align="end">
+    <mat-chip-listbox aria-label="Product status">
+      <mat-chip *ngIf="product().stock < 10" class="status-chip low-stock-chip">
+        {{ translocoService.translate('productCard.lowStock') }}
+      </mat-chip>
+      <mat-chip *ngIf="isNearExpiry(product().expirationDate)" class="status-chip expiry-chip">
+        {{ translocoService.translate('productCard.nearExpiry') }}
+      </mat-chip>
+    </mat-chip-listbox>
+  </mat-card-actions>
+</mat-card>

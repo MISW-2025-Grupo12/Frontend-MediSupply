@@ -92,5 +92,18 @@
       "cancel": "Cancel",
       "create": "Add Product"
     }
+  },
+  "productCard": {
+    "price": "Price",
+    "stock": "Stock",
+    "units": "units",
+    "provider": "Provider",
+    "expires": "Expires",
+    "lowStock": "Low Stock",
+    "nearExpiry": "Near Expiry"
+  },
+  "productList": {
+    "noProducts": "No products available",
+    "loadingProducts": "Loading products..."
   }
 }
