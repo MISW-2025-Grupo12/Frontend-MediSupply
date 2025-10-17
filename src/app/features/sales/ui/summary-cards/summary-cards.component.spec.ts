@@ -5,16 +5,30 @@ import { MatIconModule } from '@angular/material/icon';
 import { TranslocoTestingModule } from '@ngneat/transloco';
 
 import { SummaryCardsComponent } from './summary-cards.component';
-import { DashboardSummary } from '../../services/sales-data.service';
+import { SalesReport } from '../../../../shared/models/salesReport.model';
 
 describe('SummaryCardsComponent', () => {
   let component: SummaryCardsComponent;
   let fixture: ComponentFixture<SummaryCardsComponent>;
 
-  const mockSummary: DashboardSummary = {
+  const mockSummary: SalesReport = {
     totalSales: 150000,
-    currentSellerSales: 45000,
-    sellerName: 'John Doe'
+    totalProductsSold: 1250,
+    salesByMonth: {
+      'January': 50000,
+      'February': 60000,
+      'March': 40000
+    },
+    salesByCustomer: {
+      'Hospital Central': 75000,
+      'Clinic Norte': 45000,
+      'Farmacia Popular': 30000
+    },
+    mostSoldProducts: {
+      'Surgical Masks': 500,
+      'Antibiotics': 100,
+      'Syringes': 200
+    }
   };
 
   beforeEach(async () => {
@@ -66,8 +80,8 @@ describe('SummaryCardsComponent', () => {
     // Check total sales value
     expect(summaryValues[0].textContent?.trim()).toBe('$150,000.00');
     
-    // Check current seller sales value
-    expect(summaryValues[1].textContent?.trim()).toBe('$45,000.00');
+    // Check total products sold value
+    expect(summaryValues[1].textContent?.trim()).toBe('1,250');
   });
 
   it('should render the correct icons', () => {
@@ -76,7 +90,7 @@ describe('SummaryCardsComponent', () => {
     
     expect(icons.length).toBe(2);
     expect(icons[0].textContent?.trim()).toBe('attach_money');
-    expect(icons[1].textContent?.trim()).toBe('person');
+    expect(icons[1].textContent?.trim()).toBe('inventory');
   });
 
   it('should have the correct CSS classes for styling', () => {
@@ -112,8 +126,10 @@ describe('SummaryCardsComponent', () => {
     // Update the input using componentRef.setInput for proper change detection
     fixture.componentRef.setInput('summary', {
       totalSales: 0,
-      currentSellerSales: 0,
-      sellerName: ''
+      totalProductsSold: 0,
+      salesByMonth: {},
+      salesByCustomer: {},
+      mostSoldProducts: {}
     });
     
     // Wait for change detection to complete
@@ -124,15 +140,17 @@ describe('SummaryCardsComponent', () => {
     const summaryValues = compiled.querySelectorAll('.summary-value');
     
     expect(summaryValues[0].textContent?.trim()).toBe('$0.00');
-    expect(summaryValues[1].textContent?.trim()).toBe('$0.00');
+    expect(summaryValues[1].textContent?.trim()).toBe('0');
   });
 
   it('should handle negative values correctly', async () => {
     // Update the input using componentRef.setInput for proper change detection
     fixture.componentRef.setInput('summary', {
       totalSales: -500,
-      currentSellerSales: -250,
-      sellerName: 'Test User'
+      totalProductsSold: 0,
+      salesByMonth: {},
+      salesByCustomer: {},
+      mostSoldProducts: {}
     });
     
     // Wait for change detection to complete
@@ -143,14 +161,25 @@ describe('SummaryCardsComponent', () => {
     const summaryValues = compiled.querySelectorAll('.summary-value');
     
     expect(summaryValues[0].textContent?.trim()).toBe('-$500.00');
-    expect(summaryValues[1].textContent?.trim()).toBe('-$250.00');
+    expect(summaryValues[1].textContent?.trim()).toBe('0');
   });
 
   it('should update display when summary input changes', async () => {
-    const newSummary: DashboardSummary = {
+    const newSummary: SalesReport = {
       totalSales: 200000,
-      currentSellerSales: 75000,
-      sellerName: 'Jane Smith'
+      totalProductsSold: 2000,
+      salesByMonth: {
+        'April': 80000,
+        'May': 120000
+      },
+      salesByCustomer: {
+        'Hospital Central': 100000,
+        'Clinic Norte': 100000
+      },
+      mostSoldProducts: {
+        'Surgical Masks': 1000,
+        'Antibiotics': 1000
+      }
     };
 
     // Update the input using componentRef.setInput for proper change detection
@@ -164,6 +193,6 @@ describe('SummaryCardsComponent', () => {
     const summaryValues = compiled.querySelectorAll('.summary-value');
     
     expect(summaryValues[0].textContent?.trim()).toBe('$200,000.00');
-    expect(summaryValues[1].textContent?.trim()).toBe('$75,000.00');
+    expect(summaryValues[1].textContent?.trim()).toBe('2,000');
   });
 });

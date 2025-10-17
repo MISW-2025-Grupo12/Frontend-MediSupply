@@ -83,8 +83,8 @@
       "descriptionPlaceholder": "Enter product description",
       "category": "Category",
       "categoryPlaceholder": "Select a category",
-      "quantity": "Quantity",
-      "quantityPlaceholder": "Enter quantity",
+      "quantity": "Stock",
+      "quantityPlaceholder": "Enter stock quantity",
       "expirationDate": "Expiration Date",
       "provider": "Provider",
       "providerPlaceholder": "Enter provider name",
@@ -113,7 +113,12 @@
     "provider": "Provider",
     "expires": "Expires",
     "lowStock": "Low Stock",
-    "nearExpiry": "Near Expiry"
+    "nearExpiry": "Near Expiry",
+    "reserved": "Reserved",
+    "coldChain": "Cold Chain",
+    "required": "Required",
+    "locations": "Locations",
+    "available": "available"
   },
   "productList": {
     "noProducts": "No products available",

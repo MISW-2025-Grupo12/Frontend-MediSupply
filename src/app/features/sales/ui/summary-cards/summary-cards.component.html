@@ -19,11 +19,11 @@
       <mat-card-content>
         <div class="summary-content">
           <div class="summary-icon seller-sales">
-            <mat-icon>person</mat-icon>
+            <mat-icon>inventory</mat-icon>
           </div>
           <div class="summary-info">
-            <h3 class="summary-value">{{ formatCurrency(summary.currentSellerSales) }}</h3>
-            <p class="summary-label">{{ t('sales.dashboard.summary.myTotalSales') }}</p>
+            <h3 class="summary-value">{{ summary.totalProductsSold | number }}</h3>
+            <p class="summary-label">Total Products Sold</p>
           </div>
         </div>
       </mat-card-content>

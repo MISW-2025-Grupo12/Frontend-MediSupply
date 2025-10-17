@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -10,23 +12,52 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatNativeDateModule } from '@angular/material/core';
 import { TranslocoTestingModule } from '@ngneat/transloco';
+import { of } from 'rxjs';
 
 import { DashboardComponent } from './dashboard.component';
 import { SummaryCardsComponent } from '../summary-cards/summary-cards.component';
+import { SalesState } from '../../state/sales.store';
 import { SalesDataService } from '../../services/sales-data.service';
+import { SalesReport } from '../../../../shared/models/salesReport.model';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
+  let salesState: jasmine.SpyObj<SalesState>;
   let salesDataService: jasmine.SpyObj<SalesDataService>;
 
+  const mockSalesReport: SalesReport = {
+    totalSales: 100000,
+    totalProductsSold: 1250,
+    salesByMonth: {
+      'January': 30000,
+      'February': 40000,
+      'March': 30000
+    },
+    salesByCustomer: {
+      'Hospital Central': 50000,
+      'Clinic Norte': 30000,
+      'Farmacia Popular': 20000
+    },
+    mostSoldProducts: {
+      'Surgical Masks': 500,
+      'Antibiotics': 300,
+      'Syringes': 450
+    }
+  };
+
   beforeEach(async () => {
-    const salesDataServiceSpy = jasmine.createSpyObj('SalesDataService', [
-      'getDashboardSummary',
-      'getChartDataByCompany',
-      'getChartDataByCustomer',
-      'getChartDataByProduct'
-    ]);
+    const salesStateSpy = jasmine.createSpyObj('SalesState', ['loadSalesReport']);
+    const salesDataServiceSpy = jasmine.createSpyObj('SalesDataService', ['getSalesReportData']);
+
+    // Mock the salesReport computed signal
+    Object.defineProperty(salesStateSpy, 'salesReport', {
+      get: () => () => mockSalesReport,
+      configurable: true
+    });
+
+    // Mock the getSalesReportData method
+    salesDataServiceSpy.getSalesReportData.and.returnValue(of(mockSalesReport));
 
     await TestBed.configureTestingModule({
       imports: [
@@ -64,6 +95,9 @@ describe('DashboardComponent', () => {
       ],
       providers: [
         provideZonelessChangeDetection(),
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: SalesState, useValue: salesStateSpy },
         { provide: SalesDataService, useValue: salesDataServiceSpy }
       ]
     })
@@ -71,30 +105,8 @@ describe('DashboardComponent', () => {
 
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
+    salesState = TestBed.inject(SalesState) as jasmine.SpyObj<SalesState>;
     salesDataService = TestBed.inject(SalesDataService) as jasmine.SpyObj<SalesDataService>;
-
-    // Setup default spy returns
-    salesDataService.getDashboardSummary.and.returnValue({
-      totalSales: 100000,
-      currentSellerSales: 25000,
-      sellerName: 'Test User'
-    });
-
-    salesDataService.getChartDataByCompany.and.returnValue({
-      labels: ['Company A', 'Company B'],
-      data: [60000, 40000],
-      colors: ['#3B82F6', '#10B981']
-    });
-
-    salesDataService.getChartDataByCustomer.and.returnValue({
-      labels: ['Customer 1', 'Customer 2'],
-      data: [30000, 70000]
-    });
-
-    salesDataService.getChartDataByProduct.and.returnValue({
-      labels: ['Product X', 'Product Y'],
-      data: [45000, 55000]
-    });
 
     fixture.detectChanges();
   });
@@ -114,11 +126,8 @@ describe('DashboardComponent', () => {
     expect(component.startDate!.toDateString()).toBe(ninetyDaysAgo.toDateString());
   });
 
-  it('should load dashboard data on init', () => {
-    expect(salesDataService.getDashboardSummary).toHaveBeenCalled();
-    expect(salesDataService.getChartDataByCompany).toHaveBeenCalled();
-    expect(salesDataService.getChartDataByCustomer).toHaveBeenCalled();
-    expect(salesDataService.getChartDataByProduct).toHaveBeenCalled();
+  it('should load sales report data on init', () => {
+    expect(salesState.loadSalesReport).toHaveBeenCalled();
   });
 
   it('should display summary cards component', () => {
@@ -127,17 +136,13 @@ describe('DashboardComponent', () => {
     expect(summaryCardsComponent).toBeTruthy();
   });
 
-  it('should pass summary data to summary cards component', () => {
+  it('should pass sales report data to summary cards component', () => {
     const summaryCardsComponent = fixture.debugElement.query(
       (element) => element.componentInstance instanceof SummaryCardsComponent
     );
     
     expect(summaryCardsComponent).toBeTruthy();
-    expect(summaryCardsComponent.componentInstance.summary).toEqual({
-      totalSales: 100000,
-      currentSellerSales: 25000,
-      sellerName: 'Test User'
-    });
+    expect(summaryCardsComponent.componentInstance.summary).toEqual(mockSalesReport);
   });
 
   it('should render filter controls', () => {
@@ -164,17 +169,11 @@ describe('DashboardComponent', () => {
   });
 
   it('should apply filters when onApplyFilters is called', () => {
-    salesDataService.getDashboardSummary.calls.reset();
-    salesDataService.getChartDataByCompany.calls.reset();
-    salesDataService.getChartDataByCustomer.calls.reset();
-    salesDataService.getChartDataByProduct.calls.reset();
+    salesState.loadSalesReport.calls.reset();
 
     component.onApplyFilters();
 
-    expect(salesDataService.getDashboardSummary).toHaveBeenCalled();
-    expect(salesDataService.getChartDataByCompany).toHaveBeenCalled();
-    expect(salesDataService.getChartDataByCustomer).toHaveBeenCalled();
-    expect(salesDataService.getChartDataByProduct).toHaveBeenCalled();
+    expect(salesState.loadSalesReport).toHaveBeenCalled();
   });
 
   it('should clear filters when onClearFilters is called', () => {
@@ -187,14 +186,14 @@ describe('DashboardComponent', () => {
     expect(component.endDate).toBeNull();
   });
 
-  it('should update chart data based on service responses', () => {
-    expect(component.companyChartData.labels).toEqual(['Company A', 'Company B']);
-    expect(component.companyChartData.datasets[0].data).toEqual([60000, 40000]);
+  it('should update chart data based on sales report', () => {
+    expect(component.companyChartData.labels).toEqual(['January', 'February', 'March']);
+    expect(component.companyChartData.datasets[0].data).toEqual([30000, 40000, 30000]);
     
-    expect(component.customerChartData.labels).toEqual(['Customer 1', 'Customer 2']);
-    expect(component.customerChartData.datasets[0].data).toEqual([30000, 70000]);
+    expect(component.customerChartData.labels).toEqual(['Hospital Central', 'Clinic Norte', 'Farmacia Popular']);
+    expect(component.customerChartData.datasets[0].data).toEqual([50000, 30000, 20000]);
     
-    expect(component.productChartData.labels).toEqual(['Product X', 'Product Y']);
-    expect(component.productChartData.datasets[0].data).toEqual([45000, 55000]);
+    expect(component.productChartData.labels).toEqual(['Surgical Masks', 'Syringes', 'Antibiotics']);
+    expect(component.productChartData.datasets[0].data).toEqual([500, 450, 300]);
   });
 });

@@ -76,7 +76,7 @@ describe('AddProduct', () => {
       expect(component.productForm.get('name')?.value).toBe('');
       expect(component.productForm.get('description')?.value).toBe('');
       expect(component.productForm.get('category')?.value).toBe('');
-      expect(component.productForm.get('quantity')?.value).toBeNull();
+      expect(component.productForm.get('stock')?.value).toBeNull();
       expect(component.productForm.get('expirationDate')?.value).toBeNull();
       expect(component.productForm.get('providerId')?.value).toBeNull();
       expect(component.productForm.get('price')?.value).toBeNull();
@@ -88,7 +88,7 @@ describe('AddProduct', () => {
       expect(form.get('name')?.hasError('required')).toBe(true);
       expect(form.get('description')?.hasError('required')).toBe(true);
       expect(form.get('category')?.hasError('required')).toBe(true);
-      expect(form.get('quantity')?.hasError('required')).toBe(true);
+      expect(form.get('stock')?.hasError('required')).toBe(true);
       expect(form.get('expirationDate')?.hasError('required')).toBe(true);
       expect(form.get('providerId')?.hasError('required')).toBe(true);
       expect(form.get('price')?.hasError('required')).toBe(true);
@@ -112,13 +112,13 @@ describe('AddProduct', () => {
       expect(descControl?.hasError('minlength')).toBe(false);
     });
 
-    it('should validate minimum value for quantity', () => {
-      const quantityControl = component.productForm.get('quantity');
-      quantityControl?.setValue(0);
-      expect(quantityControl?.hasError('min')).toBe(true);
+    it('should validate minimum value for stock', () => {
+      const stockControl = component.productForm.get('stock');
+      stockControl?.setValue(0);
+      expect(stockControl?.hasError('min')).toBe(true);
       
-      quantityControl?.setValue(1);
-      expect(quantityControl?.hasError('min')).toBe(false);
+      stockControl?.setValue(1);
+      expect(stockControl?.hasError('min')).toBe(false);
     });
 
     it('should validate minimum value for price', () => {
@@ -178,7 +178,7 @@ describe('AddProduct', () => {
           name: 'Medicines',
           description: 'Medical products'
         },
-        quantity: 10,
+        stock: 10,
         expirationDate: new Date('2025-12-31'),
         providerId: {
           id: 1,
@@ -223,7 +223,7 @@ describe('AddProduct', () => {
       
       expect(console.log).toHaveBeenCalledWith('Product data:', jasmine.objectContaining({
         name: 'Test Product',
-        quantity: 10
+        stock: 10
       }));
     });
   });
@@ -246,11 +246,11 @@ describe('AddProduct', () => {
     });
 
     it('should return min value error message', () => {
-      const quantityControl = component.productForm.get('quantity');
-      quantityControl?.setValue(0);
-      quantityControl?.markAsTouched();
+      const stockControl = component.productForm.get('stock');
+      stockControl?.setValue(0);
+      stockControl?.markAsTouched();
       
-      const errorMsg = component.getErrorMessage('quantity');
+      const errorMsg = component.getErrorMessage('stock');
       expect(errorMsg).toBe('addProduct.form.minValue');
     });
 
@@ -282,7 +282,7 @@ describe('AddProduct', () => {
         name: 'Test Product',
         description: 'This is a valid description with enough characters',
         category: 1,
-        quantity: 10,
+        stock: 10,
         expirationDate: new Date('2025-12-31'),
         providerId: 1,
         price: 99.99

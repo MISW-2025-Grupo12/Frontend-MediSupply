@@ -61,12 +61,12 @@
               <input 
                 matInput 
                 type="number"
-                formControlName="quantity"
+                formControlName="stock"
                 [placeholder]="t('addProduct.form.quantityPlaceholder')"
                 min="1"
                 required>
-              <mat-error *ngIf="productForm.get('quantity')?.invalid">
-                {{ t(getErrorMessage('quantity')) }}
+              <mat-error *ngIf="productForm.get('stock')?.invalid">
+                {{ t(getErrorMessage('stock')) }}
               </mat-error>
             </mat-form-field>
 

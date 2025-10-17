@@ -2,13 +2,13 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
 import { TranslocoTestingModule } from '@ngneat/transloco';
 import { ProductListComponent } from './product-list.component';
-import { Product } from '../../../../shared/models/product.model';
+import { ProductWithLocation } from '../../../../shared/models/productWithLocation.model';
 
 describe('ProductListComponent', () => {
   let component: ProductListComponent;
   let fixture: ComponentFixture<ProductListComponent>;
 
-  const mockProducts: Product[] = [
+  const mockProducts: ProductWithLocation[] = [
     {
       id: '1',
       name: 'Product 1',
@@ -17,7 +17,18 @@ describe('ProductListComponent', () => {
       stock: 10,
       expirationDate: new Date('2025-12-31'),
       category: { id: '1', name: 'Category 1', description: 'Category 1 Description' },
-      provider: { id: '1', name: 'Provider 1', email: 'provider1@test.com' }
+      provider: { id: '1', name: 'Provider 1', email: 'provider1@test.com' },
+      requiresColdChain: false,
+      locations: [
+        {
+          id: '1',
+          name: 'Warehouse A',
+          aisle: 'A1',
+          rack: 'R1',
+          available_quantity: 8,
+          reserved_quantity: 2
+        }
+      ]
     },
     {
       id: '2',
@@ -27,7 +38,18 @@ describe('ProductListComponent', () => {
       stock: 20,
       expirationDate: new Date('2025-11-30'),
       category: { id: '2', name: 'Category 2', description: 'Category 2 Description' },
-      provider: { id: '2', name: 'Provider 2', email: 'provider2@test.com' }
+      provider: { id: '2', name: 'Provider 2', email: 'provider2@test.com' },
+      requiresColdChain: true,
+      locations: [
+        {
+          id: '2',
+          name: 'Cold Storage B',
+          aisle: 'B2',
+          rack: 'R2',
+          available_quantity: 15,
+          reserved_quantity: 5
+        }
+      ]
     }
   ];
 

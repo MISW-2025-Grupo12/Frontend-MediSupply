@@ -12,7 +12,7 @@ import { TranslocoDirective, TranslocoService } from '@ngneat/transloco';
 import { BaseChartDirective } from 'ng2-charts';
 import { Chart, ChartConfiguration, ChartType, registerables } from 'chart.js';
 
-import { SalesDataService, DashboardSummary, ChartData } from '../../services/sales-data.service';
+import { SalesState } from '../../state/sales.store';
 import { SummaryCardsComponent } from '../summary-cards/summary-cards.component';
 
 // Register Chart.js components
@@ -38,19 +38,15 @@ Chart.register(...registerables);
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit {
-  private salesDataService = inject(SalesDataService);
+  private salesState = inject(SalesState);
   private translocoService = inject(TranslocoService);
 
   // Date filters
   startDate: Date | null = null;
   endDate: Date | null = null;
 
-  // Summary data
-  summary: DashboardSummary = {
-    totalSales: 0,
-    currentSellerSales: 0,
-    sellerName: ''
-  };
+  // Sales report data
+  salesReport = this.salesState.salesReport;
 
   // Chart configurations
   companyChartData: ChartConfiguration<'doughnut'>['data'] = {
@@ -122,65 +118,70 @@ export class DashboardComponent implements OnInit {
     this.endDate = today;
     this.startDate = new Date(today.getTime() - (90 * 24 * 60 * 60 * 1000));
     
-    this.loadDashboardData();
+    this.loadSalesReport();
   }
 
   onApplyFilters(): void {
-    this.loadDashboardData();
+    this.loadSalesReport();
   }
 
   onClearFilters(): void {
     this.startDate = null;
     this.endDate = null;
-    this.loadDashboardData();
+    this.loadSalesReport();
   }
 
-  private loadDashboardData(): void {
-    // Load dashboard summary
-    this.summary = this.salesDataService.getDashboardSummary(
-      this.startDate || undefined,
-      this.endDate || undefined
-    );
+  private loadSalesReport(): void {
+    this.salesState.loadSalesReport();
+    this.updateChartData();
+  }
 
-    // Load company chart data
-    const companyData = this.salesDataService.getChartDataByCompany(
-      this.startDate || undefined,
-      this.endDate || undefined
-    );
+  private updateChartData(): void {
+    const report = this.salesReport();
+    
+    // Update sales by month chart (using doughnut for company representation)
     this.companyChartData = {
-      labels: companyData.labels,
+      labels: Object.keys(report.salesByMonth),
       datasets: [{
-        data: companyData.data,
-        backgroundColor: companyData.colors || []
+        data: Object.values(report.salesByMonth).map(value => typeof value === 'number' ? value : 0),
+        backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6']
       }]
     };
 
-    // Load customer chart data
-    const customerData = this.salesDataService.getChartDataByCustomer(
-      this.startDate || undefined,
-      this.endDate || undefined
-    );
+    // Update sales by customer chart
+    const customerEntries = Object.entries(report.salesByCustomer)
+      .sort(([, a], [, b]) => {
+        const aVal = typeof a === 'number' ? a : 0;
+        const bVal = typeof b === 'number' ? b : 0;
+        return bVal - aVal;
+      })
+      .slice(0, 8);
+
     this.customerChartData = {
-      labels: customerData.labels,
+      labels: customerEntries.map(([customer]) => customer),
       datasets: [{
         label: this.translocoService.translate('sales.dashboard.salesAmount'),
-        data: customerData.data,
+        data: customerEntries.map(([, amount]) => typeof amount === 'number' ? amount : 0),
         backgroundColor: '#3B82F6',
         borderColor: '#2563EB',
         borderWidth: 1
       }]
     };
 
-    // Load product chart data
-    const productData = this.salesDataService.getChartDataByProduct(
-      this.startDate || undefined,
-      this.endDate || undefined
-    );
+    // Update most sold products chart
+    const productEntries = Object.entries(report.mostSoldProducts)
+      .sort(([, a], [, b]) => {
+        const aVal = typeof a === 'number' ? a : 0;
+        const bVal = typeof b === 'number' ? b : 0;
+        return bVal - aVal;
+      })
+      .slice(0, 10);
+
     this.productChartData = {
-      labels: productData.labels,
+      labels: productEntries.map(([product]) => product),
       datasets: [{
         label: this.translocoService.translate('sales.dashboard.salesAmount'),
-        data: productData.data,
+        data: productEntries.map(([, amount]) => typeof amount === 'number' ? amount : 0),
         backgroundColor: '#10B981',
         borderColor: '#059669',
         borderWidth: 1
