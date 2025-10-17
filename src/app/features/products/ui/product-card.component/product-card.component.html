@@ -15,9 +15,14 @@
       
       <div class="detail-item">
         <span class="detail-label">{{ translocoService.translate('productCard.stock') }}:</span>
-        <span class="detail-value" [class.low-stock]="product().stock < 10">
-          {{ product().stock }} {{ translocoService.translate('productCard.units') }}
+        <span class="detail-value" [class.low-stock]="getTotalAvailableStock() < 10">
+          {{ getTotalAvailableStock() }} {{ translocoService.translate('productCard.units') }}
         </span>
+      </div>
+      
+      <div class="detail-item" *ngIf="getTotalReservedStock() > 0">
+        <span class="detail-label">{{ translocoService.translate('productCard.reserved') }}:</span>
+        <span class="detail-value">{{ getTotalReservedStock() }} {{ translocoService.translate('productCard.units') }}</span>
       </div>
       
       <div class="detail-item">
@@ -31,16 +36,41 @@
           {{ product().expirationDate | date:'mediumDate' }}
         </span>
       </div>
+      
+      <div class="detail-item" *ngIf="product().requiresColdChain">
+        <span class="detail-label">{{ translocoService.translate('productCard.coldChain') }}:</span>
+        <span class="detail-value cold-chain">{{ translocoService.translate('productCard.required') }}</span>
+      </div>
+      
+      <div *ngIf="product().locations.length > 0">
+        <div class="detail-item">
+          <span class="detail-label">{{ translocoService.translate('productCard.locations') }}:</span>
+        </div>
+        <div class="locations-list">
+          <div *ngFor="let location of product().locations" class="location-item">
+            <div class="location-info">
+              <span class="location-name">{{ location.name }}</span>
+              <span class="location-details">({{ location.aisle }}, {{ location.rack }})</span>
+            </div>
+            <div class="location-stock">
+              {{ location.available_quantity }} {{ translocoService.translate('productCard.available') }}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </mat-card-content>
   
   <mat-card-actions align="end">
     <mat-chip-listbox aria-label="Product status">
-      <mat-chip *ngIf="product().stock < 10" class="status-chip low-stock-chip">
+      <mat-chip *ngIf="getTotalAvailableStock() < 10" class="status-chip low-stock-chip">
         {{ translocoService.translate('productCard.lowStock') }}
       </mat-chip>
       <mat-chip *ngIf="isNearExpiry(product().expirationDate)" class="status-chip expiry-chip">
         {{ translocoService.translate('productCard.nearExpiry') }}
+      </mat-chip>
+      <mat-chip *ngIf="product().requiresColdChain" class="status-chip cold-chain-chip">
+        {{ translocoService.translate('productCard.coldChain') }}
       </mat-chip>
     </mat-chip-listbox>
   </mat-card-actions>

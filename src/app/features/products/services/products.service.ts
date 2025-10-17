@@ -8,6 +8,8 @@ import { Provider } from '../../../shared/models/provider.model';
 import { Product } from '../../../shared/models/product.model';
 import { AddProductDTO } from '../../../shared/DTOs/addProductDTO.model';
 import { ProductDTO } from '../../../shared/DTOs/productDTO.model';
+import { ProductWithLocationDTO } from '../../../shared/DTOs/productWithLocationDTO.model';
+import { ProductWithLocation } from '../../../shared/models/productWithLocation.model';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +30,7 @@ export class ProductsService {
   }
 
   getCategories(): Observable<Category[]> {
-    return this.apiClient.get<CategoryDTO[]>('/productos/categorias', 'products')
+    return this.apiClient.get<CategoryDTO[]>('/categorias', 'products')
       .pipe(
         map(categories => categories.map(c => ({
           id: c.id,
@@ -49,6 +51,8 @@ export class ProductsService {
       categoria_id: product.category.id.toString(),
       proveedor_id: product.provider.id.toString(),
     }
+
+    debugger;
 
     return this.apiClient.post<ProductDTO>('/productos/con-inventario', addProductDTO, 'products')
       .pipe(
@@ -333,4 +337,39 @@ export class ProductsService {
 
     return of(mockProducts);
   }
+
+  getProductsWithLocation(): Observable<ProductWithLocation[]> {
+    return this.apiClient.get<ProductWithLocationDTO[]>('/bodegas/productos', 'logistics')
+      .pipe(
+        map(products => products.map(p => ({
+          id: p.id,
+          name: p.nombre,
+          description: p.descripcion,
+          price: p.precio,
+          stock: p.stock,
+          expirationDate: new Date(p.fecha_vencimiento),
+          category: {
+            id: p.categoria.id,
+            name: p.categoria.nombre,
+            description: p.categoria.descripcion
+          },
+          provider: {
+            id: p.proveedor.id,
+            name: p.proveedor.nombre,
+            email: p.proveedor.email,
+            address: p.proveedor.direccion
+          },
+          requiresColdChain: p.requiere_cadena_frio,
+          locations: p.ubicaciones.map(l => ({
+            id: l.id,
+            name: l.nombre,
+            aisle: l.pasillo,
+            rack: l.estante,
+            available_quantity: l.stock_disponible,
+            reserved_quantity: l.stock_reservado
+          }))
+        })))
+      );
+  }
 }
+

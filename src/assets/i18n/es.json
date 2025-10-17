@@ -83,8 +83,8 @@
       "descriptionPlaceholder": "Ingrese la descripción del producto",
       "category": "Categoría",
       "categoryPlaceholder": "Seleccione una categoría",
-      "quantity": "Cantidad",
-      "quantityPlaceholder": "Ingrese la cantidad",
+      "quantity": "Stock",
+      "quantityPlaceholder": "Ingrese la cantidad en stock",
       "expirationDate": "Fecha de Expiración",
       "provider": "Proveedor",
       "providerPlaceholder": "Ingrese el nombre del proveedor",
@@ -113,7 +113,12 @@
     "provider": "Proveedor",
     "expires": "Vence",
     "lowStock": "Stock Bajo",
-    "nearExpiry": "Próximo a Vencer"
+    "nearExpiry": "Próximo a Vencer",
+    "reserved": "Reservado",
+    "coldChain": "Cadena de Frío",
+    "required": "Requerido",
+    "locations": "Ubicaciones",
+    "available": "disponible"
   },
   "productList": {
     "noProducts": "No hay productos disponibles",

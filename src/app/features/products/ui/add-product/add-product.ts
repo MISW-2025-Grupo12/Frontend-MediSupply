@@ -101,7 +101,7 @@ export class AddProduct implements OnInit {
       name: ['', [Validators.required, Validators.minLength(3)]],
       description: ['', [Validators.required, Validators.minLength(10)]],
       category: ['', Validators.required],
-      quantity: [null, [Validators.required, Validators.min(1)]],
+      stock: [null, [Validators.required, Validators.min(1)]],
       expirationDate: [null, Validators.required],
       providerId: [null, Validators.required], // Changed to providerId for dropdown
       price: [null, [Validators.required, Validators.min(0.01)]]

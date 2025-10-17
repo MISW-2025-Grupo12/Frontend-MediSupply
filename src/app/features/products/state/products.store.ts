@@ -2,7 +2,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppStore } from '../../../core/state/app.store';
 import { LocaleRouteService } from '../../../core/services/locale-route.service';
-import { Product } from '../../../shared/models/product.model';
+import { ProductWithLocation } from '../../../shared/models/productWithLocation.model';
 import { ProductsService } from '../services/products.service';
 
 @Injectable({ providedIn: 'root' })
@@ -12,12 +12,12 @@ export class ProductsState {
   private localeRouteService = inject(LocaleRouteService);
   private productsService = inject(ProductsService);
   
-  private _products = signal<Product[]>([]);
+  private _products = signal<ProductWithLocation[]>([]);
 
   readonly products = computed(() => this._products());
 
   loadProducts(): void {
-    this.productsService.getProducts().subscribe(products => {
+    this.productsService.getProductsWithLocation().subscribe(products => {
       this._products.set(products);
     });
   }

@@ -10,7 +10,7 @@ export interface ApiRequestOptions {
   withCredentials?: boolean;
 }
 
-export type ServiceType = 'default' | 'users' | 'products';
+export type ServiceType = 'default' | 'users' | 'products' | 'logistics' | 'sales';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +23,9 @@ export class ApiClientService {
   private serviceUrls: Record<string, string> = {
     default: environment.usersApiUrl || 'http://localhost:3000/api',
     users: environment.usersApiUrl || 'http://localhost:3000/api',
-    products: environment.productsApiUrl || 'http://localhost:3000/api'
+    products: environment.productsApiUrl || 'http://localhost:3000/api',
+    logistics: environment.logisticsApiUrl || 'http://localhost:3000/api',
+    sales: environment.salesApiUrl || 'http://localhost:3000/api'
   };
 
   /**
