@@ -4,7 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoDirective } from '@ngneat/transloco';
 
-import { DashboardSummary } from '../../services/sales-data.service';
+import { SalesReport } from '../../../../shared/models/salesReport.model';
 
 @Component({
   selector: 'app-summary-cards',
@@ -18,10 +18,12 @@ import { DashboardSummary } from '../../services/sales-data.service';
   styleUrl: './summary-cards.component.scss'
 })
 export class SummaryCardsComponent {
-  @Input() summary: DashboardSummary = {
+  @Input() summary: SalesReport = {
     totalSales: 0,
-    currentSellerSales: 0,
-    sellerName: ''
+    totalProductsSold: 0,
+    salesByMonth: {},
+    salesByCustomer: {},
+    mostSoldProducts: {}
   };
 
   formatCurrency(amount: number): string {
