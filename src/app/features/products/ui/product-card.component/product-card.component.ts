@@ -24,11 +24,11 @@ export class ProductCardComponent {
   }
 
   getTotalAvailableStock(): number {
-    return this.product().locations.reduce((total, location) => total + location.available_quantity, 0);
+    return this.product().locations?.reduce((total, location) => total + location.available_quantity, 0) || 0;
   }
 
   getTotalReservedStock(): number {
-    return this.product().locations.reduce((total, location) => total + location.reserved_quantity, 0);
+    return this.product().locations?.reduce((total, location) => total + location.reserved_quantity, 0) || 0;
   }
 
 }

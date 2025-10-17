@@ -42,7 +42,7 @@
         <span class="detail-value cold-chain">{{ translocoService.translate('productCard.required') }}</span>
       </div>
       
-      <div *ngIf="product().locations.length > 0">
+      <div *ngIf="product().locations && product().locations.length > 0">
         <div class="detail-item">
           <span class="detail-label">{{ translocoService.translate('productCard.locations') }}:</span>
         </div>
