@@ -1,9 +1,10 @@
-const BASE_URL = 'http://34.120.214.57';
-
 export const environment = {
   production: true,
-  usersApiUrl: `${BASE_URL}/usuarios/api`,
-  productsApiUrl: `${BASE_URL}/productos/api`,
-  logisticsApiUrl: `${BASE_URL}/logistica/api`,
-  salesApiUrl: `${BASE_URL}/ventas/api`
+  // Use the dynamic base URL for backendApiUrl
+  backendApiUrl: 'http://localhost:8080',
+  // Derive other API URLs from the dynamic base URL
+  usersApiUrl: `http://localhost:8080/usuarios/api`,
+  productsApiUrl: `http://localhost:8080/productos/api`,
+  logisticsApiUrl: `http://localhost:8080/logistica/api`,
+  salesApiUrl: `http://localhost:8080/ventas/api`
 };
