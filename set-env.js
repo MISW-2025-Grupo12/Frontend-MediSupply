@@ -21,10 +21,10 @@ const envConfigFile = `export const environment = {
   // Use the dynamic base URL for backendApiUrl
   backendApiUrl: '${appApiBaseUrl}',
   // Derive other API URLs from the dynamic base URL
-  usersApiUrl: \`${appApiBaseUrl}/usuarios\`,
-  productsApiUrl: \`${appApiBaseUrl}/productos\`,
-  logisticsApiUrl: \`${appApiBaseUrl}/logistica\`,
-  salesApiUrl: \`${appApiBaseUrl}/ventas\`
+  usersApiUrl: \`${appApiBaseUrl}/usuarios/api\`,
+  productsApiUrl: \`${appApiBaseUrl}/productos/api\`,
+  logisticsApiUrl: \`${appApiBaseUrl}/logistica/api\`,
+  salesApiUrl: \`${appApiBaseUrl}/ventas/api\`
 };
 `;
 
