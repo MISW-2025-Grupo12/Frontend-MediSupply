@@ -134,6 +134,11 @@
     },
     "dashboard": {
       "title": "Panel de Análisis de Ventas",
+      "loading": "Cargando datos de ventas...",
+      "noData": {
+        "title": "No Hay Datos Disponibles",
+        "message": "No se encontraron datos de ventas para el rango de fechas seleccionado. Intenta ajustar tus filtros o seleccionar un período de tiempo diferente."
+      },
       "filters": {
         "title": "Filtros de Fecha",
         "startDate": "Fecha de Inicio",
@@ -143,6 +148,7 @@
       },
       "summary": {
         "totalSales": "Ventas Totales",
+        "totalProductsSold": "Total de Productos Vendidos",
         "myTotalSales": "Mis Ventas Totales"
       },
       "charts": {
