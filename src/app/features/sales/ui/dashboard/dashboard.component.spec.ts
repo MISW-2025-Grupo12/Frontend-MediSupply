@@ -56,6 +56,12 @@ describe('DashboardComponent', () => {
       configurable: true
     });
 
+    // Mock the isLoading computed signal
+    Object.defineProperty(salesStateSpy, 'isLoading', {
+      get: () => () => false,
+      configurable: true
+    });
+
     // Mock the getSalesReportData method
     salesDataServiceSpy.getSalesReportData.and.returnValue(of(mockSalesReport));
 
