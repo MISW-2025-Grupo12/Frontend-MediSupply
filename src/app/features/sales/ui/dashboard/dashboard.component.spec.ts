@@ -34,16 +34,16 @@ describe('DashboardComponent', () => {
       'February': 40000,
       'March': 30000
     },
-    salesByCustomer: {
-      'Hospital Central': 50000,
-      'Clinic Norte': 30000,
-      'Farmacia Popular': 20000
-    },
-    mostSoldProducts: {
-      'Surgical Masks': 500,
-      'Antibiotics': 300,
-      'Syringes': 450
-    }
+    salesByCustomer: [
+      { customerId: '1', name: 'Hospital Central', totalOrders: 5, totalAmount: 50000 },
+      { customerId: '2', name: 'Clinic Norte', totalOrders: 3, totalAmount: 30000 },
+      { customerId: '3', name: 'Farmacia Popular', totalOrders: 2, totalAmount: 20000 }
+    ],
+    mostSoldProducts: [
+      { productId: '1', name: 'Surgical Masks', quantity: 500 },
+      { productId: '2', name: 'Antibiotics', quantity: 300 },
+      { productId: '3', name: 'Syringes', quantity: 450 }
+    ]
   };
 
   beforeEach(async () => {
@@ -115,15 +115,9 @@ describe('DashboardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should initialize with default date range', () => {
-    expect(component.startDate).toBeTruthy();
-    expect(component.endDate).toBeTruthy();
-    
-    const today = new Date();
-    const ninetyDaysAgo = new Date(today.getTime() - (90 * 24 * 60 * 60 * 1000));
-    
-    expect(component.endDate!.toDateString()).toBe(today.toDateString());
-    expect(component.startDate!.toDateString()).toBe(ninetyDaysAgo.toDateString());
+  it('should initialize with empty date filters', () => {
+    expect(component.startDate).toBeNull();
+    expect(component.endDate).toBeNull();
   });
 
   it('should load sales report data on init', () => {

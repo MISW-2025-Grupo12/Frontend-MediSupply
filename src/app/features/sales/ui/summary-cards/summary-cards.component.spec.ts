@@ -19,16 +19,16 @@ describe('SummaryCardsComponent', () => {
       'February': 60000,
       'March': 40000
     },
-    salesByCustomer: {
-      'Hospital Central': 75000,
-      'Clinic Norte': 45000,
-      'Farmacia Popular': 30000
-    },
-    mostSoldProducts: {
-      'Surgical Masks': 500,
-      'Antibiotics': 100,
-      'Syringes': 200
-    }
+    salesByCustomer: [
+      { customerId: '1', name: 'Hospital Central', totalOrders: 5, totalAmount: 75000 },
+      { customerId: '2', name: 'Clinic Norte', totalOrders: 3, totalAmount: 45000 },
+      { customerId: '3', name: 'Farmacia Popular', totalOrders: 2, totalAmount: 30000 }
+    ],
+    mostSoldProducts: [
+      { productId: '1', name: 'Surgical Masks', quantity: 500 },
+      { productId: '2', name: 'Antibiotics', quantity: 100 },
+      { productId: '3', name: 'Syringes', quantity: 200 }
+    ]
   };
 
   beforeEach(async () => {
@@ -128,8 +128,8 @@ describe('SummaryCardsComponent', () => {
       totalSales: 0,
       totalProductsSold: 0,
       salesByMonth: {},
-      salesByCustomer: {},
-      mostSoldProducts: {}
+      salesByCustomer: [],
+      mostSoldProducts: []
     });
     
     // Wait for change detection to complete
@@ -149,8 +149,8 @@ describe('SummaryCardsComponent', () => {
       totalSales: -500,
       totalProductsSold: 0,
       salesByMonth: {},
-      salesByCustomer: {},
-      mostSoldProducts: {}
+      salesByCustomer: [],
+      mostSoldProducts: []
     });
     
     // Wait for change detection to complete
@@ -172,14 +172,14 @@ describe('SummaryCardsComponent', () => {
         'April': 80000,
         'May': 120000
       },
-      salesByCustomer: {
-        'Hospital Central': 100000,
-        'Clinic Norte': 100000
-      },
-      mostSoldProducts: {
-        'Surgical Masks': 1000,
-        'Antibiotics': 1000
-      }
+      salesByCustomer: [
+        { customerId: '1', name: 'Hospital Central', totalOrders: 5, totalAmount: 100000 },
+        { customerId: '2', name: 'Clinic Norte', totalOrders: 3, totalAmount: 100000 }
+      ],
+      mostSoldProducts: [
+        { productId: '1', name: 'Surgical Masks', quantity: 1000 },
+        { productId: '2', name: 'Antibiotics', quantity: 1000 }
+      ]
     };
 
     // Update the input using componentRef.setInput for proper change detection
