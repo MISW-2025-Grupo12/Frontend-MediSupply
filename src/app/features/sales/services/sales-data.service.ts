@@ -187,24 +187,42 @@ export class SalesDataService {
     };
   }
 
-  getSalesReportData(): Observable<SalesReport> {
-    return this.apiClient.get<SalesReportDTO>('/informes/ventas', 'sales')
+  getSalesReportData(startDate?: Date, endDate?: Date): Observable<SalesReport> {
+    // Build query parameters for date filtering
+    const params: { [key: string]: string } = {};
+    
+    if (startDate) {
+      params['fecha_inicio'] = startDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+    }
+    
+    if (endDate) {
+      params['fecha_fin'] = endDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+    }
+
+    // Pass params in the options object
+    const options = params && Object.keys(params).length > 0 ? { params } : undefined;
+
+    return this.apiClient.get<SalesReportDTO>('/informes/ventas', 'sales', options)
       .pipe(
         map(salesReport => ({
-          totalSales: salesReport.ventas_totales,
-          totalProductsSold: salesReport.total_productos_vendidos,
-          salesByMonth: salesReport.ventas_por_mes,
-          salesByCustomer: salesReport.ventas_por_cliente.map(customer => ({
-            customerId: customer.cliente_id,
-            name: customer.nombre,
-            totalOrders: customer.cantidad_pedidos,
-            totalAmount: customer.monto_total
-          })),
-          mostSoldProducts: salesReport.productos_mas_vendidos.map(product => ({
-            productId: product.producto_id,
-            name: product.nombre,
-            quantity: product.cantidad
-          }))
+            totalSales: salesReport.ventas_totales || 0,
+            totalProductsSold: salesReport.total_productos_vendidos || 0,
+            salesByMonth: salesReport.ventas_por_mes || {},
+            salesByCustomer: Array.isArray(salesReport.ventas_por_cliente) 
+              ? salesReport.ventas_por_cliente.map(customer => ({
+                  customerId: customer.cliente_id,
+                  name: customer.nombre,
+                  totalOrders: customer.cantidad_pedidos,
+                  totalAmount: customer.monto_total
+                }))
+              : [],
+            mostSoldProducts: Array.isArray(salesReport.productos_mas_vendidos)
+              ? salesReport.productos_mas_vendidos.map(product => ({
+                  productId: product.producto_id,
+                  name: product.nombre,
+                  quantity: product.cantidad
+                }))
+              : []
         }))
       );
   }

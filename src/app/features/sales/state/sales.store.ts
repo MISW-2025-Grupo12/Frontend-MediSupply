@@ -20,11 +20,22 @@ export class SalesState {
     mostSoldProducts: []
   });
 
-  readonly salesReport = computed(() => this._salesReport());
+  private _isLoading = signal<boolean>(false);
 
-  loadSalesReport(): void {
-    this.salesDataService.getSalesReportData().subscribe(salesReport => {
-      this._salesReport.set(salesReport);
+  readonly salesReport = computed(() => this._salesReport());
+  readonly isLoading = computed(() => this._isLoading());
+
+  loadSalesReport(startDate?: Date, endDate?: Date): void {
+    this._isLoading.set(true);
+    this.salesDataService.getSalesReportData(startDate, endDate).subscribe({
+      next: (salesReport) => {
+        this._salesReport.set(salesReport);
+        this._isLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Error loading sales report:', error);
+        this._isLoading.set(false);
+      }
     });
   }
 }
