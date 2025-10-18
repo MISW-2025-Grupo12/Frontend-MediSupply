@@ -2,8 +2,8 @@ export interface SalesReportDTO {
   ventas_totales: number;
   total_productos_vendidos: number;
   ventas_por_mes: Record<string, number | string>;
-  ventas_por_cliente: SalesPerCustomerDTO[];
-  productos_mas_vendidos: SalesPerProductDTO[];
+  ventas_por_cliente: SalesPerCustomerDTO[] | Record<string, any>;
+  productos_mas_vendidos: SalesPerProductDTO[] | Record<string, any>;
 }
 
 export interface SalesPerCustomerDTO {

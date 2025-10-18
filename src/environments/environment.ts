@@ -1,8 +1,8 @@
 export const environment = {
   production: false,
-  usersApiUrl: 'http://localhost:5001/usuarios/api',
-  productsApiUrl: 'http://localhost:5000/productos/api',
-  logisticsApiUrl: 'http://localhost:5003/logistica/api',
-  salesApiUrl: 'http://localhost:5002/ventas/api'
+  usersApiUrl: 'https://api.medisupplyg4.online/usuarios/api',
+  productsApiUrl: 'https://api.medisupplyg4.online/productos/api',
+  logisticsApiUrl: 'https://api.medisupplyg4.online/logistica/api',
+  salesApiUrl: 'https://api.medisupplyg4.online/ventas/api'
 };
 

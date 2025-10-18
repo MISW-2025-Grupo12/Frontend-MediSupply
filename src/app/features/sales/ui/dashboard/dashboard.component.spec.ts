@@ -121,7 +121,7 @@ describe('DashboardComponent', () => {
   });
 
   it('should load sales report data on init', () => {
-    expect(salesState.loadSalesReport).toHaveBeenCalled();
+    expect(salesState.loadSalesReport).toHaveBeenCalledWith(undefined, undefined);
   });
 
   it('should display summary cards component', () => {
@@ -167,7 +167,7 @@ describe('DashboardComponent', () => {
 
     component.onApplyFilters();
 
-    expect(salesState.loadSalesReport).toHaveBeenCalled();
+    expect(salesState.loadSalesReport).toHaveBeenCalledWith(undefined, undefined);
   });
 
   it('should clear filters when onClearFilters is called', () => {
@@ -178,6 +178,20 @@ describe('DashboardComponent', () => {
 
     expect(component.startDate).toBeNull();
     expect(component.endDate).toBeNull();
+  });
+
+  it('should pass date parameters when applying filters with dates set', () => {
+    const testStartDate = new Date('2024-01-01');
+    const testEndDate = new Date('2024-12-31');
+    
+    component.startDate = testStartDate;
+    component.endDate = testEndDate;
+    
+    salesState.loadSalesReport.calls.reset();
+
+    component.onApplyFilters();
+
+    expect(salesState.loadSalesReport).toHaveBeenCalledWith(testStartDate, testEndDate);
   });
 
   it('should update chart data based on sales report', () => {

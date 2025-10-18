@@ -40,10 +40,25 @@
     </mat-card>
 
     <!-- Summary Cards Section -->
-    <app-summary-cards [summary]="salesReport()"></app-summary-cards>
+    <div *ngIf="!isLoading()">
+      <app-summary-cards [summary]="salesReport()"></app-summary-cards>
+    </div>
+    
+    <!-- Loading State -->
+    <div *ngIf="isLoading()" class="loading-container">
+      <mat-spinner></mat-spinner>
+      <p>{{ t('sales.dashboard.loading') }}</p>
+    </div>
+
+    <!-- No Data Message -->
+    <div *ngIf="!isLoading() && !hasData" class="no-data-container">
+      <mat-icon class="no-data-icon">inbox</mat-icon>
+      <h3>{{ t('sales.dashboard.noData.title') }}</h3>
+      <p>{{ t('sales.dashboard.noData.message') }}</p>
+    </div>
 
     <!-- Charts Section -->
-    <div class="charts-section">
+    <div class="charts-section" *ngIf="!isLoading() && hasData">
 
       <!-- Sales by Company Chart -->
       <mat-card class="chart-card">

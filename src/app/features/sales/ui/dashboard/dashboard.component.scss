@@ -48,6 +48,57 @@
     }
   }
 
+// Loading Section
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  
+  mat-spinner {
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    color: $gray-600;
+    font-size: 1rem;
+    margin: 0;
+  }
+}
+
+// No Data Section
+.no-data-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  
+  .no-data-icon {
+    font-size: 4rem;
+    width: 4rem;
+    height: 4rem;
+    color: $gray-400;
+    margin-bottom: 1rem;
+  }
+  
+  h3 {
+    color: $gray-700;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+  }
+  
+  p {
+    color: $gray-600;
+    font-size: 1rem;
+    margin: 0;
+    max-width: 400px;
+  }
+}
 
   // Charts Section
   .charts-section {
