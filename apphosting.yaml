@@ -1,0 +1,7 @@
+# apphosting.yaml
+env:
+  - variable: APP_API_BASE_URL
+    value: "https://34.120.214.57" # <--- IMPORTANT: Replace with the actual base URL for your production backend!
+    availability:
+      - BUILD # Make it available during the build step
+      - RUNTIME # Also good to have if your app might check it at runtime (though for client-side, BUILD is critical)
