@@ -113,10 +113,9 @@ export class DashboardComponent implements OnInit {
   // Chart types are now defined directly in the template
 
   ngOnInit(): void {
-    // Set default date range (last 90 days)
-    const today = new Date();
-    this.endDate = today;
-    this.startDate = new Date(today.getTime() - (90 * 24 * 60 * 60 * 1000));
+    // Set default date filters to empty
+    this.startDate = null;
+    this.endDate = null;
     
     this.loadSalesReport();
   }
@@ -149,19 +148,15 @@ export class DashboardComponent implements OnInit {
     };
 
     // Update sales by customer chart
-    const customerEntries = Object.entries(report.salesByCustomer)
-      .sort(([, a], [, b]) => {
-        const aVal = typeof a === 'number' ? a : 0;
-        const bVal = typeof b === 'number' ? b : 0;
-        return bVal - aVal;
-      })
+    const sortedCustomers = report.salesByCustomer
+      .sort((a, b) => b.totalAmount - a.totalAmount)
       .slice(0, 8);
 
     this.customerChartData = {
-      labels: customerEntries.map(([customer]) => customer),
+      labels: sortedCustomers.map(customer => customer.name),
       datasets: [{
         label: this.translocoService.translate('sales.dashboard.salesAmount'),
-        data: customerEntries.map(([, amount]) => typeof amount === 'number' ? amount : 0),
+        data: sortedCustomers.map(customer => customer.totalAmount),
         backgroundColor: '#3B82F6',
         borderColor: '#2563EB',
         borderWidth: 1
@@ -169,19 +164,15 @@ export class DashboardComponent implements OnInit {
     };
 
     // Update most sold products chart
-    const productEntries = Object.entries(report.mostSoldProducts)
-      .sort(([, a], [, b]) => {
-        const aVal = typeof a === 'number' ? a : 0;
-        const bVal = typeof b === 'number' ? b : 0;
-        return bVal - aVal;
-      })
+    const sortedProducts = report.mostSoldProducts
+      .sort((a, b) => b.quantity - a.quantity)
       .slice(0, 10);
 
     this.productChartData = {
-      labels: productEntries.map(([product]) => product),
+      labels: sortedProducts.map(product => product.name),
       datasets: [{
         label: this.translocoService.translate('sales.dashboard.salesAmount'),
-        data: productEntries.map(([, amount]) => typeof amount === 'number' ? amount : 0),
+        data: sortedProducts.map(product => product.quantity),
         backgroundColor: '#10B981',
         borderColor: '#059669',
         borderWidth: 1

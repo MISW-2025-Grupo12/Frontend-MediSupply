@@ -22,8 +22,8 @@ export class SummaryCardsComponent {
     totalSales: 0,
     totalProductsSold: 0,
     salesByMonth: {},
-    salesByCustomer: {},
-    mostSoldProducts: {}
+    salesByCustomer: [],
+    mostSoldProducts: []
   };
 
   formatCurrency(amount: number): string {

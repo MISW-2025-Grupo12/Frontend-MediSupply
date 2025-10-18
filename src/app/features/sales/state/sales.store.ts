@@ -16,8 +16,8 @@ export class SalesState {
     totalSales: 0,
     totalProductsSold: 0,
     salesByMonth: {},
-    salesByCustomer: {},
-    mostSoldProducts: {}
+    salesByCustomer: [],
+    mostSoldProducts: []
   });
 
   readonly salesReport = computed(() => this._salesReport());

@@ -194,8 +194,17 @@ export class SalesDataService {
           totalSales: salesReport.ventas_totales,
           totalProductsSold: salesReport.total_productos_vendidos,
           salesByMonth: salesReport.ventas_por_mes,
-          salesByCustomer: salesReport.ventas_por_cliente,
-          mostSoldProducts: salesReport.productos_mas_vendidos
+          salesByCustomer: salesReport.ventas_por_cliente.map(customer => ({
+            customerId: customer.cliente_id,
+            name: customer.nombre,
+            totalOrders: customer.cantidad_pedidos,
+            totalAmount: customer.monto_total
+          })),
+          mostSoldProducts: salesReport.productos_mas_vendidos.map(product => ({
+            productId: product.producto_id,
+            name: product.nombre,
+            quantity: product.cantidad
+          }))
         }))
       );
   }
