@@ -1,0 +1,77 @@
+<mat-card class="product-card">
+  <mat-card-header>
+    <mat-card-title>{{ product().name }}</mat-card-title>
+    <mat-card-subtitle>{{ product().category.name }}</mat-card-subtitle>
+  </mat-card-header>
+  
+  <mat-card-content>
+    <p class="product-description">{{ product().description }}</p>
+    
+    <div class="product-details">
+      <div class="detail-item">
+        <span class="detail-label">{{ translocoService.translate('productCard.price') }}:</span>
+        <span class="detail-value price">${{ product().price | number:'1.2-2' }}</span>
+      </div>
+      
+      <div class="detail-item">
+        <span class="detail-label">{{ translocoService.translate('productCard.stock') }}:</span>
+        <span class="detail-value" [class.low-stock]="getTotalAvailableStock() < 10">
+          {{ getTotalAvailableStock() }} {{ translocoService.translate('productCard.units') }}
+        </span>
+      </div>
+      
+      <div class="detail-item" *ngIf="getTotalReservedStock() > 0">
+        <span class="detail-label">{{ translocoService.translate('productCard.reserved') }}:</span>
+        <span class="detail-value">{{ getTotalReservedStock() }} {{ translocoService.translate('productCard.units') }}</span>
+      </div>
+      
+      <div class="detail-item">
+        <span class="detail-label">{{ translocoService.translate('productCard.provider') }}:</span>
+        <span class="detail-value">{{ product().provider.name }}</span>
+      </div>
+      
+      <div class="detail-item">
+        <span class="detail-label">{{ translocoService.translate('productCard.expires') }}:</span>
+        <span class="detail-value" [class.near-expiry]="isNearExpiry(product().expirationDate)">
+          {{ product().expirationDate | date:'mediumDate' }}
+        </span>
+      </div>
+      
+      <div class="detail-item" *ngIf="product().requiresColdChain">
+        <span class="detail-label">{{ translocoService.translate('productCard.coldChain') }}:</span>
+        <span class="detail-value cold-chain">{{ translocoService.translate('productCard.required') }}</span>
+      </div>
+      
+      <div *ngIf="product().locations && product().locations.length > 0">
+        <div class="detail-item">
+          <span class="detail-label">{{ translocoService.translate('productCard.locations') }}:</span>
+        </div>
+        <div class="locations-list">
+          <div *ngFor="let location of product().locations" class="location-item">
+            <div class="location-info">
+              <span class="location-name">{{ location.name }}</span>
+              <span class="location-details">({{ location.aisle }}, {{ location.rack }})</span>
+            </div>
+            <div class="location-stock">
+              {{ location.available_quantity }} {{ translocoService.translate('productCard.available') }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+  
+  <mat-card-actions align="end">
+    <mat-chip-listbox aria-label="Product status">
+      <mat-chip *ngIf="getTotalAvailableStock() < 10" class="status-chip low-stock-chip">
+        {{ translocoService.translate('productCard.lowStock') }}
+      </mat-chip>
+      <mat-chip *ngIf="isNearExpiry(product().expirationDate)" class="status-chip expiry-chip">
+        {{ translocoService.translate('productCard.nearExpiry') }}
+      </mat-chip>
+      <mat-chip *ngIf="product().requiresColdChain" class="status-chip cold-chain-chip">
+        {{ translocoService.translate('productCard.coldChain') }}
+      </mat-chip>
+    </mat-chip-listbox>
+  </mat-card-actions>
+</mat-card>

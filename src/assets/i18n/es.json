@@ -1,21 +1,30 @@
 {
+  "common": {
+    "comingSoon": "Próximamente"
+  },
   "header": {
     "products": "Productos",
     "clients": "Clientes",
-    "language": "Idioma"
+    "sales": "Ventas",
+    "language": "Idioma",
+    "salesReport": "Reporte de Ventas"
   },
   "routes": {
     "products": "productos",
     "clients": "clientes",
     "add": "anadir",
-    "dashboard": "panel"
+    "dashboard": "panel",
+    "sales": "ventas",
+    "salesReport": "reporte-de-ventas"
   },
   "titles": {
     "products": "Productos - MediSupply",
     "addProduct": "Añadir Producto - MediSupply",
     "login": "Iniciar Sesión - MediSupply",
     "dashboard": "Panel de Control - MediSupply",
-    "home": "MediSupply"
+    "home": "MediSupply",
+    "sales": "Ventas - MediSupply",
+    "salesReport": "Reporte de Ventas - MediSupply"
   },
   "login": {
     "title": "Iniciar Sesión",
@@ -58,6 +67,10 @@
       "reports": {
         "title": "Informes",
         "description": "Visualiza analíticas, genera informes y analiza el rendimiento del negocio"
+      },
+      "sales": {
+        "title": "Ventas",
+        "description": "Gestiona transacciones de ventas, rastrea ingresos y monitorea el rendimiento de ventas"
       }
     }
   },
@@ -70,8 +83,8 @@
       "descriptionPlaceholder": "Ingrese la descripción del producto",
       "category": "Categoría",
       "categoryPlaceholder": "Seleccione una categoría",
-      "quantity": "Cantidad",
-      "quantityPlaceholder": "Ingrese la cantidad",
+      "quantity": "Stock",
+      "quantityPlaceholder": "Ingrese la cantidad en stock",
       "expirationDate": "Fecha de Expiración",
       "provider": "Proveedor",
       "providerPlaceholder": "Ingrese el nombre del proveedor",
@@ -91,6 +104,53 @@
     "actions": {
       "cancel": "Cancelar",
       "create": "Añadir Producto"
+    }
+  },
+  "productCard": {
+    "price": "Precio",
+    "stock": "Stock",
+    "units": "unidades",
+    "provider": "Proveedor",
+    "expires": "Vence",
+    "lowStock": "Stock Bajo",
+    "nearExpiry": "Próximo a Vencer",
+    "reserved": "Reservado",
+    "coldChain": "Cadena de Frío",
+    "required": "Requerido",
+    "locations": "Ubicaciones",
+    "available": "disponible"
+  },
+  "productList": {
+    "noProducts": "No hay productos disponibles",
+    "loadingProducts": "Cargando productos..."
+  },
+  "sales": {
+    "subtitle": "Selecciona una opción para gestionar ventas",
+    "options": {
+      "salesReport": {
+        "title": "Reporte de Ventas",
+        "description": "Ver reportes detallados de ventas y analíticas"
+      }
+    },
+    "dashboard": {
+      "title": "Panel de Análisis de Ventas",
+      "filters": {
+        "title": "Filtros de Fecha",
+        "startDate": "Fecha de Inicio",
+        "endDate": "Fecha de Fin",
+        "apply": "Aplicar Filtros",
+        "clear": "Limpiar Filtros"
+      },
+      "summary": {
+        "totalSales": "Ventas Totales",
+        "myTotalSales": "Mis Ventas Totales"
+      },
+      "charts": {
+        "salesByCompany": "Ventas por Empresa",
+        "salesByCustomer": "Ventas por Cliente",
+        "salesByProduct": "Ventas por Producto"
+      },
+      "salesAmount": "Monto de Ventas"
     }
   }
 }

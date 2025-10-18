@@ -33,6 +33,15 @@ export class DashboardState {
       enabled: true
     },
     {
+      id: 'sales',
+      titleKey: 'dashboard.cards.sales.title',
+      descriptionKey: 'dashboard.cards.sales.description',
+      icon: 'point_of_sale',
+      route: 'sales',
+      color: '#8b5cf6',
+      enabled: true
+    },
+    {
       id: 'clients',
       titleKey: 'dashboard.cards.clients.title',
       descriptionKey: 'dashboard.cards.clients.description',
@@ -50,15 +59,6 @@ export class DashboardState {
       color: '#10b981',
       enabled: false // Coming soon
     },
-    {
-      id: 'reports',
-      titleKey: 'dashboard.cards.reports.title',
-      descriptionKey: 'dashboard.cards.reports.description',
-      icon: 'analytics',
-      route: 'reports',
-      color: '#f59e0b',
-      enabled: false // Coming soon
-    }
   ]);
 
   // Computed values

@@ -1,0 +1,32 @@
+<!-- Summary Cards Section -->
+<div class="summary-section" *transloco="let t">
+  <div class="summary-cards">
+    <mat-card class="summary-card">
+      <mat-card-content>
+        <div class="summary-content">
+          <div class="summary-icon total-sales">
+            <mat-icon>attach_money</mat-icon>
+          </div>
+          <div class="summary-info">
+            <h3 class="summary-value">{{ formatCurrency(summary.totalSales) }}</h3>
+            <p class="summary-label">{{ t('sales.dashboard.summary.totalSales') }}</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="summary-card">
+      <mat-card-content>
+        <div class="summary-content">
+          <div class="summary-icon seller-sales">
+            <mat-icon>inventory</mat-icon>
+          </div>
+          <div class="summary-info">
+            <h3 class="summary-value">{{ summary.totalProductsSold | number }}</h3>
+            <p class="summary-label">Total Products Sold</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

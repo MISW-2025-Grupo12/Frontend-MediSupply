@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "set-env": "node set-env.js",
+    "build": "npm run set-env && ng build --configuration=production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -33,6 +34,8 @@
     "@angular/router": "^20.3.0",
     "@ngneat/tailwind": "^7.0.3",
     "@ngneat/transloco": "^6.0.4",
+    "chart.js": "^4.5.1",
+    "ng2-charts": "^8.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },

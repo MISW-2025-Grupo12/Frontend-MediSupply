@@ -42,3 +42,32 @@ body {
 html, body { 
   height: 100%; 
 }
+
+/* Reusable Separator Utility Classes */
+.separator {
+  border: none;
+  height: 1px;
+  background-color: $gray-300;
+  margin: 2rem 0;
+}
+
+.separator-light {
+  border: none;
+  height: 1px;
+  background-color: $gray-200;
+  margin: 2rem 0;
+}
+
+.separator-bold {
+  border: none;
+  height: 2px;
+  background-color: $gray-400;
+  margin: 2rem 0;
+}
+
+.separator-primary {
+  border: none;
+  height: 1px;
+  background-color: $primary-color;
+  margin: 2rem 0;
+}

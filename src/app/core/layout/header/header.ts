@@ -63,4 +63,8 @@ export class Header implements OnInit {
   getClientsRoute(): string {
     return this.localeRouteService.getLocalizedUrl('clients');
   }
+
+  getSalesRoute(): string {
+    return this.localeRouteService.getLocalizedUrl('sales');
+  }
 }
