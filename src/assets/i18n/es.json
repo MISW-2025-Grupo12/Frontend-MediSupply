@@ -24,6 +24,7 @@
   "titles": {
     "products": "Productos - MediSupply",
     "addProduct": "Añadir Producto - MediSupply",
+    "addCategory": "Añadir Categoría - MediSupply",
     "addUser": "Añadir Usuario - MediSupply",
     "login": "Iniciar Sesión - MediSupply",
     "register": "Registrarse - MediSupply",
@@ -152,6 +153,22 @@
       "cancel": "Cancelar",
       "create": "Añadir Producto"
     }
+  },
+  "addCategory": {
+    "title": "Añadir Categoría",
+    "form": {
+      "name": "Nombre",
+      "namePlaceholder": "Ingrese el nombre de la categoría",
+      "description": "Descripción",
+      "descriptionPlaceholder": "Ingrese la descripción de la categoría",
+      "required": "Este campo es requerido",
+      "minValue": "El valor debe ser mayor a 0"
+    },
+    "actions": {
+      "cancel": "Cancelar",
+      "create": "Añadir Categoría"
+    },
+    "categories": {}
   },
   "addUser": {
     "title": "Añadir Usuario",
