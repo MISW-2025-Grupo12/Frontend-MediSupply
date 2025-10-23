@@ -24,6 +24,7 @@
   "titles": {
     "products": "Products - MediSupply",
     "addProduct": "Add Product - MediSupply",
+    "addCategory": "Add Category - MediSupply",
     "addUser": "Add User - MediSupply",
     "login": "Login - MediSupply",
     "register": "Register - MediSupply",
@@ -152,6 +153,23 @@
       "cancel": "Cancel",
       "create": "Add Product"
     }
+  },
+  "addCategory": {
+    "title": "Add Category",
+    "actions": {
+      "cancel": "Cancel",
+      "create": "Add Category"
+    }
+    ,
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "Enter category name",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter category description",
+      "required": "This field is required",
+      "minValue": "Value must be greater than 0"
+    },
+    "categories": {}
   },
   "addUser": {
     "title": "Add User",

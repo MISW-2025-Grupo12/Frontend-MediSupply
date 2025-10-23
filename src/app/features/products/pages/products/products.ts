@@ -25,4 +25,8 @@ export class Products {
     // Use the enhanced API for nested route navigation
     this.localeRouteService.navigateToNestedRoute(['products', 'add']);
   }
+
+  navigateToAddCategory(): void {
+    this.localeRouteService.navigateToNestedRoute(['products', 'add-category']);
+  }
 }

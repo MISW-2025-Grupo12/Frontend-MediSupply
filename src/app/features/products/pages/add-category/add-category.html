@@ -1,0 +1,42 @@
+<div class="add-category-container" *transloco="let t">
+  <mat-card class="category-card">
+    <mat-card-header class="justify-center">
+      <mat-card-title class="card-title">
+        {{ t('addCategory.title') }}
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" class="add-category-form">
+        <div class="app-form-fields app-form-fields--compact">
+          <mat-form-field appearance="fill" class="app-form-field full-width">
+            <mat-label>{{ t('addCategory.form.name') || 'Category Name' }}</mat-label>
+            <input matInput formControlName="name" [placeholder]="t('addCategory.form.namePlaceholder') || 'Enter category name'" required>
+            <mat-error *ngIf="categoryForm.get('name')?.hasError('required')">
+              {{ t(getErrorMessage('name')) }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="app-form-field full-width">
+            <mat-label>{{ t('addCategory.form.description') || 'Description' }}</mat-label>
+            <textarea matInput formControlName="description" [placeholder]="t('addCategory.form.descriptionPlaceholder') || 'Enter category description'" required rows="4"></textarea>
+            <mat-error *ngIf="categoryForm.get('description')?.hasError('required')">
+              {{ t(getErrorMessage('description')) }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions class="card-actions justify-end">
+      <div class="app-form-actions app-form-actions--horizontal">
+        <button mat-stroked-button type="button" (click)="onCancel()" class="app-btn app-btn--secondary">
+          {{ t('addCategory.actions.cancel') }}
+        </button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="categoryForm.invalid || saving" class="app-btn app-btn--primary">
+          {{ t('addCategory.actions.create') }}
+        </button>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+</div>
