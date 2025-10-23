@@ -1,10 +1,10 @@
 import { Injectable, inject } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { AppStore } from '../state/app.store';
 
 type SupportedLocale = 'en' | 'es';
-type RouteKey = 'dashboard' | 'products' | 'sales' | 'salesReport' | 'add' | 'clients' | 'login' | 'orders';
+type RouteKey = 'dashboard' | 'products' | 'sales' | 'salesReport' | 'add' | 'clients' | 'login' | 'orders' | 'users' | 'addUser' | 'register';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +29,10 @@ export class LocaleRouteService {
       'add': 'add',
       'clients': 'clients',
       'login': 'login',
-      'orders': 'orders'
+      'orders': 'orders',
+      'users': 'users',
+      'addUser': 'add-user',
+      'register': 'register'
     },
     'es': {
       'dashboard': 'panel',
@@ -39,7 +42,10 @@ export class LocaleRouteService {
       'add': 'anadir',
       'clients': 'clientes',
       'login': 'login',
-      'orders': 'pedidos'
+      'orders': 'pedidos',
+      'users': 'usuarios',
+      'addUser': 'anadir-usuario',
+      'register': 'registrarse'
     }
   };
 
@@ -223,13 +229,13 @@ export class LocaleRouteService {
   /**
    * Get the localized URL for a route
    */
-  getLocalizedUrl(routeKey: string, locale?: SupportedLocale): string {
+  getLocalizedUrl(routeKey: RouteKey, locale?: SupportedLocale): string {
     const targetLocale = locale || this.getCurrentLocale();
     
     // Check if it's a known route key, otherwise use as-is
     const isKnownRoute = routeKey in this.ROUTE_MAP[targetLocale];
     const translatedPath = isKnownRoute 
-      ? this.getLocalizedRoute(routeKey as RouteKey, targetLocale)
+      ? this.getLocalizedRoute(routeKey, targetLocale)
       : routeKey;
     
     return `/${targetLocale}/${translatedPath}`;

@@ -1,29 +1,35 @@
 {
   "common": {
-    "comingSoon": "Próximamente"
+    "comingSoon": "Próximamente",
+    "back": "Atrás"
   },
   "header": {
     "products": "Productos",
     "clients": "Clientes",
     "sales": "Ventas",
+    "users": "Usuarios",
     "language": "Idioma",
     "salesReport": "Reporte de Ventas"
   },
   "routes": {
     "products": "productos",
     "clients": "clientes",
+    "sales": "ventas",
+    "users": "usuarios",
+    "addUser": "anadir-usuario",
     "add": "anadir",
     "dashboard": "panel",
-    "sales": "ventas",
     "salesReport": "reporte-de-ventas"
   },
   "titles": {
     "products": "Productos - MediSupply",
     "addProduct": "Añadir Producto - MediSupply",
+    "addUser": "Añadir Usuario - MediSupply",
     "login": "Iniciar Sesión - MediSupply",
     "dashboard": "Panel de Control - MediSupply",
     "home": "MediSupply",
     "sales": "Ventas - MediSupply",
+    "users": "Usuarios - MediSupply",
     "salesReport": "Reporte de Ventas - MediSupply"
   },
   "login": {
@@ -41,8 +47,44 @@
       "invalidEmail": "Por favor ingresa un correo electrónico válido",
       "minLength": "La contraseña debe tener al menos 6 caracteres",
       "loginButton": "Iniciar Sesión",
-      "forgotPassword": "¿Olvidaste tu contraseña?"
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "register": "¿No tienes una cuenta? Regístrate"
     }
+  },
+  "register": {
+    "title": "Crear Cuenta",
+    "subtitle": "Únete a MediSupply y comienza a gestionar tu inventario",
+    "formComingSoon": "Formulario de registro próximamente...",
+    "backToLogin": "¿Ya tienes una cuenta? Iniciar Sesión",
+    "form": {
+      "userType": "Tipo de Usuario",
+      "userTypePlaceholder": "Selecciona tu rol",
+      "name": "Nombre Completo",
+      "namePlaceholder": "Ingresa tu nombre completo",
+      "email": "Correo Electrónico",
+      "emailPlaceholder": "Ingresa tu correo electrónico",
+      "dni": "Identificación",
+      "dniPlaceholder": "Ingresa tu identificación",
+      "phone": "Teléfono",
+      "phonePlaceholder": "Ingresa tu número de teléfono",
+      "address": "Dirección",
+      "addressPlaceholder": "Ingresa tu dirección",
+      "password": "Contraseña",
+      "passwordPlaceholder": "Ingresa tu contraseña",
+      "required": "Este campo es requerido",
+      "invalidEmail": "Por favor ingresa un correo electrónico válido",
+      "minLength": "Longitud mínima no cumplida",
+      "invalidDni": "Por favor ingresa un DNI válido (8-12 dígitos)",
+      "invalidPhone": "Por favor ingresa un número de teléfono válido",
+      "createAccount": "Crear Cuenta"
+    }
+  },
+  "userTypes": {
+    "ADMIN": "Administrador",
+    "SELLER": "Vendedor",
+    "CUSTOMER": "Cliente",
+    "DELIVERY": "Repartidor",
+    "PROVIDER": "Proveedor"
   },
   "dashboard": {
     "welcome": "Bienvenido",
@@ -71,6 +113,10 @@
       "sales": {
         "title": "Ventas",
         "description": "Gestiona transacciones de ventas, rastrea ingresos y monitorea el rendimiento de ventas"
+      },
+      "users": {
+        "title": "Usuarios",
+        "description": "Gestiona cuentas de usuario, roles y permisos para acceso al sistema"
       }
     }
   },
@@ -104,6 +150,43 @@
     "actions": {
       "cancel": "Cancelar",
       "create": "Añadir Producto"
+    }
+  },
+  "addUser": {
+    "title": "Añadir Usuario",
+    "form": {
+      "name": "Nombre Completo",
+      "namePlaceholder": "Ingrese el nombre completo",
+      "email": "Correo Electrónico",
+      "emailPlaceholder": "Ingrese el correo electrónico",
+      "role": "Rol",
+      "rolePlaceholder": "Seleccione un rol",
+      "password": "Contraseña",
+      "passwordPlaceholder": "Ingrese la contraseña",
+      "confirmPassword": "Confirmar Contraseña",
+      "confirmPasswordPlaceholder": "Confirme la contraseña",
+      "department": "Departamento",
+      "departmentPlaceholder": "Seleccione departamento",
+      "required": "Este campo es requerido",
+      "invalidEmail": "Por favor ingrese un correo electrónico válido",
+      "minLength": "Longitud mínima no cumplida",
+      "passwordMismatch": "Las contraseñas no coinciden"
+    },
+    "roles": {
+      "admin": "Administrador",
+      "manager": "Gerente",
+      "employee": "Empleado",
+      "viewer": "Visualizador"
+    },
+    "departments": {
+      "pharmacy": "Farmacia",
+      "inventory": "Inventario",
+      "sales": "Ventas",
+      "administration": "Administración"
+    },
+    "actions": {
+      "cancel": "Cancelar",
+      "create": "Añadir Usuario"
     }
   },
   "productCard": {

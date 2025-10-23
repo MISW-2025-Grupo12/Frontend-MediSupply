@@ -1,10 +1,12 @@
+import { UserType } from "../enums/user-type";
+
 export interface AppUser {
   id: string;
   name: string;
-  role: UserRole;
-}
-
-export enum UserRole {
-  ADMIN = 'admin',
-  USER = 'user',
+  email: string;
+  legalId: string | number;
+  phone: string | number;
+  address: string;
+  password?: string;
+  role: UserType;
 }

@@ -12,5 +12,12 @@
     <div class="form-section">
       <app-login-form (loginSubmitted)="onLogin($event)"></app-login-form>
     </div>
+
+    <!-- Register Link -->
+    <div class="register-section">
+      <button mat-raised-button color="primary" (click)="navigateToRegister()">
+        {{ t('login.form.register') }}
+      </button>
+    </div>
   </div>
 </div>

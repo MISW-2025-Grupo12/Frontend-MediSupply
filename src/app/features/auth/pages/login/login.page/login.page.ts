@@ -21,4 +21,8 @@ export class LoginPage {
     console.log('Login attempt:', credentials);
     this.authStore.login(credentials.email, credentials.password);
   }
+
+  navigateToRegister(): void {
+    this.authStore.navigateToRegister();
+  }
 }
