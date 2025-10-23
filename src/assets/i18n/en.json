@@ -1,11 +1,13 @@
 {
   "common": {
-    "comingSoon": "Coming Soon"
+    "comingSoon": "Coming Soon",
+    "back": "Back"
   },
   "header": {
     "products": "Products",
     "clients": "Clients",
     "sales": "Sales",
+    "users": "Users",
     "salesReport": "Sales Report",
     "language": "Language"
   },
@@ -13,6 +15,8 @@
     "products": "products",
     "clients": "clients",
     "sales": "sales",
+    "users": "users",
+    "addUser": "add-user",
     "salesReport": "sales-report",
     "add": "add",
     "dashboard": "dashboard"
@@ -20,10 +24,13 @@
   "titles": {
     "products": "Products - MediSupply",
     "addProduct": "Add Product - MediSupply",
+    "addUser": "Add User - MediSupply",
     "login": "Login - MediSupply",
+    "register": "Register - MediSupply",
     "dashboard": "Dashboard - MediSupply",
     "home": "MediSupply",
     "sales": "Sales - MediSupply",
+    "users": "Users - MediSupply",
     "salesReport": "Sales Report - MediSupply"
   },
   "login": {
@@ -41,8 +48,44 @@
       "invalidEmail": "Please enter a valid email address",
       "minLength": "Password must be at least 6 characters",
       "loginButton": "Sign In",
-      "forgotPassword": "Forgot your password?"
+      "forgotPassword": "Forgot your password?",
+      "register": "Don't have an account? Sign Up"
     }
+  },
+  "register": {
+    "title": "Create Account",
+    "subtitle": "Join MediSupply and start managing your inventory",
+    "formComingSoon": "Registration form coming soon...",
+    "backToLogin": "Already have an account? Sign In",
+    "form": {
+      "userType": "User Type",
+      "userTypePlaceholder": "Select your role",
+      "name": "Full Name",
+      "namePlaceholder": "Enter your full name",
+      "email": "Email",
+      "emailPlaceholder": "Enter your email address",
+      "dni": "DNI",
+      "dniPlaceholder": "Enter your DNI",
+      "phone": "Phone",
+      "phonePlaceholder": "Enter your phone number",
+      "address": "Address",
+      "addressPlaceholder": "Enter your address",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "required": "This field is required",
+      "invalidEmail": "Please enter a valid email address",
+      "minLength": "Minimum length not met",
+      "invalidDni": "Please enter a valid DNI (8-12 digits)",
+      "invalidPhone": "Please enter a valid phone number",
+      "createAccount": "Create Account"
+    }
+  },
+  "userTypes": {
+    "ADMIN": "Admin",
+    "SELLER": "Seller",
+    "CUSTOMER": "Customer",
+    "DELIVERY": "Delivery",
+    "PROVIDER": "Provider"
   },
   "dashboard": {
     "welcome": "Welcome",
@@ -71,6 +114,10 @@
       "sales": {
         "title": "Sales",
         "description": "Manage sales transactions, track revenue, and monitor sales performance"
+      },
+      "users": {
+        "title": "Users",
+        "description": "Manage user accounts, roles, and permissions for system access"
       }
     }
   },
@@ -104,6 +151,43 @@
     "actions": {
       "cancel": "Cancel",
       "create": "Add Product"
+    }
+  },
+  "addUser": {
+    "title": "Add User",
+    "form": {
+      "name": "Full Name",
+      "namePlaceholder": "Enter full name",
+      "email": "Email",
+      "emailPlaceholder": "Enter email address",
+      "role": "Role",
+      "rolePlaceholder": "Select a role",
+      "password": "Password",
+      "passwordPlaceholder": "Enter password",
+      "confirmPassword": "Confirm Password",
+      "confirmPasswordPlaceholder": "Confirm password",
+      "department": "Department",
+      "departmentPlaceholder": "Select department",
+      "required": "This field is required",
+      "invalidEmail": "Please enter a valid email address",
+      "minLength": "Minimum length not met",
+      "passwordMismatch": "Passwords do not match"
+    },
+    "roles": {
+      "admin": "Administrator",
+      "manager": "Manager",
+      "employee": "Employee",
+      "viewer": "Viewer"
+    },
+    "departments": {
+      "pharmacy": "Pharmacy",
+      "inventory": "Inventory",
+      "sales": "Sales",
+      "administration": "Administration"
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "create": "Add User"
     }
   },
   "productCard": {

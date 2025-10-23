@@ -1,0 +1,146 @@
+<div class="register-form" *transloco="let t">  
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="form">
+    <div class="form-field">
+      <mat-form-field class="app-form-field">
+        <mat-label>{{ t('register.form.userType') }}</mat-label>
+        <mat-select 
+          formControlName="role"
+          [placeholder]="t('register.form.userTypePlaceholder')"
+          required>
+          <mat-option *ngFor="let userType of userTypes" [value]="userType">
+            {{ t('userTypes.' + userType) }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="registerForm.get('role')?.invalid">
+          {{ t('register.form.required') }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-field">
+      <mat-form-field class="app-form-field">
+        <mat-label>{{ t('register.form.name') }}</mat-label>
+        <input 
+          matInput 
+          formControlName="name"
+          [placeholder]="t('register.form.namePlaceholder')"
+          required>
+        <mat-error *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
+          <span *ngIf="registerForm.get('name')?.errors?.['required']">
+            {{ t('register.form.required') }}
+          </span>
+          <span *ngIf="registerForm.get('name')?.errors?.['minlength']">
+            {{ t('register.form.minLength') }}
+          </span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-field">
+      <mat-form-field class="app-form-field">
+        <mat-label>{{ t('register.form.email') }}</mat-label>
+        <input 
+          matInput 
+          type="email"
+          formControlName="email"
+          [placeholder]="t('register.form.emailPlaceholder')"
+          required>
+        <mat-error *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+          <span *ngIf="registerForm.get('email')?.errors?.['required']">
+            {{ t('register.form.required') }}
+          </span>
+          <span *ngIf="registerForm.get('email')?.errors?.['email']">
+            {{ t('register.form.invalidEmail') }}
+          </span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-field">
+      <mat-form-field class="app-form-field">
+        <mat-label>{{ t('register.form.dni') }}</mat-label>
+        <input 
+          matInput 
+          formControlName="dni"
+          [placeholder]="t('register.form.dniPlaceholder')"
+          required>
+        <mat-error *ngIf="registerForm.get('dni')?.invalid && registerForm.get('dni')?.touched">
+          <span *ngIf="registerForm.get('dni')?.errors?.['required']">
+            {{ t('register.form.required') }}
+          </span>
+          <span *ngIf="registerForm.get('dni')?.errors?.['pattern']">
+            {{ t('register.form.invalidDni') }}
+          </span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-field">
+      <mat-form-field class="app-form-field">
+        <mat-label>{{ t('register.form.phone') }}</mat-label>
+        <input 
+          matInput 
+          formControlName="phone"
+          [placeholder]="t('register.form.phonePlaceholder')"
+          required>
+        <mat-error *ngIf="registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched">
+          <span *ngIf="registerForm.get('phone')?.errors?.['required']">
+            {{ t('register.form.required') }}
+          </span>
+          <span *ngIf="registerForm.get('phone')?.errors?.['pattern']">
+            {{ t('register.form.invalidPhone') }}
+          </span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-field" *ngIf="registerForm.get('role')?.value !== 'ADMIN' && registerForm.get('role')?.value !== 'DELIVERY'">
+      <mat-form-field class="app-form-field">
+        <mat-label>{{ t('register.form.address') }}</mat-label>
+        <input 
+          matInput 
+          formControlName="address"
+          [placeholder]="t('register.form.addressPlaceholder')"
+          required>
+        <mat-error *ngIf="registerForm.get('address')?.invalid && registerForm.get('address')?.touched">
+          <span *ngIf="registerForm.get('address')?.errors?.['required']">
+            {{ t('register.form.required') }}
+          </span>
+          <span *ngIf="registerForm.get('address')?.errors?.['minlength']">
+            {{ t('register.form.minLength') }}
+          </span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-field">
+      <mat-form-field class="app-form-field">
+        <mat-label>{{ t('register.form.password') }}</mat-label>
+        <input 
+          matInput 
+          type="password"
+          formControlName="password"
+          [placeholder]="t('register.form.passwordPlaceholder')"
+          required>
+        <mat-error *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+          <span *ngIf="registerForm.get('password')?.errors?.['required']">
+            {{ t('register.form.required') }}
+          </span>
+          <span *ngIf="registerForm.get('password')?.errors?.['minlength']">
+            {{ t('register.form.minLength') }}
+          </span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-actions">
+      <button 
+        mat-raised-button 
+        type="submit"
+        [disabled]="registerForm.invalid"
+        class="submit-button">
+        {{ t('register.form.createAccount') }}
+      </button>
+    </div>
+  </form>
+</div>

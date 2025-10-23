@@ -1,0 +1,26 @@
+<div class="register-page" *transloco="let t">
+  <div class="register-container">
+    <!-- MediSupply Logo -->
+    <div class="logo-section">
+      <img 
+        src="assets/images/MediSupplyLogo.png" 
+        alt="MediSupply Logo" 
+        class="logo-image">
+    </div>
+
+    <!-- Register Form Section -->
+    <div class="form-section">
+      <h1 class="page-title">{{ t('register.title') }}</h1>
+      
+      <!-- Register Form -->
+      <app-register-form (registerSubmitted)="onRegister($event)"></app-register-form>
+    </div>
+
+    <!-- Back to Login Link -->
+    <div class="login-section">
+      <a (click)="navigateToLogin()" class="login-link">
+        {{ t('register.backToLogin') }}
+      </a>
+    </div>
+  </div>
+</div>

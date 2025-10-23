@@ -28,10 +28,22 @@ const localizedRoutes: Routes = LOCALES.map(locale => ({
       data: { titleKey: 'titles.sales' }
     },
     { 
+      path: locale === 'en' ? 'users' : 'usuarios', 
+      loadChildren: () => import('./features/users/routes').then(m => m.USERS_ROUTES),
+      canActivate: [authGuard],
+      data: { titleKey: 'titles.users' }
+    },
+    { 
       path: 'login', 
       loadChildren: () => import('./features/auth/routes').then(m => m.LOGIN_ROUTES),
       canActivate: [guestGuard],
       data: { titleKey: 'titles.login' }
+    },
+    { 
+      path: locale === 'en' ? 'register' : 'registrarse', 
+      loadChildren: () => import('./features/auth/routes').then(m => m.REGISTER_ROUTES),
+      canActivate: [guestGuard],
+      data: { titleKey: 'titles.register' }
     },
     { 
       path: '', 

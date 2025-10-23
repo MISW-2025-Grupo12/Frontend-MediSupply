@@ -59,6 +59,15 @@ export class DashboardState {
       color: '#10b981',
       enabled: false // Coming soon
     },
+    {
+      id: 'users',
+      titleKey: 'dashboard.cards.users.title',
+      descriptionKey: 'dashboard.cards.users.description',
+      icon: 'people_alt',
+      route: 'users',
+      color: '#f59e0b',
+      enabled: true
+    },
   ]);
 
   // Computed values
