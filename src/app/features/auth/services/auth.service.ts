@@ -5,6 +5,7 @@ import { map, Observable, tap } from 'rxjs';
 import { AppUserDTO } from '../../../shared/DTOs/addAppUserDTO.model';
 import { UserType } from '../../../shared/enums/user-type';
 import { LoginResponseDTO } from '../../../shared/DTOs/loginResponseDTO.model';
+import { RegisterAdminResponseDTO, RegisterCustomerResponseDTO, RegisterDeliveryResponseDTO, RegisterProviderResponseDTO, RegisterSellerResponseDTO } from '../../../shared/DTOs/registerUserReponseDTO.model';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +34,7 @@ export class AuthService {
         tap(response => {
           // Store the access token
           this.accessToken.set(response.access_token);
-          
+
           // Transform and store user info
           const user: AppUser = {
             id: response.user_info.id?.toString() || '',
@@ -44,7 +45,7 @@ export class AuthService {
             address: response.user_info.direccion || '',
             role: this.mapUserRoleFromDTO(response.user_info)
           };
-          
+
           this.setCurrentUser(user);
         }),
         map(response => {
@@ -81,30 +82,43 @@ export class AuthService {
     }
 
     const userPath = this.getUserPathByUserType(userData.role);
-    return this.apiClient.post<AppUserDTO>(`${this.baseUrl}/registro-${userPath}`, dto, 'users')
+    return this.apiClient.post<
+      RegisterSellerResponseDTO |
+      RegisterCustomerResponseDTO |
+      RegisterProviderResponseDTO |
+      RegisterAdminResponseDTO |
+      RegisterDeliveryResponseDTO>(`${this.baseUrl}/registro-${userPath}`, dto, 'users')
       .pipe(
-        tap(user => {
+        tap(response => {
+          // Extract user data from the nested response structure
+          const userFromResponse = this.extractUserFromResponse(response, userData.role);
+          
           // Set the created user as current user
           const createdUser: AppUser = {
-            id: user.id?.toString() || '',
-            name: user.nombre,
-            email: user.email,
-            legalId: user.identificacion,
-            phone: user.telefono,
-            address: user.direccion || '',
+            id: userFromResponse.id?.toString() || '',
+            name: userFromResponse.nombre,
+            email: userFromResponse.email,
+            legalId: userFromResponse.identificacion,
+            phone: userFromResponse.telefono,
+            address: userFromResponse.direccion || '',
             role: userData.role,
           };
           this.setCurrentUser(createdUser);
         }),
-        map(user => ({
-          id: user.id?.toString() || '',
-          name: user.nombre,
-          email: user.email,
-          legalId: user.identificacion,
-          phone: user.telefono,
-          address: user.direccion || '',
-          role: userData.role,
-        }))
+        map(response => {
+          // Extract user data from the nested response structure
+          const userFromResponse = this.extractUserFromResponse(response, userData.role);
+          
+          return {
+            id: userFromResponse.id?.toString() || '',
+            name: userFromResponse.nombre,
+            email: userFromResponse.email,
+            legalId: userFromResponse.identificacion,
+            phone: userFromResponse.telefono,
+            address: userFromResponse.direccion || '',
+            role: userData.role,
+          };
+        })
       );
   }
 
@@ -157,7 +171,7 @@ export class AuthService {
    */
   private mapUserRoleFromDTO(userInfo: Partial<AppUserDTO>): UserType {
     const tipoUsuario = userInfo.tipo_usuario;
-    
+
     switch (tipoUsuario) {
       case 'administrador':
         return UserType.ADMIN;
@@ -187,6 +201,33 @@ export class AuthService {
         return 'repartidor';
       case UserType.PROVIDER:
         return 'proveedor';
+    }
+  }
+
+  /**
+   * Extract user data from the nested response structure based on user role
+   */
+  private extractUserFromResponse(
+    response: RegisterSellerResponseDTO |
+             RegisterCustomerResponseDTO |
+             RegisterProviderResponseDTO |
+             RegisterAdminResponseDTO |
+             RegisterDeliveryResponseDTO,
+    userRole: UserType
+  ): AppUserDTO {
+    switch (userRole) {
+      case UserType.ADMIN:
+        return (response as RegisterAdminResponseDTO).administrador;
+      case UserType.SELLER:
+        return (response as RegisterSellerResponseDTO).vendedor;
+      case UserType.CUSTOMER:
+        return (response as RegisterCustomerResponseDTO).cliente;
+      case UserType.DELIVERY:
+        return (response as RegisterDeliveryResponseDTO).repartidor;
+      case UserType.PROVIDER:
+        return (response as RegisterProviderResponseDTO).proveedor;
+      default:
+        throw new Error(`Unknown user role: ${userRole}`);
     }
   }
 }

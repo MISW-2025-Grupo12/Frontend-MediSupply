@@ -7,6 +7,7 @@ import { ApiClientService } from '../../../core/services/api-client.service';
 import { AppUser } from '../../../shared/models/user.model';
 import { AppUserDTO } from '../../../shared/DTOs/addAppUserDTO.model';
 import { LoginResponseDTO } from '../../../shared/DTOs/loginResponseDTO.model';
+import { RegisterCustomerResponseDTO, RegisterSellerResponseDTO, RegisterAdminResponseDTO, RegisterProviderResponseDTO, RegisterDeliveryResponseDTO } from '../../../shared/DTOs/registerUserReponseDTO.model';
 import { UserType } from '../../../shared/enums/user-type';
 
 describe('AuthService', () => {
@@ -70,7 +71,12 @@ describe('AuthService', () => {
     };
 
     it('should create user successfully', () => {
-      mockApiClientService.post.and.returnValue(of(mockAppUserDTO));
+      const mockResponse: RegisterCustomerResponseDTO = {
+        mensaje: 'Usuario creado exitosamente',
+        cliente: mockAppUserDTO
+      };
+
+      mockApiClientService.post.and.returnValue(of(mockResponse));
 
       service.createUser(mockAppUser).subscribe(result => {
         expect(result).toEqual({
@@ -130,14 +136,17 @@ describe('AuthService', () => {
     });
 
     it('should handle missing address in response', () => {
-      const mockResponseWithoutAddress: AppUserDTO = {
-        id: '123',
-        nombre: 'John Doe',
-        email: 'john@example.com',
-        identificacion: '12345678',
-        telefono: '+1234567890',
-        password: 'password123'
-        // direccion is missing
+      const mockResponseWithoutAddress: RegisterCustomerResponseDTO = {
+        mensaje: 'Usuario creado exitosamente',
+        cliente: {
+          id: '123',
+          nombre: 'John Doe',
+          email: 'john@example.com',
+          identificacion: '12345678',
+          telefono: '+1234567890',
+          password: 'password123'
+          // direccion is missing
+        }
       };
 
       mockApiClientService.post.and.returnValue(of(mockResponseWithoutAddress));
@@ -148,14 +157,17 @@ describe('AuthService', () => {
     });
 
     it('should handle numeric ID in response', () => {
-      const mockResponseWithNumericId: AppUserDTO = {
-        id: 123,
-        nombre: 'John Doe',
-        email: 'john@example.com',
-        identificacion: '12345678',
-        telefono: '+1234567890',
-        direccion: '123 Main Street',
-        password: 'password123'
+      const mockResponseWithNumericId: RegisterCustomerResponseDTO = {
+        mensaje: 'Usuario creado exitosamente',
+        cliente: {
+          id: 123,
+          nombre: 'John Doe',
+          email: 'john@example.com',
+          identificacion: '12345678',
+          telefono: '+1234567890',
+          direccion: '123 Main Street',
+          password: 'password123'
+        }
       };
 
       mockApiClientService.post.and.returnValue(of(mockResponseWithNumericId));
@@ -166,14 +178,17 @@ describe('AuthService', () => {
     });
 
     it('should handle string ID in response', () => {
-      const mockResponseWithStringId: AppUserDTO = {
-        id: 'abc123',
-        nombre: 'John Doe',
-        email: 'john@example.com',
-        identificacion: '12345678',
-        telefono: '+1234567890',
-        direccion: '123 Main Street',
-        password: 'password123'
+      const mockResponseWithStringId: RegisterCustomerResponseDTO = {
+        mensaje: 'Usuario creado exitosamente',
+        cliente: {
+          id: 'abc123',
+          nombre: 'John Doe',
+          email: 'john@example.com',
+          identificacion: '12345678',
+          telefono: '+1234567890',
+          direccion: '123 Main Street',
+          password: 'password123'
+        }
       };
 
       mockApiClientService.post.and.returnValue(of(mockResponseWithStringId));
@@ -184,14 +199,17 @@ describe('AuthService', () => {
     });
 
     it('should handle undefined ID in response', () => {
-      const mockResponseWithUndefinedId: AppUserDTO = {
-        nombre: 'John Doe',
-        email: 'john@example.com',
-        identificacion: '12345678',
-        telefono: '+1234567890',
-        direccion: '123 Main Street',
-        password: 'password123'
-        // id is undefined
+      const mockResponseWithUndefinedId: RegisterCustomerResponseDTO = {
+        mensaje: 'Usuario creado exitosamente',
+        cliente: {
+          nombre: 'John Doe',
+          email: 'john@example.com',
+          identificacion: '12345678',
+          telefono: '+1234567890',
+          direccion: '123 Main Street',
+          password: 'password123'
+          // id is undefined
+        }
       };
 
       mockApiClientService.post.and.returnValue(of(mockResponseWithUndefinedId));
@@ -237,15 +255,20 @@ describe('AuthService', () => {
         role: UserType.SELLER
       };
 
-      mockApiClientService.post.and.returnValue(of({
-        id: '456',
-        nombre: 'Jane Smith',
-        email: 'jane@example.com',
-        identificacion: '87654321',
-        telefono: '+9876543210',
-        direccion: '456 Business Ave',
-        password: 'jane123'
-      }));
+      const mockResponse: RegisterSellerResponseDTO = {
+        mensaje: 'Usuario creado exitosamente',
+        vendedor: {
+          id: '456',
+          nombre: 'Jane Smith',
+          email: 'jane@example.com',
+          identificacion: '87654321',
+          telefono: '+9876543210',
+          direccion: '456 Business Ave',
+          password: 'jane123'
+        }
+      };
+
+      mockApiClientService.post.and.returnValue(of(mockResponse));
 
       service.createUser(appUser).subscribe();
 
@@ -276,15 +299,20 @@ describe('AuthService', () => {
         role: UserType.CUSTOMER
       };
 
-      mockApiClientService.post.and.returnValue(of({
-        id: '789',
-        nombre: 'Test User',
-        email: 'test@example.com',
-        identificacion: 12345678,
-        telefono: 1234567890,
-        direccion: 'Test Address',
-        password: 'test123'
-      }));
+      const mockResponse: RegisterCustomerResponseDTO = {
+        mensaje: 'Usuario creado exitosamente',
+        cliente: {
+          id: '789',
+          nombre: 'Test User',
+          email: 'test@example.com',
+          identificacion: 12345678,
+          telefono: 1234567890,
+          direccion: 'Test Address',
+          password: 'test123'
+        }
+      };
+
+      mockApiClientService.post.and.returnValue(of(mockResponse));
 
       service.createUser(appUser).subscribe();
 
@@ -317,15 +345,20 @@ describe('AuthService', () => {
         role: UserType.ADMIN
       };
 
-      mockApiClientService.post.and.returnValue(of({
-        id: '1',
-        nombre: 'Admin User',
-        email: 'admin@example.com',
-        identificacion: '11223344',
-        telefono: '+1111111111',
-        direccion: '',
-        password: 'admin123'
-      }));
+      const mockResponse: RegisterAdminResponseDTO = {
+        mensaje: 'Usuario creado exitosamente',
+        administrador: {
+          id: '1',
+          nombre: 'Admin User',
+          email: 'admin@example.com',
+          identificacion: '11223344',
+          telefono: '+1111111111',
+          direccion: '',
+          password: 'admin123'
+        }
+      };
+
+      mockApiClientService.post.and.returnValue(of(mockResponse));
 
       service.createUser(adminUser).subscribe();
 
@@ -348,15 +381,20 @@ describe('AuthService', () => {
         role: UserType.PROVIDER
       };
 
-      mockApiClientService.post.and.returnValue(of({
-        id: '2',
-        nombre: 'Provider User',
-        email: 'provider@example.com',
-        identificacion: '55667788',
-        telefono: '+2222222222',
-        direccion: 'Provider Address',
-        password: 'provider123'
-      }));
+      const mockResponse: RegisterProviderResponseDTO = {
+        mensaje: 'Usuario creado exitosamente',
+        proveedor: {
+          id: '2',
+          nombre: 'Provider User',
+          email: 'provider@example.com',
+          identificacion: '55667788',
+          telefono: '+2222222222',
+          direccion: 'Provider Address',
+          password: 'provider123'
+        }
+      };
+
+      mockApiClientService.post.and.returnValue(of(mockResponse));
 
       service.createUser(providerUser).subscribe();
 
@@ -379,15 +417,20 @@ describe('AuthService', () => {
         role: UserType.DELIVERY
       };
 
-      mockApiClientService.post.and.returnValue(of({
-        id: '3',
-        nombre: 'Delivery User',
-        email: 'delivery@example.com',
-        identificacion: '99887766',
-        telefono: '+3333333333',
-        direccion: '',
-        password: 'delivery123'
-      }));
+      const mockResponse: RegisterDeliveryResponseDTO = {
+        mensaje: 'Usuario creado exitosamente',
+        repartidor: {
+          id: '3',
+          nombre: 'Delivery User',
+          email: 'delivery@example.com',
+          identificacion: '99887766',
+          telefono: '+3333333333',
+          direccion: '',
+          password: 'delivery123'
+        }
+      };
+
+      mockApiClientService.post.and.returnValue(of(mockResponse));
 
       service.createUser(deliveryUser).subscribe();
 
@@ -411,13 +454,16 @@ describe('AuthService', () => {
       };
 
       mockApiClientService.post.and.returnValue(of({
-        id: '4',
-        nombre: 'Test User',
-        email: 'test@example.com',
-        identificacion: '12345678',
-        telefono: '+1234567890',
-        direccion: 'Test Address',
-        password: 'test123'
+        mensaje: 'Usuario creado exitosamente',
+        cliente: {
+          id: '4',
+          nombre: 'Test User',
+          email: 'test@example.com',
+          identificacion: '12345678',
+          telefono: '+1234567890',
+          direccion: 'Test Address',
+          password: 'test123'
+        }
       }));
 
       service.createUser(testUser).subscribe();
@@ -452,15 +498,80 @@ describe('AuthService', () => {
           role: type
         };
 
-        const mockResponse: AppUserDTO = {
-          id: '123',
-          nombre: `${type} User`,
-          email: `${type.toLowerCase()}@example.com`,
-          identificacion: '12345678',
-          telefono: '+1234567890',
-          direccion: type === UserType.ADMIN || type === UserType.DELIVERY ? '' : 'Test Address',
-          password: 'password123'
-        };
+        // Create appropriate mock response based on user type
+        let mockResponse: any;
+        switch (type) {
+          case UserType.ADMIN:
+            mockResponse = {
+              mensaje: 'Usuario creado exitosamente',
+              administrador: {
+                id: '123',
+                nombre: `${type} User`,
+                email: `${type.toLowerCase()}@example.com`,
+                identificacion: '12345678',
+                telefono: '+1234567890',
+                direccion: '',
+                password: 'password123'
+              }
+            };
+            break;
+          case UserType.SELLER:
+            mockResponse = {
+              mensaje: 'Usuario creado exitosamente',
+              vendedor: {
+                id: '123',
+                nombre: `${type} User`,
+                email: `${type.toLowerCase()}@example.com`,
+                identificacion: '12345678',
+                telefono: '+1234567890',
+                direccion: 'Test Address',
+                password: 'password123'
+              }
+            };
+            break;
+          case UserType.CUSTOMER:
+            mockResponse = {
+              mensaje: 'Usuario creado exitosamente',
+              cliente: {
+                id: '123',
+                nombre: `${type} User`,
+                email: `${type.toLowerCase()}@example.com`,
+                identificacion: '12345678',
+                telefono: '+1234567890',
+                direccion: 'Test Address',
+                password: 'password123'
+              }
+            };
+            break;
+          case UserType.DELIVERY:
+            mockResponse = {
+              mensaje: 'Usuario creado exitosamente',
+              repartidor: {
+                id: '123',
+                nombre: `${type} User`,
+                email: `${type.toLowerCase()}@example.com`,
+                identificacion: '12345678',
+                telefono: '+1234567890',
+                direccion: '',
+                password: 'password123'
+              }
+            };
+            break;
+          case UserType.PROVIDER:
+            mockResponse = {
+              mensaje: 'Usuario creado exitosamente',
+              proveedor: {
+                id: '123',
+                nombre: `${type} User`,
+                email: `${type.toLowerCase()}@example.com`,
+                identificacion: '12345678',
+                telefono: '+1234567890',
+                direccion: 'Test Address',
+                password: 'password123'
+              }
+            };
+            break;
+        }
 
         mockApiClientService.post.and.returnValue(of(mockResponse));
 
@@ -498,15 +609,20 @@ describe('AuthService', () => {
         role: UserType.CUSTOMER
       };
 
-      mockApiClientService.post.and.returnValue(of({
-        id: '123',
-        nombre: 'Test User',
-        email: 'test@example.com',
-        identificacion: '12345678',
-        telefono: '+1234567890',
-        direccion: '',
-        password: 'test123'
-      }));
+      const mockResponse: RegisterCustomerResponseDTO = {
+        mensaje: 'Usuario creado exitosamente',
+        cliente: {
+          id: '123',
+          nombre: 'Test User',
+          email: 'test@example.com',
+          identificacion: '12345678',
+          telefono: '+1234567890',
+          direccion: '',
+          password: 'test123'
+        }
+      };
+
+      mockApiClientService.post.and.returnValue(of(mockResponse));
 
       service.createUser(userWithEmptyAddress).subscribe(result => {
         expect(result.address).toBe('');
@@ -525,14 +641,17 @@ describe('AuthService', () => {
         role: UserType.CUSTOMER
       };
 
-      const mockResponseWithNullAddress: AppUserDTO = {
-        id: '123',
-        nombre: 'Test User',
-        email: 'test@example.com',
-        identificacion: '12345678',
-        telefono: '+1234567890',
-        direccion: null as any,
-        password: 'test123'
+      const mockResponseWithNullAddress: RegisterCustomerResponseDTO = {
+        mensaje: 'Usuario creado exitosamente',
+        cliente: {
+          id: '123',
+          nombre: 'Test User',
+          email: 'test@example.com',
+          identificacion: '12345678',
+          telefono: '+1234567890',
+          direccion: null as any,
+          password: 'test123'
+        }
       };
 
       mockApiClientService.post.and.returnValue(of(mockResponseWithNullAddress));
@@ -554,14 +673,17 @@ describe('AuthService', () => {
         role: UserType.CUSTOMER
       };
 
-      const mockResponseWithUndefinedAddress: AppUserDTO = {
-        id: '123',
-        nombre: 'Test User',
-        email: 'test@example.com',
-        identificacion: '12345678',
-        telefono: '+1234567890',
-        password: 'test123'
-        // direccion is undefined
+      const mockResponseWithUndefinedAddress: RegisterCustomerResponseDTO = {
+        mensaje: 'Usuario creado exitosamente',
+        cliente: {
+          id: '123',
+          nombre: 'Test User',
+          email: 'test@example.com',
+          identificacion: '12345678',
+          telefono: '+1234567890',
+          password: 'test123'
+          // direccion is undefined
+        }
       };
 
       mockApiClientService.post.and.returnValue(of(mockResponseWithUndefinedAddress));
@@ -583,14 +705,17 @@ describe('AuthService', () => {
         role: UserType.CUSTOMER
       };
 
-      const mockResponse: AppUserDTO = {
-        id: '123',
-        nombre: 'John Doe',
-        email: 'john@example.com',
-        identificacion: '12345678',
-        telefono: '+1234567890',
-        direccion: '123 Main Street',
-        password: 'password123'
+      const mockResponse: RegisterCustomerResponseDTO = {
+        mensaje: 'Usuario creado exitosamente',
+        cliente: {
+          id: '123',
+          nombre: 'John Doe',
+          email: 'john@example.com',
+          identificacion: '12345678',
+          telefono: '+1234567890',
+          direccion: '123 Main Street',
+          password: 'password123'
+        }
       };
 
       mockApiClientService.post.and.returnValue(of(mockResponse));
