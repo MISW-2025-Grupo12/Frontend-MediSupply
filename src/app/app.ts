@@ -5,10 +5,11 @@ import { filter } from 'rxjs/operators';
 import { Header } from './core/layout/header/header';
 import { AppStore } from './core/state/app.store';
 import { TranslocoService } from '@ngneat/transloco';
+import { Footer } from './core/layout/footer/footer';
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, RouterOutlet, Header],
+  imports: [CommonModule, RouterOutlet, Header, Footer],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

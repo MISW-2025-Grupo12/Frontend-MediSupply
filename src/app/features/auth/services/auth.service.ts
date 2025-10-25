@@ -1,5 +1,6 @@
 import { inject, Injectable, signal, computed } from '@angular/core';
 import { ApiClientService } from '../../../core/services/api-client.service';
+import { AppStore } from '../../../core/state/app.store';
 import { AppUser } from '../../../shared/models/user.model';
 import { map, Observable, tap } from 'rxjs';
 import { AppUserDTO } from '../../../shared/DTOs/addAppUserDTO.model';
@@ -12,16 +13,16 @@ import { RegisterAdminResponseDTO, RegisterCustomerResponseDTO, RegisterDelivery
 })
 export class AuthService {
   private apiClient = inject(ApiClientService);
+  private appStore = inject(AppStore);
 
   private baseUrl = '/auth';
 
   // User state management using signals
   private currentUser = signal<AppUser | null>(null);
-  private accessToken = signal<string | null>(null);
 
   // Public readonly signals for components to access
   readonly user = this.currentUser.asReadonly();
-  readonly token = this.accessToken.asReadonly();
+  readonly token = computed(() => this.appStore.accessToken());
   readonly isAuthenticated = computed(() => this.currentUser() !== null);
   readonly userRole = computed(() => this.currentUser()?.role || null);
 
@@ -32,8 +33,8 @@ export class AuthService {
     return this.apiClient.post<LoginResponseDTO>(`${this.baseUrl}/login`, { email, password }, 'users')
       .pipe(
         tap(response => {
-          // Store the access token
-          this.accessToken.set(response.access_token);
+          // Store the access token in AppStore
+          this.appStore.setAccessToken(response.access_token);
 
           // Transform and store user info
           const user: AppUser = {
@@ -140,7 +141,7 @@ export class AuthService {
    * Get the current access token
    */
   getAccessToken(): string | null {
-    return this.accessToken();
+    return this.appStore.accessToken();
   }
 
   /**
@@ -148,7 +149,10 @@ export class AuthService {
    */
   logout(): void {
     this.currentUser.set(null);
-    this.accessToken.set(null);
+    
+    // Clear the token and user from AppStore
+    this.appStore.setAccessToken(null);
+    this.appStore.setUser(null);
   }
 
   /**

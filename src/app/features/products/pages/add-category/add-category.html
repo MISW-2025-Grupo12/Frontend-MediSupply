@@ -19,8 +19,8 @@
 
           <mat-form-field appearance="fill" class="app-form-field full-width">
             <mat-label>{{ t('addCategory.form.description') || 'Description' }}</mat-label>
-            <textarea matInput formControlName="description" [placeholder]="t('addCategory.form.descriptionPlaceholder') || 'Enter category description'" required rows="4"></textarea>
-            <mat-error *ngIf="categoryForm.get('description')?.hasError('required')">
+            <textarea matInput formControlName="description" [placeholder]="t('addCategory.form.descriptionPlaceholder') || 'Enter category description'" rows="4"></textarea>
+            <mat-error *ngIf="categoryForm.get('description')?.hasError('minlength')">
               {{ t(getErrorMessage('description')) }}
             </mat-error>
           </mat-form-field>

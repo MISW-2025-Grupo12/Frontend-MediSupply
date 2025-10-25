@@ -4,38 +4,34 @@ import { AppUser } from "../../../shared/models/user.model";
 import { AppStore } from "../../../core/state/app.store";
 import { LocaleRouteService } from "../../../core/services/locale-route.service";
 import { UserType } from "../../../shared/enums/user-type";
+import { AuthService } from "../services/auth.service";
 
 @Injectable({ providedIn: 'root' })
 export class AuthStore {
   private appStore = inject(AppStore);
   private router = inject(Router);
   private localeRouteService = inject(LocaleRouteService);
+  private authService = inject(AuthService);
 
   login(email: string, password: string) {
     this.appStore.setApiBusy(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      // Set user data
-      this.appStore.setUser({
-        id: '1',
-        name: 'John Doe',
-        email: 'john.doe@example.com',
-        legalId: '12345678',
-        phone: '1234567890',
-        address: '123 Main St',
-        role: UserType.ADMIN
-      });
-      
-      this.appStore.setApiBusy(false);
-      
-      // Navigate to dashboard after successful login
-      this.localeRouteService.navigateToRoute('dashboard');
-    }, 1000);
+    this.authService.login(email, password).subscribe({
+      next: (user) => {
+        this.appStore.setApiBusy(false);
+        // Navigate to dashboard after successful login
+        this.localeRouteService.navigateToRoute('dashboard');
+      },
+      error: (error) => {
+        this.appStore.setApiBusy(false);
+        console.error('Login failed:', error);
+        // Handle login error (show error message, etc.)
+      }
+    });
   }
 
   logout() {
-    this.appStore.setUser(null);
+    this.authService.logout();
     this.localeRouteService.navigateToRoute('login');
   }
 
