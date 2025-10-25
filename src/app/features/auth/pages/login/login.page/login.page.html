@@ -10,7 +10,12 @@
 
     <!-- Login Form -->
     <div class="form-section">
-      <app-login-form (loginSubmitted)="onLogin($event)"></app-login-form>
+      <app-login-form 
+        [isLoading]="isLoading()" 
+        [errorMessage]="error()"
+        (loginSubmitted)="onLogin($event)"
+        (inputChanged)="onInputChange()">
+      </app-login-form>
     </div>
 
     <!-- Register Link -->
@@ -19,5 +24,6 @@
         {{ t('login.form.register') }}
       </button>
     </div>
+
   </div>
 </div>

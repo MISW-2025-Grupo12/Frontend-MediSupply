@@ -2,7 +2,7 @@
   <!-- Header Section -->
   <div class="dashboard-header">
     <div class="welcome-section">
-      <h1 class="dashboard-title">{{ t('dashboard.welcome') }}, {{ dashboardState.userName() }}!</h1>
+      <h1 class="dashboard-title">{{ t('dashboard.welcome') }}{{ dashboardState.userName().length > 0 ? `, ${dashboardState.userName()}!` : '!' }}</h1>
       <p class="dashboard-subtitle">{{ t('dashboard.subtitle') }}</p>
     </div>
     <button 

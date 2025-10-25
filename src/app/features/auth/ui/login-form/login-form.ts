@@ -1,4 +1,4 @@
-import { Component, inject, output, OnInit } from '@angular/core';
+import { Component, inject, output, OnInit, input, Input } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -32,10 +32,14 @@ export class LoginForm implements OnInit {
   private fb = inject(FormBuilder);
 
   loginSubmitted = output<LoginCredentials>();
+  inputChanged = output<void>();
+  
+  // Input for loading state and error message from parent component
+  isLoading = input<boolean>(false);
+  errorMessage = input<string | null>(null);
   
   loginForm!: FormGroup;
   hidePassword = true;
-  isLoading = false;
 
   ngOnInit(): void {
     this.initForm();
@@ -68,7 +72,6 @@ export class LoginForm implements OnInit {
 
   onSubmit(): void {
     if (this.loginForm.valid) {
-      this.isLoading = true;
       const credentials: LoginCredentials = this.loginForm.value;
       this.loginSubmitted.emit(credentials);
     } else {
@@ -78,7 +81,10 @@ export class LoginForm implements OnInit {
     }
   }
 
-  setLoading(loading: boolean): void {
-    this.isLoading = loading;
+  // Clear error when user starts typing
+  onInputChange(): void {
+    // Emit event to parent to clear error
+    this.inputChanged.emit();
   }
+
 }

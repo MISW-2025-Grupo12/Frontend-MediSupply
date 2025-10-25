@@ -7,8 +7,9 @@ type SupportedLocale = 'en' | 'es';
 export class AppStore {
   // User state
   private _user = signal<AppUser | null>(null);
-  private _apiBusy = signal(false);
   private _accessToken = signal<string | null>(null);
+  private _apiBusy = signal(false);
+  private _error = signal<string | null>(null);
 
   // Locale state
   private _locale = signal<SupportedLocale>('en');
@@ -22,9 +23,10 @@ export class AppStore {
 
   // User computed values
   readonly user = computed(() => this._user());
+  readonly accessToken = computed(() => this._accessToken());
   readonly isLoggedIn = computed(() => !!this._user());
   readonly apiBusy = computed(() => this._apiBusy());
-  readonly accessToken = computed(() => this._accessToken());
+  readonly error = computed(() => this._error());
 
   // Locale computed values
   readonly locale = computed(() => this._locale());
@@ -34,8 +36,21 @@ export class AppStore {
 
   // User actions
   setUser(u: AppUser | null) { this._user.set(u); }
-  setApiBusy(v: boolean) { this._apiBusy.set(v); }
   setAccessToken(token: string | null) { this._accessToken.set(token); }
+  setApiBusy(v: boolean) { this._apiBusy.set(v); }
+  setError(error: string | null) { this._error.set(error); }
+  
+  // Combined user and token actions
+  setUserAndToken(user: AppUser | null, token: string | null) {
+    this._user.set(user);
+    this._accessToken.set(token);
+  }
+  
+  clearUserSession() {
+    this._user.set(null);
+    this._accessToken.set(null);
+    this._error.set(null);
+  }
 
   // Locale actions
   setLocale(locale: SupportedLocale) {

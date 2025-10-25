@@ -78,7 +78,7 @@ export class DashboardState {
     this._availableFeatures().filter(f => f.enabled)
   );
   readonly user = computed(() => this.appStore.user());
-  readonly userName = computed(() => this.appStore.user()?.name || 'User');
+  readonly userName = computed(() => this.appStore.user()?.name || '');
   readonly userRole = computed(() => this.appStore.user()?.role || 'user');
 
   // Actions

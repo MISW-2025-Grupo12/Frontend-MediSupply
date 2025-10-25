@@ -4,6 +4,7 @@ import { of, throwError } from 'rxjs';
 
 import { AuthService } from './auth.service';
 import { ApiClientService } from '../../../core/services/api-client.service';
+import { AppStore } from '../../../core/state/app.store';
 import { AppUser } from '../../../shared/models/user.model';
 import { AppUserDTO } from '../../../shared/DTOs/addAppUserDTO.model';
 import { LoginResponseDTO } from '../../../shared/DTOs/loginResponseDTO.model';
@@ -13,19 +14,23 @@ import { UserType } from '../../../shared/enums/user-type';
 describe('AuthService', () => {
   let service: AuthService;
   let mockApiClientService: jasmine.SpyObj<ApiClientService>;
+  let mockAppStore: jasmine.SpyObj<AppStore>;
 
   beforeEach(() => {
     const apiClientServiceSpy = jasmine.createSpyObj('ApiClientService', ['post']);
+    const appStoreSpy = jasmine.createSpyObj('AppStore', ['setUser', 'setUserAndToken', 'clearUserSession', 'user', 'accessToken', 'isLoggedIn']);
 
     TestBed.configureTestingModule({
       providers: [
         provideZonelessChangeDetection(),
-        { provide: ApiClientService, useValue: apiClientServiceSpy }
+        { provide: ApiClientService, useValue: apiClientServiceSpy },
+        { provide: AppStore, useValue: appStoreSpy }
       ]
     });
     
     service = TestBed.inject(AuthService);
     mockApiClientService = TestBed.inject(ApiClientService) as jasmine.SpyObj<ApiClientService>;
+    mockAppStore = TestBed.inject(AppStore) as jasmine.SpyObj<AppStore>;
   });
 
   describe('Service Creation', () => {
@@ -33,17 +38,18 @@ describe('AuthService', () => {
       expect(service).toBeTruthy();
     });
 
-    it('should inject ApiClientService', () => {
+    it('should inject ApiClientService and AppStore', () => {
       expect(service['apiClient']).toBeDefined();
+      expect(service['appStore']).toBeDefined();
     });
 
     it('should initialize with no current user', () => {
+      mockAppStore.user.and.returnValue(null);
       expect(service.getCurrentUser()).toBeNull();
-      expect(service.isAuthenticated()).toBeFalse();
-      expect(service.userRole()).toBeNull();
     });
 
     it('should initialize with no access token', () => {
+      mockAppStore.accessToken.and.returnValue(null);
       expect(service.getAccessToken()).toBeNull();
     });
   });
@@ -722,7 +728,7 @@ describe('AuthService', () => {
 
       service.createUser(mockUser).subscribe();
 
-      expect(service.getCurrentUser()).toEqual({
+      expect(mockAppStore.setUser).toHaveBeenCalledWith({
         id: '123',
         name: 'John Doe',
         email: 'john@example.com',
@@ -731,8 +737,6 @@ describe('AuthService', () => {
         address: '123 Main Street',
         role: UserType.CUSTOMER
       });
-      expect(service.isAuthenticated()).toBeTrue();
-      expect(service.userRole()).toBe(UserType.CUSTOMER);
     });
   });
 
@@ -747,51 +751,45 @@ describe('AuthService', () => {
       role: UserType.CUSTOMER
     };
 
-    it('should set current user', () => {
-      service.setCurrentUser(testUser);
-      
-      expect(service.getCurrentUser()).toEqual(testUser);
-      expect(service.isAuthenticated()).toBeTrue();
-      expect(service.userRole()).toBe(UserType.CUSTOMER);
-    });
-
-    it('should get current user', () => {
-      service.setCurrentUser(testUser);
+    it('should get current user from AppStore', () => {
+      mockAppStore.user.and.returnValue(testUser);
       
       expect(service.getCurrentUser()).toEqual(testUser);
     });
 
-    it('should logout user', () => {
-      service.setCurrentUser(testUser);
-      expect(service.isAuthenticated()).toBeTrue();
+    it('should get access token from AppStore', () => {
+      mockAppStore.accessToken.and.returnValue('test-token');
       
+      expect(service.getAccessToken()).toBe('test-token');
+    });
+
+    it('should logout user by calling AppStore', () => {
       service.logout();
       
-      expect(service.getCurrentUser()).toBeNull();
-      expect(service.isAuthenticated()).toBeFalse();
-      expect(service.userRole()).toBeNull();
-      expect(service.getAccessToken()).toBeNull();
+      expect(mockAppStore.clearUserSession).toHaveBeenCalled();
     });
 
     it('should check if user has specific role', () => {
-      service.setCurrentUser(testUser);
+      mockAppStore.user.and.returnValue(testUser);
       
       expect(service.hasRole(UserType.CUSTOMER)).toBeTrue();
       expect(service.hasRole(UserType.ADMIN)).toBeFalse();
     });
 
     it('should check if user has any of specified roles', () => {
-      service.setCurrentUser(testUser);
+      mockAppStore.user.and.returnValue(testUser);
       
       expect(service.hasAnyRole([UserType.CUSTOMER, UserType.SELLER])).toBeTrue();
       expect(service.hasAnyRole([UserType.ADMIN, UserType.PROVIDER])).toBeFalse();
     });
 
     it('should return false for hasRole when no user is set', () => {
+      mockAppStore.user.and.returnValue(null);
       expect(service.hasRole(UserType.CUSTOMER)).toBeFalse();
     });
 
     it('should return false for hasAnyRole when no user is set', () => {
+      mockAppStore.user.and.returnValue(null);
       expect(service.hasAnyRole([UserType.CUSTOMER])).toBeFalse();
     });
   });
@@ -833,8 +831,8 @@ describe('AuthService', () => {
         'users'
       );
 
-      // Check that user and token are stored
-      expect(service.getCurrentUser()).toEqual({
+      // Check that user and token are stored in AppStore
+      expect(mockAppStore.setUserAndToken).toHaveBeenCalledWith({
         id: '123',
         name: 'John Doe',
         email: 'john@example.com',
@@ -842,9 +840,7 @@ describe('AuthService', () => {
         phone: '+1234567890',
         address: '123 Main Street',
         role: UserType.CUSTOMER
-      });
-      expect(service.getAccessToken()).toBe('mock-token-123');
-      expect(service.isAuthenticated()).toBeTrue();
+      }, 'mock-token-123');
     });
 
     it('should handle login with different user types', () => {
@@ -867,8 +863,10 @@ describe('AuthService', () => {
 
       service.login('admin@example.com', 'admin123').subscribe();
 
-      expect(service.userRole()).toBe(UserType.ADMIN);
-      expect(service.getAccessToken()).toBe('admin-token');
+      expect(mockAppStore.setUserAndToken).toHaveBeenCalledWith(
+        jasmine.objectContaining({ role: UserType.ADMIN }),
+        'admin-token'
+      );
     });
 
     it('should handle login error', () => {
@@ -883,8 +881,7 @@ describe('AuthService', () => {
       });
 
       // User should not be set on login error
-      expect(service.getCurrentUser()).toBeNull();
-      expect(service.getAccessToken()).toBeNull();
+      expect(mockAppStore.setUserAndToken).not.toHaveBeenCalled();
     });
   });
 
@@ -925,45 +922,4 @@ describe('AuthService', () => {
     });
   });
 
-  describe('Signal Reactivity', () => {
-    it('should update isAuthenticated signal when user changes', () => {
-      expect(service.isAuthenticated()).toBeFalse();
-      
-      const testUser: AppUser = {
-        id: '123',
-        name: 'Test User',
-        email: 'test@example.com',
-        legalId: '12345678',
-        phone: '+1234567890',
-        address: 'Test Address',
-        role: UserType.CUSTOMER
-      };
-      
-      service.setCurrentUser(testUser);
-      expect(service.isAuthenticated()).toBeTrue();
-      
-      service.logout();
-      expect(service.isAuthenticated()).toBeFalse();
-    });
-
-    it('should update userRole signal when user changes', () => {
-      expect(service.userRole()).toBeNull();
-      
-      const adminUser: AppUser = {
-        id: '123',
-        name: 'Admin User',
-        email: 'admin@example.com',
-        legalId: '12345678',
-        phone: '+1234567890',
-        address: '',
-        role: UserType.ADMIN
-      };
-      
-      service.setCurrentUser(adminUser);
-      expect(service.userRole()).toBe(UserType.ADMIN);
-      
-      service.logout();
-      expect(service.userRole()).toBeNull();
-    });
-  });
 });

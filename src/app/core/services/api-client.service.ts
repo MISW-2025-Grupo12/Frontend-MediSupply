@@ -46,7 +46,6 @@ export class ApiClientService {
    */
   private buildHeaders(options?: ApiRequestOptions): HttpHeaders | { [header: string]: string | string[] } {
     const token = this.appStore.accessToken();
-    
     let headers: HttpHeaders | { [header: string]: string | string[] };
 
     if (options?.headers) {

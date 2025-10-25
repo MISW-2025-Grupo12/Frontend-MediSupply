@@ -3,9 +3,9 @@ import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs/operators';
 import { Header } from './core/layout/header/header';
+import { Footer } from './core/layout/footer/footer';
 import { AppStore } from './core/state/app.store';
 import { TranslocoService } from '@ngneat/transloco';
-import { Footer } from './core/layout/footer/footer';
 
 @Component({
   selector: 'app-root',
