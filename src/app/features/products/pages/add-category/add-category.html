@@ -33,7 +33,7 @@
         <button mat-stroked-button type="button" (click)="onCancel()" class="app-btn app-btn--secondary">
           {{ t('addCategory.actions.cancel') }}
         </button>
-        <button mat-raised-button color="primary" type="submit" [disabled]="categoryForm.invalid || saving" class="app-btn app-btn--primary">
+        <button mat-raised-button color="primary" type="button" (click)="onSubmit()" [disabled]="categoryForm.invalid || saving" class="app-btn app-btn--primary">
           {{ t('addCategory.actions.create') }}
         </button>
       </div>

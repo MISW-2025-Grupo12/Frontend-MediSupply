@@ -23,10 +23,10 @@ export class ApiClientService {
   // Service URL mappings
   private serviceUrls: Record<string, string> = {
     default: environment.baseApiUrl,
-    users: `${environment.baseApiUrl}/usuarios`,
-    products: `${environment.baseApiUrl}/productos`,
-    logistics: `${environment.baseApiUrl}/logistica`,
-    sales: `${environment.baseApiUrl}/ventas`,
+    users: `${environment.baseApiUrl}/usuarios/api`,
+    products: `${environment.baseApiUrl}/productos/api`,
+    logistics: `${environment.baseApiUrl}/logistica/api`,
+    sales: `${environment.baseApiUrl}/ventas/api`,
     auth: `${environment.baseApiUrl}/auth`
   };
 

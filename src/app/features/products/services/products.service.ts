@@ -31,7 +31,7 @@ export class ProductsService {
   }
 
   getCategories(): Observable<Category[]> {
-    return this.apiClient.get<CategoryDTO[]>('/categorias', this.serviceType)
+    return this.apiClient.get<CategoryDTO[]>('/categorias/', this.serviceType)
       .pipe(
         map(categories => categories.map(c => ({
           id: c.id,
@@ -379,7 +379,7 @@ export class ProductsService {
       descripcion: category.description
     }
 
-    return this.apiClient.post<CategoryDTO>('/categorias', dto, this.serviceType).pipe(
+    return this.apiClient.post<CategoryDTO>('/categorias/', dto, this.serviceType).pipe(
       map(response => ({
         id: response.id,
         name: response.nombre,
