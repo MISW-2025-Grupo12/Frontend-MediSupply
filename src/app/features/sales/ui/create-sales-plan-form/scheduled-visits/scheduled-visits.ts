@@ -4,8 +4,7 @@ import { MatCardModule, MatCardContent } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoDirective } from '@ngneat/transloco';
-import { CommonModule } from '@angular/common';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { ScheduledVisit, VisitStatus } from '../../../../../shared/models/scheduledVisit.model';
 
 @Component({
