@@ -4,6 +4,8 @@ import { TranslocoTestingModule } from '@ngneat/transloco';
 import { DebugElement, provideZonelessChangeDetection } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { UsersPage } from './users-page';
 
@@ -39,6 +41,8 @@ describe('UsersPage', () => {
       ],
       providers: [
         provideZonelessChangeDetection(),
+        provideHttpClient(),
+        provideHttpClientTesting(),
         { provide: Router, useValue: routerSpy }
       ]
     })

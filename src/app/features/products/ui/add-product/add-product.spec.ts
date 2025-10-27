@@ -8,6 +8,7 @@ import { of, throwError } from 'rxjs';
 import { AddProduct } from './add-product';
 import { ProductsService } from '../../services/products.service';
 import { LocaleRouteService } from '../../../../core/services/locale-route.service';
+import { ApiClientService } from '../../../../core/services/api-client.service';
 import { Provider } from '../../../../shared/models/provider.model';
 import { Category } from '../../../../shared/models/category.model';
 import { TranslocoTestingModule } from '@ngneat/transloco';
@@ -32,6 +33,7 @@ describe('AddProduct', () => {
   beforeEach(async () => {
     const productsServiceSpy = jasmine.createSpyObj('ProductsService', ['getProviders', 'getCategories', 'createProduct', 'addProduct']);
     const localeRouteServiceSpy = jasmine.createSpyObj('LocaleRouteService', ['navigateToRoute']);
+    const apiClientServiceSpy = jasmine.createSpyObj('ApiClientService', ['get', 'post']);
 
     productsServiceSpy.getProviders.and.returnValue(of(mockProviders));
     productsServiceSpy.getCategories.and.returnValue(of(mockCategories));
@@ -54,7 +56,8 @@ describe('AddProduct', () => {
         provideHttpClient(),
         provideHttpClientTesting(),
         { provide: ProductsService, useValue: productsServiceSpy },
-        { provide: LocaleRouteService, useValue: localeRouteServiceSpy }
+        { provide: LocaleRouteService, useValue: localeRouteServiceSpy },
+        { provide: ApiClientService, useValue: apiClientServiceSpy }
       ]
     }).compileComponents();
 
@@ -145,9 +148,11 @@ describe('AddProduct', () => {
     it('should handle provider loading error', () => {
       const error = new Error('API Error');
       productsService.getProviders.and.returnValue(throwError(() => error));
+      spyOn(console, 'error');
       
       component.ngOnInit();
       
+      expect(console.error).toHaveBeenCalled();
       expect(component.providers).toEqual([]);
       expect(component.loading).toBe(false);
     });
@@ -155,9 +160,11 @@ describe('AddProduct', () => {
     it('should handle category loading error', () => {
       const error = new Error('API Error');
       productsService.getCategories.and.returnValue(throwError(() => error));
+      spyOn(console, 'error');
       
       component.ngOnInit();
       
+      expect(console.error).toHaveBeenCalled();
       expect(component.categories).toEqual([]);
       expect(component.loading).toBe(false);
     });

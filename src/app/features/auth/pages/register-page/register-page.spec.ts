@@ -25,16 +25,26 @@ describe('RegisterPage', () => {
   let mockLocaleRouteService: jasmine.SpyObj<LocaleRouteService>;
   let mockRouter: jasmine.SpyObj<Router>;
   let mockAppStore: jasmine.SpyObj<AppStore>;
+  let userSignal: ReturnType<typeof signal<AppUser | null>>;
+  let isLoggedInSignal: ReturnType<typeof signal<boolean>>;
 
   beforeEach(async () => {
     const authServiceSpy = jasmine.createSpyObj('AuthService', ['createUser', 'getCurrentUser']);
     const localeRouteServiceSpy = jasmine.createSpyObj('LocaleRouteService', ['navigateToRoute']);
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
-    const appStoreSpy = jasmine.createSpyObj('AppStore', ['user', 'isLoggedIn', 'setError']);
-    appStoreSpy.user.and.returnValue(signal(null));
-    appStoreSpy.isLoggedIn.and.returnValue(signal(false));
-    appStoreSpy.apiBusy = signal(false);
-    appStoreSpy.error = signal(null);
+    userSignal = signal<AppUser | null>(null);
+    isLoggedInSignal = signal(false);
+    const apiBusySignal = signal(false);
+    const errorSignal = signal<string | null>(null);
+    
+    const appStoreSpy = jasmine.createSpyObj('AppStore', ['user', 'isLoggedIn', 'setError'], {
+      apiBusy: apiBusySignal,
+      error: errorSignal
+    });
+    
+    // Set up user and isLoggedIn to return functions that return values
+    appStoreSpy.user.and.callFake(() => userSignal());
+    appStoreSpy.isLoggedIn.and.callFake(() => isLoggedInSignal());
 
     await TestBed.configureTestingModule({
       imports: [
@@ -94,7 +104,7 @@ describe('RegisterPage', () => {
       expect(mockLocaleRouteService.navigateToRoute).toHaveBeenCalledWith('login');
     });
 
-    it('should navigate to dashboard after successful registration when user is authenticated', () => {
+    it('should navigate to dashboard after successful registration when user is authenticated', async () => {
       const mockUser: AppUser = {
         id: '123',
         name: 'John Doe',
@@ -106,8 +116,8 @@ describe('RegisterPage', () => {
       };
 
       mockAuthService.createUser.and.returnValue(of(mockUser));
-      mockAppStore.user.and.returnValue(mockUser);
-      mockAppStore.isLoggedIn.and.returnValue(true);
+      userSignal.set(mockUser);
+      isLoggedInSignal.set(true);
 
       const registerData: RegisterData = {
         role: UserType.CUSTOMER,
@@ -120,6 +130,9 @@ describe('RegisterPage', () => {
       };
 
       component.onRegister(registerData);
+      
+      // Wait for async operation
+      await new Promise(resolve => setTimeout(resolve, 0));
 
       expect(mockAuthService.createUser).toHaveBeenCalled();
       expect(mockAppStore.user).toHaveBeenCalled();
@@ -127,7 +140,7 @@ describe('RegisterPage', () => {
       expect(mockLocaleRouteService.navigateToRoute).toHaveBeenCalledWith('dashboard');
     });
 
-    it('should navigate to login page when user is created but not properly authenticated', () => {
+    it('should navigate to login page when user is created but not properly authenticated', async () => {
       const mockUser: AppUser = {
         id: '123',
         name: 'John Doe',
@@ -139,8 +152,8 @@ describe('RegisterPage', () => {
       };
 
       mockAuthService.createUser.and.returnValue(of(mockUser));
-      mockAppStore.user.and.returnValue(null); // User not set
-      mockAppStore.isLoggedIn.and.returnValue(false); // Not authenticated
+      userSignal.set(null); // User not set
+      isLoggedInSignal.set(false); // Not authenticated
 
       const registerData: RegisterData = {
         role: UserType.CUSTOMER,
@@ -153,6 +166,9 @@ describe('RegisterPage', () => {
       };
 
       component.onRegister(registerData);
+      
+      // Wait for async operation
+      await new Promise(resolve => setTimeout(resolve, 0));
 
       expect(mockAuthService.createUser).toHaveBeenCalled();
       expect(mockAppStore.user).toHaveBeenCalled();
@@ -489,7 +505,7 @@ describe('RegisterPage', () => {
   });
 
   describe('Form Integration', () => {
-    it('should handle register form submission', () => {
+    it('should handle register form submission', async () => {
       const mockUser: AppUser = {
         id: '123',
         name: 'Form User',
@@ -501,8 +517,8 @@ describe('RegisterPage', () => {
       };
 
       mockAuthService.createUser.and.returnValue(of(mockUser));
-      mockAppStore.user.and.returnValue(mockUser);
-      mockAppStore.isLoggedIn.and.returnValue(true);
+      userSignal.set(mockUser);
+      isLoggedInSignal.set(true);
 
       const registerForm = debugElement.query(By.css('app-register-form'));
       const registerFormComponent = registerForm.componentInstance as RegisterForm;
@@ -519,6 +535,9 @@ describe('RegisterPage', () => {
 
       // Simulate form submission
       registerFormComponent.registerSubmitted.emit(registerData);
+      
+      // Wait for async operation
+      await new Promise(resolve => setTimeout(resolve, 0));
 
       expect(mockAuthService.createUser).toHaveBeenCalled();
       expect(mockAppStore.user).toHaveBeenCalled();
@@ -573,7 +592,7 @@ describe('RegisterPage', () => {
   });
 
   describe('Console Logging', () => {
-    it('should log successful user creation and authentication validation', () => {
+    it('should log successful user creation and authentication validation', async () => {
       const mockUser: AppUser = {
         id: '123',
         name: 'Log Test',
@@ -585,8 +604,8 @@ describe('RegisterPage', () => {
       };
 
       mockAuthService.createUser.and.returnValue(of(mockUser));
-      mockAppStore.user.and.returnValue(mockUser);
-      mockAppStore.isLoggedIn.and.returnValue(true);
+      userSignal.set(mockUser);
+      isLoggedInSignal.set(true);
       spyOn(console, 'log');
 
       const registerData: RegisterData = {
@@ -600,12 +619,15 @@ describe('RegisterPage', () => {
       };
 
       component.onRegister(registerData);
+      
+      // Wait for async operation
+      await new Promise(resolve => setTimeout(resolve, 0));
 
       expect(console.log).toHaveBeenCalledWith('User created successfully:', mockUser);
       expect(console.log).toHaveBeenCalledWith('User is authenticated, navigating to dashboard');
     });
 
-    it('should log warning when user is created but not authenticated', () => {
+    it('should log warning when user is created but not authenticated', async () => {
       const mockUser: AppUser = {
         id: '123',
         name: 'Log Test',
@@ -617,8 +639,8 @@ describe('RegisterPage', () => {
       };
 
       mockAuthService.createUser.and.returnValue(of(mockUser));
-      mockAppStore.user.and.returnValue(null);
-      mockAppStore.isLoggedIn.and.returnValue(false);
+      userSignal.set(null);
+      isLoggedInSignal.set(false);
       spyOn(console, 'log');
       spyOn(console, 'warn');
 
@@ -633,6 +655,9 @@ describe('RegisterPage', () => {
       };
 
       component.onRegister(registerData);
+      
+      // Wait for async operation
+      await new Promise(resolve => setTimeout(resolve, 0));
 
       expect(console.log).toHaveBeenCalledWith('User created successfully:', mockUser);
       expect(console.warn).toHaveBeenCalledWith('User created but not properly authenticated, redirecting to login');
