@@ -37,7 +37,7 @@ describe('ApiClientService', () => {
     const mockResponse = { data: 'test' };
     const endpoint = '/test';
 
-    service.get(endpoint).subscribe(response => {
+    service.get(endpoint, 'default').subscribe(response => {
       expect(response).toEqual(mockResponse);
     });
 
@@ -51,7 +51,7 @@ describe('ApiClientService', () => {
     const endpoint = '/test';
     const body = { name: 'test' };
 
-    service.post(endpoint, body).subscribe(response => {
+    service.post(endpoint, body, 'default').subscribe(response => {
       expect(response).toEqual(mockResponse);
     });
 
@@ -82,7 +82,7 @@ describe('ApiClientService', () => {
     const mockResponse = { data: 'test' };
     const endpoint = '/test';
 
-    service.get(endpoint).subscribe(response => {
+    service.get(endpoint, 'default').subscribe(response => {
       expect(response).toEqual(mockResponse);
     });
 
@@ -98,7 +98,7 @@ describe('ApiClientService', () => {
     const mockResponse = { data: 'test' };
     const endpoint = '/test';
 
-    service.get(endpoint).subscribe(response => {
+    service.get(endpoint, 'default').subscribe(response => {
       expect(response).toEqual(mockResponse);
     });
 
@@ -116,7 +116,7 @@ describe('ApiClientService', () => {
     const endpoint = '/test';
     const body = { name: 'test' };
 
-    service.post(endpoint, body).subscribe(response => {
+    service.post(endpoint, body, 'default').subscribe(response => {
       expect(response).toEqual(mockResponse);
     });
 

@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideZonelessChangeDetection } from '@angular/core';
+import { TranslocoTestingModule } from '@ngneat/transloco';
 
 import { SalesPlanComponent } from './sales-plan';
+import { LocaleRouteService } from '../../../../core/services/locale-route.service';
 
 describe('SalesPlanComponent', () => {
   let component: SalesPlanComponent;
@@ -8,7 +11,19 @@ describe('SalesPlanComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SalesPlanComponent]
+      imports: [
+        SalesPlanComponent,
+        TranslocoTestingModule.forRoot({
+          langs: { en: {}, es: {} }
+        })
+      ],
+      providers: [
+        provideZonelessChangeDetection(),
+        {
+          provide: LocaleRouteService,
+          useValue: jasmine.createSpyObj('LocaleRouteService', ['navigateToNestedRoute'])
+        }
+      ]
     })
     .compileComponents();
 

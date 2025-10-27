@@ -1,12 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { of, throwError } from 'rxjs';
 
 import { AuthService } from './auth.service';
 import { ApiClientService } from '../../../core/services/api-client.service';
 import { AppStore } from '../../../core/state/app.store';
 import { AppUser } from '../../../shared/models/user.model';
-import { AppUserDTO } from '../../../shared/DTOs/addAppUserDTO.model';
+import { AppUserDTO } from '../../../shared/DTOs/appUserDTO.model';
 import { LoginResponseDTO } from '../../../shared/DTOs/loginResponseDTO.model';
 import { RegisterCustomerResponseDTO, RegisterSellerResponseDTO, RegisterAdminResponseDTO, RegisterProviderResponseDTO, RegisterDeliveryResponseDTO } from '../../../shared/DTOs/registerUserReponseDTO.model';
 import { UserType } from '../../../shared/enums/user-type';
@@ -23,6 +25,8 @@ describe('AuthService', () => {
     TestBed.configureTestingModule({
       providers: [
         provideZonelessChangeDetection(),
+        provideHttpClient(),
+        provideHttpClientTesting(),
         { provide: ApiClientService, useValue: apiClientServiceSpy },
         { provide: AppStore, useValue: appStoreSpy }
       ]
@@ -826,9 +830,9 @@ describe('AuthService', () => {
       });
 
       expect(mockApiClientService.post).toHaveBeenCalledWith(
-        '/auth/login',
+        '/login',
         { email: 'john@example.com', password: 'password123' },
-        'users'
+        'auth'
       );
 
       // Check that user and token are stored in AppStore

@@ -4,6 +4,9 @@ import { TranslocoTestingModule } from '@ngneat/transloco';
 import { DebugElement, provideZonelessChangeDetection } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { signal } from '@angular/core';
 import { of, throwError } from 'rxjs';
 
 import { RegisterPage } from './register-page';
@@ -12,6 +15,7 @@ import { AuthService } from '../../services/auth.service';
 import { LocaleRouteService } from '../../../../core/services/locale-route.service';
 import { UserType } from '../../../../shared/enums/user-type';
 import { AppUser } from '../../../../shared/models/user.model';
+import { AppStore } from '../../../../core/state/app.store';
 
 describe('RegisterPage', () => {
   let component: RegisterPage;
@@ -20,11 +24,17 @@ describe('RegisterPage', () => {
   let mockAuthService: jasmine.SpyObj<AuthService>;
   let mockLocaleRouteService: jasmine.SpyObj<LocaleRouteService>;
   let mockRouter: jasmine.SpyObj<Router>;
+  let mockAppStore: jasmine.SpyObj<AppStore>;
 
   beforeEach(async () => {
-    const authServiceSpy = jasmine.createSpyObj('AuthService', ['createUser', 'getCurrentUser', 'isAuthenticated']);
+    const authServiceSpy = jasmine.createSpyObj('AuthService', ['createUser', 'getCurrentUser']);
     const localeRouteServiceSpy = jasmine.createSpyObj('LocaleRouteService', ['navigateToRoute']);
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    const appStoreSpy = jasmine.createSpyObj('AppStore', ['user', 'isLoggedIn', 'setError']);
+    appStoreSpy.user.and.returnValue(signal(null));
+    appStoreSpy.isLoggedIn.and.returnValue(signal(false));
+    appStoreSpy.apiBusy = signal(false);
+    appStoreSpy.error = signal(null);
 
     await TestBed.configureTestingModule({
       imports: [
@@ -46,9 +56,12 @@ describe('RegisterPage', () => {
       ],
       providers: [
         provideZonelessChangeDetection(),
+        provideHttpClient(),
+        provideHttpClientTesting(),
         { provide: AuthService, useValue: authServiceSpy },
         { provide: LocaleRouteService, useValue: localeRouteServiceSpy },
-        { provide: Router, useValue: routerSpy }
+        { provide: Router, useValue: routerSpy },
+        { provide: AppStore, useValue: appStoreSpy }
       ]
     })
     .compileComponents();
@@ -59,6 +72,7 @@ describe('RegisterPage', () => {
     mockAuthService = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     mockLocaleRouteService = TestBed.inject(LocaleRouteService) as jasmine.SpyObj<LocaleRouteService>;
     mockRouter = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+    mockAppStore = TestBed.inject(AppStore) as jasmine.SpyObj<AppStore>;
     fixture.detectChanges();
   });
 
@@ -92,8 +106,8 @@ describe('RegisterPage', () => {
       };
 
       mockAuthService.createUser.and.returnValue(of(mockUser));
-      mockAuthService.getCurrentUser.and.returnValue(mockUser);
-      mockAuthService.isAuthenticated.and.returnValue(true);
+      mockAppStore.user.and.returnValue(mockUser);
+      mockAppStore.isLoggedIn.and.returnValue(true);
 
       const registerData: RegisterData = {
         role: UserType.CUSTOMER,
@@ -108,8 +122,8 @@ describe('RegisterPage', () => {
       component.onRegister(registerData);
 
       expect(mockAuthService.createUser).toHaveBeenCalled();
-      expect(mockAuthService.getCurrentUser).toHaveBeenCalled();
-      expect(mockAuthService.isAuthenticated).toHaveBeenCalled();
+      expect(mockAppStore.user).toHaveBeenCalled();
+      expect(mockAppStore.isLoggedIn).toHaveBeenCalled();
       expect(mockLocaleRouteService.navigateToRoute).toHaveBeenCalledWith('dashboard');
     });
 
@@ -125,8 +139,8 @@ describe('RegisterPage', () => {
       };
 
       mockAuthService.createUser.and.returnValue(of(mockUser));
-      mockAuthService.getCurrentUser.and.returnValue(null); // User not set
-      mockAuthService.isAuthenticated.and.returnValue(false); // Not authenticated
+      mockAppStore.user.and.returnValue(null); // User not set
+      mockAppStore.isLoggedIn.and.returnValue(false); // Not authenticated
 
       const registerData: RegisterData = {
         role: UserType.CUSTOMER,
@@ -141,8 +155,8 @@ describe('RegisterPage', () => {
       component.onRegister(registerData);
 
       expect(mockAuthService.createUser).toHaveBeenCalled();
-      expect(mockAuthService.getCurrentUser).toHaveBeenCalled();
-      expect(mockAuthService.isAuthenticated).toHaveBeenCalled();
+      expect(mockAppStore.user).toHaveBeenCalled();
+      expect(mockAppStore.isLoggedIn).toHaveBeenCalled();
       expect(mockLocaleRouteService.navigateToRoute).toHaveBeenCalledWith('login');
     });
   });
@@ -487,8 +501,8 @@ describe('RegisterPage', () => {
       };
 
       mockAuthService.createUser.and.returnValue(of(mockUser));
-      mockAuthService.getCurrentUser.and.returnValue(mockUser);
-      mockAuthService.isAuthenticated.and.returnValue(true);
+      mockAppStore.user.and.returnValue(mockUser);
+      mockAppStore.isLoggedIn.and.returnValue(true);
 
       const registerForm = debugElement.query(By.css('app-register-form'));
       const registerFormComponent = registerForm.componentInstance as RegisterForm;
@@ -507,8 +521,8 @@ describe('RegisterPage', () => {
       registerFormComponent.registerSubmitted.emit(registerData);
 
       expect(mockAuthService.createUser).toHaveBeenCalled();
-      expect(mockAuthService.getCurrentUser).toHaveBeenCalled();
-      expect(mockAuthService.isAuthenticated).toHaveBeenCalled();
+      expect(mockAppStore.user).toHaveBeenCalled();
+      expect(mockAppStore.isLoggedIn).toHaveBeenCalled();
       expect(mockLocaleRouteService.navigateToRoute).toHaveBeenCalledWith('dashboard');
     });
 
@@ -571,8 +585,8 @@ describe('RegisterPage', () => {
       };
 
       mockAuthService.createUser.and.returnValue(of(mockUser));
-      mockAuthService.getCurrentUser.and.returnValue(mockUser);
-      mockAuthService.isAuthenticated.and.returnValue(true);
+      mockAppStore.user.and.returnValue(mockUser);
+      mockAppStore.isLoggedIn.and.returnValue(true);
       spyOn(console, 'log');
 
       const registerData: RegisterData = {
@@ -603,8 +617,8 @@ describe('RegisterPage', () => {
       };
 
       mockAuthService.createUser.and.returnValue(of(mockUser));
-      mockAuthService.getCurrentUser.and.returnValue(null);
-      mockAuthService.isAuthenticated.and.returnValue(false);
+      mockAppStore.user.and.returnValue(null);
+      mockAppStore.isLoggedIn.and.returnValue(false);
       spyOn(console, 'log');
       spyOn(console, 'warn');
 
