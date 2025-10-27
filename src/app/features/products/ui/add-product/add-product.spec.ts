@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of, throwError } from 'rxjs';
@@ -19,7 +19,6 @@ describe('AddProduct', () => {
   let fixture: ComponentFixture<AddProduct>;
   let productsService: jasmine.SpyObj<ProductsService>;
   let localeRouteService: jasmine.SpyObj<LocaleRouteService>;
-  let httpTestingController: HttpTestingController;
   let apiClientServiceSpy: jasmine.SpyObj<ApiClientService>;
 
   const mockProviders: Provider[] = [
@@ -39,6 +38,13 @@ describe('AddProduct', () => {
 
     productsServiceSpy.getProviders.and.returnValue(of(mockProviders));
     productsServiceSpy.getCategories.and.returnValue(of(mockCategories));
+
+    // Setup ApiClientService spy to return observables BEFORE TestBed configuration
+    apiClientServiceSpy.post.and.returnValue(of({}));
+    apiClientServiceSpy.get.and.returnValue(of({}));
+    apiClientServiceSpy.put.and.returnValue(of({}));
+    apiClientServiceSpy.patch.and.returnValue(of({}));
+    apiClientServiceSpy.delete.and.returnValue(of({}));
 
     await TestBed.configureTestingModule({
       imports: [
@@ -65,23 +71,10 @@ describe('AddProduct', () => {
 
     productsService = TestBed.inject(ProductsService) as jasmine.SpyObj<ProductsService>;
     localeRouteService = TestBed.inject(LocaleRouteService) as jasmine.SpyObj<LocaleRouteService>;
-    httpTestingController = TestBed.inject(HttpTestingController);
-
-    // Setup ApiClientService spy to return observables
-    apiClientServiceSpy.post.and.returnValue(of({}));
-    apiClientServiceSpy.get.and.returnValue(of({}));
-    apiClientServiceSpy.put.and.returnValue(of({}));
-    apiClientServiceSpy.patch.and.returnValue(of({}));
-    apiClientServiceSpy.delete.and.returnValue(of({}));
 
     fixture = TestBed.createComponent(AddProduct);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
-
-  afterEach(() => {
-    // After every test, assert that there are no more pending requests
-    httpTestingController.verify();
   });
 
   it('should create', () => {

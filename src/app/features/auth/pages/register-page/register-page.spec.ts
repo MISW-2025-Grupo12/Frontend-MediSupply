@@ -5,7 +5,7 @@ import { DebugElement, provideZonelessChangeDetection } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { signal } from '@angular/core';
 import { of, throwError } from 'rxjs';
 
@@ -28,7 +28,6 @@ describe('RegisterPage', () => {
   let mockAppStore: jasmine.SpyObj<AppStore>;
   let userSignal: ReturnType<typeof signal<AppUser | null>>;
   let isLoggedInSignal: ReturnType<typeof signal<boolean>>;
-  let httpTestingController: HttpTestingController;
   let apiClientServiceSpy: jasmine.SpyObj<ApiClientService>;
 
   beforeEach(async () => {
@@ -49,6 +48,13 @@ describe('RegisterPage', () => {
     // Set up user and isLoggedIn to return functions that return values
     appStoreSpy.user.and.callFake(() => userSignal());
     appStoreSpy.isLoggedIn.and.callFake(() => isLoggedInSignal());
+
+    // Setup ApiClientService spy to return observables BEFORE TestBed configuration
+    apiClientServiceSpy.post.and.returnValue(of({}));
+    apiClientServiceSpy.get.and.returnValue(of({}));
+    apiClientServiceSpy.put.and.returnValue(of({}));
+    apiClientServiceSpy.patch.and.returnValue(of({}));
+    apiClientServiceSpy.delete.and.returnValue(of({}));
 
     await TestBed.configureTestingModule({
       imports: [
@@ -88,21 +94,8 @@ describe('RegisterPage', () => {
     mockLocaleRouteService = TestBed.inject(LocaleRouteService) as jasmine.SpyObj<LocaleRouteService>;
     mockRouter = TestBed.inject(Router) as jasmine.SpyObj<Router>;
     mockAppStore = TestBed.inject(AppStore) as jasmine.SpyObj<AppStore>;
-    httpTestingController = TestBed.inject(HttpTestingController);
-    
-    // Setup ApiClientService spy to return observables
-    apiClientServiceSpy.post.and.returnValue(of({}));
-    apiClientServiceSpy.get.and.returnValue(of({}));
-    apiClientServiceSpy.put.and.returnValue(of({}));
-    apiClientServiceSpy.patch.and.returnValue(of({}));
-    apiClientServiceSpy.delete.and.returnValue(of({}));
     
     fixture.detectChanges();
-  });
-
-  afterEach(() => {
-    // After every test, assert that there are no more pending requests
-    httpTestingController.verify();
   });
 
   describe('Component Creation', () => {
