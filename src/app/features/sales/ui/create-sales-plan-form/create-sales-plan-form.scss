@@ -1,0 +1,19 @@
+.form-card {
+  margin: 0 auto;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem;
+}
+
+.app-form-actions {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+
+  &.app-form-actions--horizontal {
+    justify-content: flex-end;
+  }
+}

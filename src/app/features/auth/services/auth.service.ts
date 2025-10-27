@@ -3,7 +3,7 @@ import { ApiClientService } from '../../../core/services/api-client.service';
 import { AppStore } from '../../../core/state/app.store';
 import { AppUser } from '../../../shared/models/user.model';
 import { map, Observable, tap } from 'rxjs';
-import { AppUserDTO } from '../../../shared/DTOs/addAppUserDTO.model';
+import { AppUserDTO } from '../../../shared/DTOs/appUserDTO.model';
 import { UserType } from '../../../shared/enums/user-type';
 import { LoginResponseDTO } from '../../../shared/DTOs/loginResponseDTO.model';
 import { RegisterAdminResponseDTO, RegisterCustomerResponseDTO, RegisterDeliveryResponseDTO, RegisterProviderResponseDTO, RegisterSellerResponseDTO } from '../../../shared/DTOs/registerUserReponseDTO.model';

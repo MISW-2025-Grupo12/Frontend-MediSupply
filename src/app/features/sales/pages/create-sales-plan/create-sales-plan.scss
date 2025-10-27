@@ -1,0 +1,16 @@
+@import '../../../../../styles/page.scss';
+
+.page-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  .page-title {
+    margin: 0;
+  }
+
+  .back-button {
+    color: inherit;
+  }
+}
+

@@ -12,6 +12,10 @@ import { LocaleRouteService } from '../../../../core/services/locale-route.servi
 export class SalesOptionsComponent {
   private localeRouteService = inject(LocaleRouteService);
 
+  navigateToSalesPlan(): void {
+    this.localeRouteService.navigateToNestedRoute(['sales', 'salesPlan']);
+  }
+
   navigateToSalesReport(): void {
     this.localeRouteService.navigateToNestedRoute(['sales', 'salesReport']);
   }

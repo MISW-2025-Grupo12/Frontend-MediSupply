@@ -1,0 +1,21 @@
+<div class="page-container" *transloco="let t">
+  <div class="page-header">
+    <div class="page-title-wrapper">
+      <button 
+        mat-icon-button 
+        class="back-button"
+        (click)="onBack()"
+        aria-label="Back">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1 class="page-title">{{ t('addSalesPlan.title') }}</h1>
+    </div>
+  </div>
+
+  <div class="page-content">
+    <app-create-sales-plan-form
+      (formSubmit)="onFormSubmit($event)"
+      (cancel)="onCancel()">
+    </app-create-sales-plan-form>
+  </div>
+</div>
