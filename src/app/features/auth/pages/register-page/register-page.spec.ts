@@ -5,7 +5,7 @@ import { DebugElement, provideZonelessChangeDetection } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { signal } from '@angular/core';
 import { of, throwError } from 'rxjs';
 
@@ -16,6 +16,7 @@ import { LocaleRouteService } from '../../../../core/services/locale-route.servi
 import { UserType } from '../../../../shared/enums/user-type';
 import { AppUser } from '../../../../shared/models/user.model';
 import { AppStore } from '../../../../core/state/app.store';
+import { ApiClientService } from '../../../../core/services/api-client.service';
 
 describe('RegisterPage', () => {
   let component: RegisterPage;
@@ -27,11 +28,14 @@ describe('RegisterPage', () => {
   let mockAppStore: jasmine.SpyObj<AppStore>;
   let userSignal: ReturnType<typeof signal<AppUser | null>>;
   let isLoggedInSignal: ReturnType<typeof signal<boolean>>;
+  let httpTestingController: HttpTestingController;
+  let apiClientServiceSpy: jasmine.SpyObj<ApiClientService>;
 
   beforeEach(async () => {
     const authServiceSpy = jasmine.createSpyObj('AuthService', ['createUser', 'getCurrentUser']);
     const localeRouteServiceSpy = jasmine.createSpyObj('LocaleRouteService', ['navigateToRoute']);
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    apiClientServiceSpy = jasmine.createSpyObj('ApiClientService', ['get', 'post', 'put', 'patch', 'delete']);
     userSignal = signal<AppUser | null>(null);
     isLoggedInSignal = signal(false);
     const apiBusySignal = signal(false);
@@ -71,7 +75,8 @@ describe('RegisterPage', () => {
         { provide: AuthService, useValue: authServiceSpy },
         { provide: LocaleRouteService, useValue: localeRouteServiceSpy },
         { provide: Router, useValue: routerSpy },
-        { provide: AppStore, useValue: appStoreSpy }
+        { provide: AppStore, useValue: appStoreSpy },
+        { provide: ApiClientService, useValue: apiClientServiceSpy }
       ]
     })
     .compileComponents();
@@ -83,7 +88,21 @@ describe('RegisterPage', () => {
     mockLocaleRouteService = TestBed.inject(LocaleRouteService) as jasmine.SpyObj<LocaleRouteService>;
     mockRouter = TestBed.inject(Router) as jasmine.SpyObj<Router>;
     mockAppStore = TestBed.inject(AppStore) as jasmine.SpyObj<AppStore>;
+    httpTestingController = TestBed.inject(HttpTestingController);
+    
+    // Setup ApiClientService spy to return observables
+    apiClientServiceSpy.post.and.returnValue(of({}));
+    apiClientServiceSpy.get.and.returnValue(of({}));
+    apiClientServiceSpy.put.and.returnValue(of({}));
+    apiClientServiceSpy.patch.and.returnValue(of({}));
+    apiClientServiceSpy.delete.and.returnValue(of({}));
+    
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    // After every test, assert that there are no more pending requests
+    httpTestingController.verify();
   });
 
   describe('Component Creation', () => {
@@ -362,6 +381,7 @@ describe('RegisterPage', () => {
 
     it('should not navigate on registration error', () => {
       mockAuthService.createUser.and.returnValue(throwError(() => new Error('API Error')));
+      spyOn(console, 'error');
 
       const registerData: RegisterData = {
         role: UserType.CUSTOMER,
@@ -375,6 +395,7 @@ describe('RegisterPage', () => {
 
       component.onRegister(registerData);
 
+      expect(console.error).toHaveBeenCalled();
       expect(mockLocaleRouteService.navigateToRoute).not.toHaveBeenCalled();
     });
   });
