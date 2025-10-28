@@ -55,9 +55,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y google-chrome-stable
       - name: Test
-        run: npm run test:ci
-        env:
-          CHROME_BIN: /usr/bin/google-chrome
-          CHROME_HEADLESS: 1
+        run: |
+          export CHROME_BIN=/usr/bin/google-chrome
+          export CHROME_FLAGS='--no-sandbox --disable-setuid-sandbox --disable-dev-shm-usage'
+          npm run test:ci
       - name: Build
         run: npm run build -- --configuration=production
