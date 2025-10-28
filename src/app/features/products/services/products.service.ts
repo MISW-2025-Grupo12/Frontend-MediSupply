@@ -53,8 +53,6 @@ export class ProductsService {
       proveedor_id: product.provider.id.toString(),
     }
 
-    debugger;
-
     return this.apiClient.post<ProductDTO>('/productos/con-inventario', addProductDTO, this.serviceType)
       .pipe(
         map(product => ({
