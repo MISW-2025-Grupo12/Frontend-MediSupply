@@ -1,8 +1,9 @@
-import { inject, Injectable, signal, computed } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ApiClientService } from '../../../core/services/api-client.service';
+import { AppStore } from '../../../core/state/app.store';
 import { AppUser } from '../../../shared/models/user.model';
 import { map, Observable, tap } from 'rxjs';
-import { AppUserDTO } from '../../../shared/DTOs/addAppUserDTO.model';
+import { AppUserDTO } from '../../../shared/DTOs/appUserDTO.model';
 import { UserType } from '../../../shared/enums/user-type';
 import { LoginResponseDTO } from '../../../shared/DTOs/loginResponseDTO.model';
 import { RegisterAdminResponseDTO, RegisterCustomerResponseDTO, RegisterDeliveryResponseDTO, RegisterProviderResponseDTO, RegisterSellerResponseDTO } from '../../../shared/DTOs/registerUserReponseDTO.model';
@@ -12,30 +13,16 @@ import { RegisterAdminResponseDTO, RegisterCustomerResponseDTO, RegisterDelivery
 })
 export class AuthService {
   private apiClient = inject(ApiClientService);
-
+  private appStore = inject(AppStore);
   private baseUrl = '/auth';
-
-  // User state management using signals
-  private currentUser = signal<AppUser | null>(null);
-  private accessToken = signal<string | null>(null);
-
-  // Public readonly signals for components to access
-  readonly user = this.currentUser.asReadonly();
-  readonly token = this.accessToken.asReadonly();
-  readonly isAuthenticated = computed(() => this.currentUser() !== null);
-  readonly userRole = computed(() => this.currentUser()?.role || null);
-
   /**
    * Login a user and store user info and token
    */
   login(email: string, password: string): Observable<AppUser> {
-    return this.apiClient.post<LoginResponseDTO>(`${this.baseUrl}/login`, { email, password }, 'users')
+    return this.apiClient.post<LoginResponseDTO>(`/login`, { email, password }, 'auth')
       .pipe(
         tap(response => {
-          // Store the access token
-          this.accessToken.set(response.access_token);
-
-          // Transform and store user info
+          // Transform user info
           const user: AppUser = {
             id: response.user_info.id?.toString() || '',
             name: response.user_info.nombre || '',
@@ -46,7 +33,8 @@ export class AuthService {
             role: this.mapUserRoleFromDTO(response.user_info)
           };
 
-          this.setCurrentUser(user);
+          // Store user and token in AppStore
+          this.appStore.setUserAndToken(user, response.access_token);
         }),
         map(response => {
           const user: AppUser = {
@@ -93,7 +81,7 @@ export class AuthService {
           // Extract user data from the nested response structure
           const userFromResponse = this.extractUserFromResponse(response, userData.role);
           
-          // Set the created user as current user
+          // Set the created user in AppStore
           const createdUser: AppUser = {
             id: userFromResponse.id?.toString() || '',
             name: userFromResponse.nombre,
@@ -103,7 +91,7 @@ export class AuthService {
             address: userFromResponse.direccion || '',
             role: userData.role,
           };
-          this.setCurrentUser(createdUser);
+          this.appStore.setUser(createdUser);
         }),
         map(response => {
           // Extract user data from the nested response structure
@@ -123,47 +111,40 @@ export class AuthService {
   }
 
   /**
-   * Set the current user (useful for setting user after registration or login)
-   */
-  setCurrentUser(user: AppUser): void {
-    this.currentUser.set(user);
-  }
-
-  /**
-   * Get the current user
+   * Get the current user from AppStore
    */
   getCurrentUser(): AppUser | null {
-    return this.currentUser();
+    return this.appStore.user();
   }
 
   /**
-   * Get the current access token
+   * Get the current access token from AppStore
    */
   getAccessToken(): string | null {
-    return this.accessToken();
+    return this.appStore.accessToken();
   }
 
   /**
    * Logout the current user
    */
   logout(): void {
-    this.currentUser.set(null);
-    this.accessToken.set(null);
+    this.appStore.clearUserSession();
   }
 
   /**
    * Check if user has specific role
    */
   hasRole(role: UserType): boolean {
-    return this.userRole() === role;
+    const currentUser = this.appStore.user();
+    return currentUser?.role === role;
   }
 
   /**
    * Check if user has any of the specified roles
    */
   hasAnyRole(roles: UserType[]): boolean {
-    const currentRole = this.userRole();
-    return currentRole !== null && roles.includes(currentRole);
+    const currentUser = this.appStore.user();
+    return currentUser !== null && roles.includes(currentUser.role);
   }
 
   /**

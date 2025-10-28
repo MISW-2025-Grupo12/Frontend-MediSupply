@@ -1,0 +1,77 @@
+<div *transloco="let t">
+  <mat-card-content>
+    <form [formGroup]="salesPlanForm" class="sales-plan-form">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Sales Plan Name - Full width on all screens -->
+        <mat-form-field class="app-form-field col-span-1 sm:col-span-2 lg:col-span-4">
+          <mat-label>{{ t('addSalesPlan.form.name') }}</mat-label>
+          <input 
+            matInput 
+            formControlName="name"
+            [placeholder]="t('addSalesPlan.form.namePlaceholder')"
+            required>
+          <mat-error *ngIf="salesPlanForm.get('name')?.invalid && salesPlanForm.get('name')?.touched">
+            {{ t(getErrorMessage('name')) }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Start Date -->
+        <mat-form-field class="app-form-field col-span-1">
+          <mat-label>{{ t('addSalesPlan.form.startDate') }}</mat-label>
+          <input 
+            matInput 
+            [matDatepicker]="startPicker"
+            formControlName="startDate"
+            required>
+          <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
+          <mat-error *ngIf="salesPlanForm.get('startDate')?.invalid && salesPlanForm.get('startDate')?.touched">
+            {{ t(getErrorMessage('startDate')) }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Start Time -->
+        <mat-form-field class="app-form-field col-span-1">
+          <mat-label>{{ t('addSalesPlan.form.startTime') }}</mat-label>
+          <input 
+            matInput 
+            type="time"
+            formControlName="startTime"
+            required>
+          <mat-error *ngIf="salesPlanForm.get('startTime')?.invalid && salesPlanForm.get('startTime')?.touched">
+            {{ t(getErrorMessage('startTime')) }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- End Date -->
+        <mat-form-field class="app-form-field col-span-1">
+          <mat-label>{{ t('addSalesPlan.form.endDate') }}</mat-label>
+          <input 
+            matInput 
+            [matDatepicker]="endPicker"
+            formControlName="endDate"
+            required>
+          <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+          <mat-datepicker #endPicker></mat-datepicker>
+          <mat-error *ngIf="salesPlanForm.get('endDate')?.invalid && salesPlanForm.get('endDate')?.touched">
+            {{ t(getErrorMessage('endDate')) }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- End Time -->
+        <mat-form-field class="app-form-field col-span-1">
+          <mat-label>{{ t('addSalesPlan.form.endTime') }}</mat-label>
+          <input 
+            matInput 
+            type="time"
+            formControlName="endTime"
+            required>
+          <mat-error *ngIf="salesPlanForm.get('endTime')?.invalid && salesPlanForm.get('endTime')?.touched">
+            {{ t(getErrorMessage('endTime')) }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </form>
+  </mat-card-content>
+</div>
+

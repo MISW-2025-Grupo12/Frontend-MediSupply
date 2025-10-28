@@ -9,7 +9,9 @@
     "sales": "Ventas",
     "users": "Usuarios",
     "language": "Idioma",
-    "salesReport": "Reporte de Ventas"
+    "salesReport": "Reporte de Ventas",
+    "salesPlan": "Plan de Ventas",
+    "addSalesPlan": "Añadir Plan de Ventas"
   },
   "routes": {
     "products": "productos",
@@ -32,7 +34,9 @@
     "home": "MediSupply",
     "sales": "Ventas - MediSupply",
     "users": "Usuarios - MediSupply",
-    "salesReport": "Reporte de Ventas - MediSupply"
+    "salesReport": "Reporte de Ventas - MediSupply",
+    "salesPlan": "Plan de Ventas - MediSupply",
+    "addSalesPlan": "Añadir Plan de Ventas - MediSupply"
   },
   "login": {
     "title": "Iniciar Sesión",
@@ -228,6 +232,10 @@
   "sales": {
     "subtitle": "Selecciona una opción para gestionar ventas",
     "options": {
+      "salesPlan": {
+        "title": "Plan de Ventas",
+        "description": "Crear y gestionar tus estrategias y objetivos de ventas"
+      },
       "salesReport": {
         "title": "Reporte de Ventas",
         "description": "Ver reportes detallados de ventas y analíticas"
@@ -258,6 +266,47 @@
         "salesByProduct": "Ventas por Producto"
       },
       "salesAmount": "Monto de Ventas"
+    }
+  },
+  "addSalesPlan": {
+    "title": "Añadir Plan de Ventas",
+    "form": {
+      "name": "Nombre del Plan de Ventas",
+      "namePlaceholder": "Ingrese el nombre del plan de ventas",
+      "startDate": "Fecha de Inicio",
+      "startTime": "Hora de Inicio",
+      "endDate": "Fecha de Fin",
+      "endTime": "Hora de Fin",
+      "required": "Este campo es requerido",
+      "invalidDate": "Fecha inválida",
+      "invalidTime": "Hora inválida"
+    },
+    "visits": {
+      "title": "Visitas Programadas",
+      "noVisits": "No hay visitas programadas aún",
+      "status": {
+        "pending": "Pendiente",
+        "completed": "Completada",
+        "cancelled": "Cancelada"
+      }
+    },
+    "scheduleVisit": {
+      "title": "Programar Visita",
+      "date": "Fecha de Visita",
+      "time": "Hora de Visita",
+      "confirm": "Programar Visita"
+    },
+    "customers": {
+      "title": "Clientes",
+      "search": "Buscar",
+      "searchPlaceholder": "Buscar por nombre de cliente",
+      "scheduleVisit": "Programar nueva visita",
+      "noCustomers": "No hay clientes disponibles",
+      "noResults": "No se encontraron clientes"
+    },
+    "actions": {
+      "cancel": "Cancelar",
+      "create": "Crear Plan de Ventas"
     }
   }
 }

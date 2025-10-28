@@ -19,8 +19,8 @@
 
           <mat-form-field appearance="fill" class="app-form-field full-width">
             <mat-label>{{ t('addCategory.form.description') || 'Description' }}</mat-label>
-            <textarea matInput formControlName="description" [placeholder]="t('addCategory.form.descriptionPlaceholder') || 'Enter category description'" required rows="4"></textarea>
-            <mat-error *ngIf="categoryForm.get('description')?.hasError('required')">
+            <textarea matInput formControlName="description" [placeholder]="t('addCategory.form.descriptionPlaceholder') || 'Enter category description'" rows="4"></textarea>
+            <mat-error *ngIf="categoryForm.get('description')?.hasError('minlength')">
               {{ t(getErrorMessage('description')) }}
             </mat-error>
           </mat-form-field>
@@ -33,7 +33,7 @@
         <button mat-stroked-button type="button" (click)="onCancel()" class="app-btn app-btn--secondary">
           {{ t('addCategory.actions.cancel') }}
         </button>
-        <button mat-raised-button color="primary" type="submit" [disabled]="categoryForm.invalid || saving" class="app-btn app-btn--primary">
+        <button mat-raised-button color="primary" type="button" (click)="onSubmit()" [disabled]="categoryForm.invalid || saving" class="app-btn app-btn--primary">
           {{ t('addCategory.actions.create') }}
         </button>
       </div>

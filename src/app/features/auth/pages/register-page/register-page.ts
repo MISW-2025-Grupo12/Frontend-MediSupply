@@ -4,6 +4,7 @@ import { LocaleRouteService } from '../../../../core/services/locale-route.servi
 import { RegisterForm, RegisterData } from '../../ui/register-form/register-form';
 import { AuthService } from '../../services/auth.service';
 import { AppUser } from '../../../../shared/models/user.model';
+import { AppStore } from '../../../../core/state/app.store';
 
 @Component({
   selector: 'app-register-page',
@@ -14,6 +15,7 @@ import { AppUser } from '../../../../shared/models/user.model';
 export class RegisterPage {
   private localeRouteService = inject(LocaleRouteService);
   private authService = inject(AuthService);
+  private appStore = inject(AppStore);
 
   navigateToLogin(): void {
     this.localeRouteService.navigateToRoute('login');
@@ -37,9 +39,9 @@ export class RegisterPage {
       next: (user) => {
         console.log('User created successfully:', user);
         
-        // Validate that the user is properly set in the auth service
-        const currentUser = this.authService.getCurrentUser();
-        const isAuthenticated = this.authService.isAuthenticated();
+        // Validate that the user is properly set in AppStore
+        const currentUser = this.appStore.user();
+        const isAuthenticated = this.appStore.isLoggedIn();
         
         if (currentUser && isAuthenticated) {
           console.log('User is authenticated, navigating to dashboard');

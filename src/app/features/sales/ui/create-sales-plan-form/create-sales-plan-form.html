@@ -1,0 +1,44 @@
+<mat-card class="form-card">
+  <app-sales-plan-filters
+    [salesPlanForm]="salesPlanForm">
+  </app-sales-plan-filters>
+
+  <app-scheduled-visits
+    [scheduledVisits]="scheduledVisits"
+    [onRemoveVisit]="onRemoveVisit.bind(this)">
+  </app-scheduled-visits>
+
+  <div *transloco="let t">
+    <mat-card-actions class="card-actions">
+      <div class="app-form-actions app-form-actions--horizontal">
+        <button 
+          mat-stroked-button 
+          type="button"
+          (click)="onCancel()"
+          class="app-btn app-btn--secondary">
+          {{ t('addSalesPlan.actions.cancel') }}
+        </button>
+        
+        <button 
+          mat-raised-button 
+          type="submit"
+          (click)="onSubmit()"
+          [disabled]="salesPlanForm.invalid"
+          class="app-btn app-btn--primary">
+          {{ t('addSalesPlan.actions.create') }}
+        </button>
+      </div>
+    </mat-card-actions>
+  </div>
+
+  <app-customer-list
+    [customers]="customers()"
+    [scheduledVisits]="scheduledVisits"
+    [selectedCustomerForVisit]="selectedCustomerForVisit"
+    [onScheduleVisit]="onScheduleVisit.bind(this)"
+    [onDateSelected]="onDateSelected.bind(this)"
+    [onCancelDateSelection]="onCancelDateSelection.bind(this)"
+    [getMinDate]="getMinDate.bind(this)"
+    [isCustomerSelectedForVisit]="isCustomerSelectedForVisit.bind(this)">
+  </app-customer-list>
+</mat-card>

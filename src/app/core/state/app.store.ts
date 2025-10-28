@@ -7,7 +7,9 @@ type SupportedLocale = 'en' | 'es';
 export class AppStore {
   // User state
   private _user = signal<AppUser | null>(null);
+  private _accessToken = signal<string | null>(null);
   private _apiBusy = signal(false);
+  private _error = signal<string | null>(null);
 
   // Locale state
   private _locale = signal<SupportedLocale>('en');
@@ -17,11 +19,14 @@ export class AppStore {
   private readonly DEFAULT_LOCALE: SupportedLocale = 'en';
   private readonly LOCALE_STORAGE_KEY = 'meddiSupply-locale';
   private readonly USER_STORAGE_KEY = 'meddiSupply-user';
+  private readonly TOKEN_STORAGE_KEY = 'meddiSupply-token';
 
   // User computed values
   readonly user = computed(() => this._user());
+  readonly accessToken = computed(() => this._accessToken());
   readonly isLoggedIn = computed(() => !!this._user());
   readonly apiBusy = computed(() => this._apiBusy());
+  readonly error = computed(() => this._error());
 
   // Locale computed values
   readonly locale = computed(() => this._locale());
@@ -31,7 +36,21 @@ export class AppStore {
 
   // User actions
   setUser(u: AppUser | null) { this._user.set(u); }
+  setAccessToken(token: string | null) { this._accessToken.set(token); }
   setApiBusy(v: boolean) { this._apiBusy.set(v); }
+  setError(error: string | null) { this._error.set(error); }
+  
+  // Combined user and token actions
+  setUserAndToken(user: AppUser | null, token: string | null) {
+    this._user.set(user);
+    this._accessToken.set(token);
+  }
+  
+  clearUserSession() {
+    this._user.set(null);
+    this._accessToken.set(null);
+    this._error.set(null);
+  }
 
   // Locale actions
   setLocale(locale: SupportedLocale) {
@@ -60,6 +79,12 @@ export class AppStore {
       }
     }
 
+    // Load token from localStorage
+    const savedToken = localStorage.getItem(this.TOKEN_STORAGE_KEY);
+    if (savedToken) {
+      this._accessToken.set(savedToken);
+    }
+
     // Load locale from localStorage
     const savedLocale = localStorage.getItem(this.LOCALE_STORAGE_KEY) as SupportedLocale;
     if (savedLocale && this.SUPPORTED_LOCALES.includes(savedLocale)) {
@@ -73,6 +98,16 @@ export class AppStore {
         localStorage.setItem(this.USER_STORAGE_KEY, JSON.stringify(u));
       } else {
         localStorage.removeItem(this.USER_STORAGE_KEY);
+      }
+    });
+
+    // Persist token changes to localStorage
+    effect(() => {
+      const token = this._accessToken();
+      if (token) {
+        localStorage.setItem(this.TOKEN_STORAGE_KEY, token);
+      } else {
+        localStorage.removeItem(this.TOKEN_STORAGE_KEY);
       }
     });
 

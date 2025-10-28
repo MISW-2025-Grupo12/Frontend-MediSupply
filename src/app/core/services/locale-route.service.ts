@@ -4,7 +4,7 @@ import { TranslocoService } from '@ngneat/transloco';
 import { AppStore } from '../state/app.store';
 
 type SupportedLocale = 'en' | 'es';
-type RouteKey = 'dashboard' | 'products' | 'sales' | 'salesReport' | 'add' | 'clients' | 'login' | 'orders' | 'users' | 'addUser' | 'register';
+type RouteKey = 'dashboard' | 'products' | 'sales' | 'salesReport' | 'salesPlan' | 'addSalesPlan' | 'add' | 'clients' | 'login' | 'orders' | 'users' | 'addUser' | 'register';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +26,8 @@ export class LocaleRouteService {
       'products': 'products',
       'sales': 'sales',
       'salesReport': 'sales-report',
+      'salesPlan': 'sales-plan',
+      'addSalesPlan': 'add-sales-plan',
       'add': 'add',
       'clients': 'clients',
       'login': 'login',
@@ -39,6 +41,8 @@ export class LocaleRouteService {
       'products': 'productos',
       'sales': 'ventas',
       'salesReport': 'reportes-de-ventas',
+      'salesPlan': 'plan-de-ventas',
+      'addSalesPlan': 'anadir-plan-de-ventas',
       'add': 'anadir',
       'clients': 'clientes',
       'login': 'login',

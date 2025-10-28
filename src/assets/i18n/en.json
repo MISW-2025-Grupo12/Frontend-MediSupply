@@ -9,6 +9,7 @@
     "sales": "Sales",
     "users": "Users",
     "salesReport": "Sales Report",
+    "salesPlan": "Sales Plan",
     "language": "Language"
   },
   "routes": {
@@ -32,7 +33,9 @@
     "home": "MediSupply",
     "sales": "Sales - MediSupply",
     "users": "Users - MediSupply",
-    "salesReport": "Sales Report - MediSupply"
+    "salesReport": "Sales Report - MediSupply",
+    "salesPlan": "Sales Plan - MediSupply",
+    "addSalesPlan": "Add Sales Plan - MediSupply"
   },
   "login": {
     "title": "Login",
@@ -229,6 +232,10 @@
   "sales": {
     "subtitle": "Select an option to manage sales",
     "options": {
+      "salesPlan": {
+        "title": "Sales Plan",
+        "description": "Create and manage your sales strategies and goals"
+      },
       "salesReport": {
         "title": "Sales Report",
         "description": "View detailed sales reports and analytics"
@@ -259,6 +266,47 @@
         "salesByProduct": "Sales by Product"
       },
       "salesAmount": "Sales Amount"
+    }
+  },
+  "addSalesPlan": {
+    "title": "Add Sales Plan",
+    "form": {
+      "name": "Sales Plan Name",
+      "namePlaceholder": "Enter sales plan name",
+      "startDate": "Start Date",
+      "startTime": "Start Time",
+      "endDate": "End Date",
+      "endTime": "End Time",
+      "required": "This field is required",
+      "invalidDate": "Invalid date",
+      "invalidTime": "Invalid time"
+    },
+    "visits": {
+      "title": "Scheduled Visits",
+      "noVisits": "No visits scheduled yet",
+      "status": {
+        "pending": "Pending",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      }
+    },
+    "scheduleVisit": {
+      "title": "Schedule Visit",
+      "date": "Visit Date",
+      "time": "Visit Time",
+      "confirm": "Schedule Visit"
+    },
+    "customers": {
+      "title": "Customers",
+      "search": "Search",
+      "searchPlaceholder": "Search by customer name",
+      "scheduleVisit": "Schedule new visit",
+      "noCustomers": "No customers available",
+      "noResults": "No customers found"
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "create": "Create Sales Plan"
     }
   }
 }

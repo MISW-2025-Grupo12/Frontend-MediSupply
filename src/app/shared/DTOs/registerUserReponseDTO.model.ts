@@ -1,4 +1,4 @@
-import { AppUserDTO } from "./addAppUserDTO.model";
+import { AppUserDTO } from "./appUserDTO.model";
 
 interface RegisterUserReponseDTO {
   mensaje: string;

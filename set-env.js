@@ -18,13 +18,8 @@ console.log(`Generating environment.production.ts with APP_API_BASE_URL: ${appAp
 // We embed the value directly into the template string
 const envConfigFile = `export const environment = {
   production: true,
-  // Use the dynamic base URL for backendApiUrl
-  backendApiUrl: '${appApiBaseUrl}',
-  // Derive other API URLs from the dynamic base URL
-  usersApiUrl: \`${appApiBaseUrl}/usuarios/api\`,
-  productsApiUrl: \`${appApiBaseUrl}/productos/api\`,
-  logisticsApiUrl: \`${appApiBaseUrl}/logistica/api\`,
-  salesApiUrl: \`${appApiBaseUrl}/ventas/api\`
+  baseApiUrl: '${appApiBaseUrl}',
+  version: '1.0.0',
 };
 `;
 

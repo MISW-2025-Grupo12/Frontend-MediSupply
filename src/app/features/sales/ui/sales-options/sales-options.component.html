@@ -1,4 +1,17 @@
 <div class="sales-options" *transloco="let t">
+  <div class="sales-option-card" (click)="navigateToSalesPlan()">
+    <div class="option-icon">
+      <mat-icon>trending_up</mat-icon>
+    </div>
+    <div class="option-content">
+      <h3 class="option-title">{{ t('sales.options.salesPlan.title') }}</h3>
+      <p class="option-description">{{ t('sales.options.salesPlan.description') }}</p>
+    </div>
+    <div class="option-arrow">
+      <mat-icon>arrow_forward</mat-icon>
+    </div>
+  </div>
+  
   <div class="sales-option-card disabled">
     <div class="option-icon">
       <mat-icon>assessment</mat-icon>
