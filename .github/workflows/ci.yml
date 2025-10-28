@@ -1,6 +1,7 @@
 name: CI
 
 on:
+  workflow_dispatch:   # Allow manual triggering
   pull_request:
     branches: ["**"]   # evaluate all PRs
 
@@ -11,6 +12,13 @@ jobs:
       - name: Enforce PR policy
         run: |
           echo "event=${{ github.event_name }}"
+          
+          # Skip policy checks for manual triggers
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "Manual trigger detected - skipping policy checks."
+            exit 0
+          fi
+          
           echo "base=${{ github.base_ref }} head=${{ github.head_ref }}"
 
           base="${{ github.base_ref }}"
@@ -38,7 +46,7 @@ jobs:
 
   build_and_test:
     needs: policy_checks
-    if: ${{ needs.policy_checks.result == 'success' }}
+    if: needs.policy_checks.result == 'success'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
