@@ -1,7 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of, throwError } from 'rxjs';
@@ -61,8 +59,6 @@ describe('AddProduct', () => {
       providers: [
         provideZonelessChangeDetection(),
         provideRouter([]),
-        provideHttpClient(),
-        provideHttpClientTesting(),
         { provide: ProductsService, useValue: productsServiceSpy },
         { provide: LocaleRouteService, useValue: localeRouteServiceSpy },
         { provide: ApiClientService, useValue: apiClientServiceSpy }

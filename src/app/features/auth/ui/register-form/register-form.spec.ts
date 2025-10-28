@@ -8,8 +8,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { RegisterForm, RegisterData } from './register-form';
 import { UserType } from '../../../../shared/enums/user-type';
@@ -55,9 +53,7 @@ describe('RegisterForm', () => {
         })
       ],
       providers: [
-        provideZonelessChangeDetection(),
-        provideHttpClient(),
-        provideHttpClientTesting()
+        provideZonelessChangeDetection()
       ]
     })
     .compileComponents();

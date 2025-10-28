@@ -4,8 +4,6 @@ import { TranslocoTestingModule } from '@ngneat/transloco';
 import { DebugElement, provideZonelessChangeDetection } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { signal } from '@angular/core';
 import { of, throwError } from 'rxjs';
 
@@ -76,8 +74,6 @@ describe('RegisterPage', () => {
       ],
       providers: [
         provideZonelessChangeDetection(),
-        provideHttpClient(),
-        provideHttpClientTesting(),
         { provide: AuthService, useValue: authServiceSpy },
         { provide: LocaleRouteService, useValue: localeRouteServiceSpy },
         { provide: Router, useValue: routerSpy },
