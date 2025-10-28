@@ -1,9 +1,21 @@
 <div class="product-list" *transloco="let t">
+  <div class="search-container">
+    <div class="search-input-wrapper">
+      <mat-icon class="search-icon">search</mat-icon>
+      <input 
+        type="text" 
+        class="search-input"
+        (input)="onSearchChange($any($event.target).value)"
+        [placeholder]="t('productList.searchPlaceholder')">
+    </div>
+  </div>
+  
   <div class="product-grid">
-    @for (product of products(); track product.id) {
+    @for (product of filteredProducts(); track product.id) {
       <app-product-card [product]="product" />
     } @empty {
       <div class="empty-state">
+        <mat-icon>inventory_2</mat-icon>
         <p>{{ t('productList.noProducts') }}</p>
       </div>
     }

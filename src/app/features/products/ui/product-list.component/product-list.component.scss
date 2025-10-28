@@ -1,5 +1,68 @@
+@use 'sass:color';
+@import '../../../../../styles/colors.scss';
+
 .product-list {
   width: 100%;
+}
+
+.search-container {
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  @media (max-width: 768px) {
+    margin-bottom: 1.5rem;
+  }
+}
+
+.search-input-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 16px;
+  color: $gray-500;
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.search-input {
+  width: 100%;
+  padding: 14px 16px 14px 52px;
+  font-size: 1rem;
+  color: $gray-900;
+  background-color: $white;
+  border: 1px solid $gray-300;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  
+  &::placeholder {
+    color: $gray-400;
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: $primary-color;
+    border-width: 2px;
+    box-shadow: 0 0 0 3px rgba(100, 97, 22, 0.1);
+    
+    ~ .search-icon {
+      color: $primary-color;
+    }
+  }
+  
+  &:hover {
+    border-color: $gray-400;
+  }
 }
 
 .product-grid {
@@ -10,15 +73,30 @@
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
 }
 
 .empty-state {
   grid-column: 1 / -1;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 200px;
-  color: rgba(0, 0, 0, 0.6);
-  font-size: 1.1rem;
+  min-height: 300px;
+  text-align: center;
+  
+  p {
+    color: $gray-500;
+    font-size: 1.1rem;
+    margin: 0;
+  }
+  
+  mat-icon {
+    font-size: 4rem;
+    width: 4rem;
+    height: 4rem;
+    color: $gray-300;
+    margin-bottom: 1rem;
+  }
 }

@@ -227,7 +227,9 @@
   },
   "productList": {
     "noProducts": "No products available",
-    "loadingProducts": "Loading products..."
+    "loadingProducts": "Loading products...",
+    "searchProducts": "Search Products",
+    "searchPlaceholder": "Search by product name"
   },
   "sales": {
     "subtitle": "Select an option to manage sales",
