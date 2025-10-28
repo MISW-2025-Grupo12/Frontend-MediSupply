@@ -20,6 +20,15 @@ describe('CreateSalesPlanForm', () => {
     const mockSalesDataService = jasmine.createSpyObj('SalesDataService', ['getCustomers']);
     mockSalesDataService.getCustomers.and.returnValue(of([]));
 
+    // Mock SalesState to prevent it from making actual HTTP calls
+    const mockSalesState = jasmine.createSpyObj('SalesState', ['loadCustomers']);
+    
+    // Mock the customers signal
+    Object.defineProperty(mockSalesState, 'customers', {
+      get: () => () => [],
+      configurable: true
+    });
+
     await TestBed.configureTestingModule({
       imports: [
         CreateSalesPlanForm,
@@ -31,7 +40,7 @@ describe('CreateSalesPlanForm', () => {
         provideZonelessChangeDetection(),
         provideHttpClient(),
         FormBuilder,
-        SalesState,
+        { provide: SalesState, useValue: mockSalesState },
         AppStore,
         { provide: SalesDataService, useValue: mockSalesDataService },
         { provide: LocaleRouteService, useValue: jasmine.createSpyObj('LocaleRouteService', ['navigateToRoute']) },

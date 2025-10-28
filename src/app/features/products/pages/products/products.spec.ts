@@ -6,12 +6,22 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslocoTestingModule } from '@ngneat/transloco';
 import { Products } from './products';
+import { ProductsState } from '../../state/products.store';
 
 describe('Products', () => {
   let component: Products;
   let fixture: ComponentFixture<Products>;
 
   beforeEach(async () => {
+    // Mock ProductsState to prevent actual HTTP calls
+    const mockProductsState = jasmine.createSpyObj('ProductsState', ['loadProducts']);
+    
+    // Mock the products signal
+    Object.defineProperty(mockProductsState, 'products', {
+      get: () => () => [],
+      configurable: true
+    });
+
     await TestBed.configureTestingModule({
       imports: [
         Products,
@@ -31,7 +41,8 @@ describe('Products', () => {
         provideZonelessChangeDetection(),
         provideRouter([]),
         provideHttpClient(),
-        provideHttpClientTesting()
+        provideHttpClientTesting(),
+        { provide: ProductsState, useValue: mockProductsState }
       ]
     }).compileComponents();
 
