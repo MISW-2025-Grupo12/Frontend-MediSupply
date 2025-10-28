@@ -162,10 +162,10 @@ export class ApiClientService {
     }
 
     // Skip logging in test environments to avoid noise during testing
-    // Check for test environment by looking for karma HTML elements or test context
-    const isTestEnvironment = typeof window !== 'undefined' && 
-      (window.document?.querySelector('karma-jasmine') !== null || 
-       window.document?.querySelector('jasmine-html') !== null);
+    // Check for test environment by checking for karma context
+    // @ts-ignore - jasmine may not be typed in all contexts
+    const isTestEnvironment = (typeof (globalThis as any).jasmine !== 'undefined') || 
+      (typeof window !== 'undefined' && typeof (window as any).__karma__ !== 'undefined');
     
     if (!isTestEnvironment) {
       console.error('API Error:', errorMessage, error);
