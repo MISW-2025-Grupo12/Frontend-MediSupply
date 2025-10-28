@@ -161,7 +161,15 @@ export class ApiClientService {
       }
     }
 
-    console.error('API Error:', errorMessage, error);
+    // Skip logging in test environments to avoid noise during testing
+    // Check for test environment by looking for karma HTML elements or test context
+    const isTestEnvironment = typeof window !== 'undefined' && 
+      (window.document?.querySelector('karma-jasmine') !== null || 
+       window.document?.querySelector('jasmine-html') !== null);
+    
+    if (!isTestEnvironment) {
+      console.error('API Error:', errorMessage, error);
+    }
     return throwError(() => new Error(errorMessage));
   }
 
