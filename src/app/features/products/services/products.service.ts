@@ -10,6 +10,7 @@ import { AddProductDTO } from '../../../shared/DTOs/addProductDTO.model';
 import { ProductDTO } from '../../../shared/DTOs/productDTO.model';
 import { ProductWithLocationDTO } from '../../../shared/DTOs/productWithLocationDTO.model';
 import { ProductWithLocation } from '../../../shared/models/productWithLocation.model';
+import { PaginatedResponseDTO } from '../../../shared/DTOs/paginatedResponseDTO.model';
 
 @Injectable({
   providedIn: 'root'
@@ -338,9 +339,11 @@ export class ProductsService {
   }
 
   getProductsWithLocation(): Observable<ProductWithLocation[]> {
-    return this.apiClient.get<ProductWithLocationDTO[]>('/bodegas/productos', 'logistics')
+    
+    
+    return this.apiClient.get<PaginatedResponseDTO<ProductWithLocationDTO>>('/bodegas/productos', 'logistics')
       .pipe(
-        map(products => products.map(p => ({
+        map(response => response.items.map(p => ({
           id: p.id,
           name: p.nombre,
           description: p.descripcion,

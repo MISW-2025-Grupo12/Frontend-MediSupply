@@ -20,7 +20,7 @@
 	}
 
 	mat-card-actions {
-		padding: 1rem 1.5rem 0 1.5rem !important;
+		padding: 1rem 1.5rem 1.5rem 1.5rem !important;
 	}
 }
 
@@ -35,21 +35,8 @@
 .add-category-form {
 	margin-top: 1.5rem;
 
-	mat-card {
-		width: 100%;
-		max-width: 720px;
-		padding: 1rem;
-	}
-
 	.full-width {
 		width: 100%;
-	}
-
-	mat-card-actions {
-		display: flex;
-		justify-content: flex-end;
-		gap: 0.75rem;
-		padding-top: 1rem;
 	}
 }
 
