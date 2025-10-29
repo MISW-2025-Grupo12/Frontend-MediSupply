@@ -66,7 +66,7 @@ export class DashboardState {
       icon: 'people_alt',
       route: 'users',
       color: '#f59e0b',
-      enabled: true
+      enabled: false
     },
   ]);
 

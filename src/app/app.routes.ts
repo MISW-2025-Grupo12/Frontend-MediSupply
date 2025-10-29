@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
+import { roleGuard } from './core/guards/role.guard';
+import { UserType } from './shared/enums/user-type';
 
 // Available locales
 const LOCALES = ['en', 'es'];
@@ -24,7 +26,7 @@ const localizedRoutes: Routes = LOCALES.map(locale => ({
     { 
       path: locale === 'en' ? 'sales' : 'ventas', 
       loadChildren: () => import('./features/sales/routes').then(m => m.SALES_ROUTES),
-      canActivate: [authGuard],
+      canActivate: [authGuard, roleGuard([UserType.SELLER, UserType.ADMIN])],
       data: { titleKey: 'titles.sales' }
     },
     { 

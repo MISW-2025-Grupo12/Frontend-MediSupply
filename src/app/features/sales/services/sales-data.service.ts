@@ -6,6 +6,7 @@ import { ApiClientService } from '../../../core/services/api-client.service';
 import { AppUser } from '../../../shared/models/user.model';
 import { UserResponseDTO } from '../../../shared/DTOs/userReponseDTO.model';
 import { UserType } from '../../../shared/enums/user-type';
+import { PaginatedResponseDTO } from '../../../shared/DTOs/paginatedResponseDTO.model';
 
 
 @Injectable({
@@ -55,9 +56,9 @@ export class SalesDataService {
   }
 
   getCustomers(): Observable<AppUser[]> {
-    return this.apiClient.get<UserResponseDTO[]>('/clientes', 'users')
+    return this.apiClient.get<PaginatedResponseDTO<UserResponseDTO>>('/clientes', 'users')
       .pipe(
-        map(customers => customers.map(customer => ({
+        map(response => response.items.map(customer => ({
           id: customer.id,
           name: customer.nombre,
           legalId: customer.identificacion,

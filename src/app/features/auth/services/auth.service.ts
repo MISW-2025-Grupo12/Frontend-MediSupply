@@ -151,7 +151,7 @@ export class AuthService {
    * Map user role from DTO response
    */
   private mapUserRoleFromDTO(userInfo: Partial<AppUserDTO>): UserType {
-    const tipoUsuario = userInfo.tipo_usuario;
+    const tipoUsuario = userInfo.tipo_usuario?.toLowerCase();
 
     switch (tipoUsuario) {
       case 'administrador':
