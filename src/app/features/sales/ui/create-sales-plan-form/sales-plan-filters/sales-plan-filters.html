@@ -1,9 +1,9 @@
 <div *transloco="let t">
   <mat-card-content>
     <form [formGroup]="salesPlanForm" class="sales-plan-form">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <!-- Sales Plan Name - Full width on all screens -->
-        <mat-form-field class="app-form-field col-span-1 sm:col-span-2 lg:col-span-4">
+        <mat-form-field class="app-form-field col-span-1 sm:col-span-2">
           <mat-label>{{ t('addSalesPlan.form.name') }}</mat-label>
           <input 
             matInput 
@@ -30,19 +30,6 @@
           </mat-error>
         </mat-form-field>
 
-        <!-- Start Time -->
-        <mat-form-field class="app-form-field col-span-1">
-          <mat-label>{{ t('addSalesPlan.form.startTime') }}</mat-label>
-          <input 
-            matInput 
-            type="time"
-            formControlName="startTime"
-            required>
-          <mat-error *ngIf="salesPlanForm.get('startTime')?.invalid && salesPlanForm.get('startTime')?.touched">
-            {{ t(getErrorMessage('startTime')) }}
-          </mat-error>
-        </mat-form-field>
-
         <!-- End Date -->
         <mat-form-field class="app-form-field col-span-1">
           <mat-label>{{ t('addSalesPlan.form.endDate') }}</mat-label>
@@ -58,18 +45,6 @@
           </mat-error>
         </mat-form-field>
 
-        <!-- End Time -->
-        <mat-form-field class="app-form-field col-span-1">
-          <mat-label>{{ t('addSalesPlan.form.endTime') }}</mat-label>
-          <input 
-            matInput 
-            type="time"
-            formControlName="endTime"
-            required>
-          <mat-error *ngIf="salesPlanForm.get('endTime')?.invalid && salesPlanForm.get('endTime')?.touched">
-            {{ t(getErrorMessage('endTime')) }}
-          </mat-error>
-        </mat-form-field>
       </div>
     </form>
   </mat-card-content>

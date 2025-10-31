@@ -1,17 +1,18 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AppStore } from '../../../core/state/app.store';
-import { LocaleRouteService } from '../../../core/services/locale-route.service';
 import { SalesDataService } from '../services/sales-data.service';
 import { SalesReport } from '../../../shared/models/salesReport.model';
 import { AppUser } from '../../../shared/models/user.model';
 import { ScheduledVisit } from '../../../shared/models/scheduledVisit.model';
+import { CreateSalesPlanModel } from '../../../shared/models/createSalesPlan.model';
+import { SalesPlan } from '../../../shared/models/salesPlan.model';
+import { UserType } from '../../../shared/enums/user-type';
 
 @Injectable({ providedIn: 'root' })
 export class SalesState {
   private appStore = inject(AppStore);
-  private router = inject(Router);
-  private localeRouteService = inject(LocaleRouteService);
   private salesDataService = inject(SalesDataService);
 
   private _salesReport = signal<SalesReport>({
@@ -25,11 +26,13 @@ export class SalesState {
   private _isLoading = signal<boolean>(false);
   private _customers = signal<AppUser[]>([]);
   private _scheduledVisits = signal<ScheduledVisit[]>([]);
+  private _salesPlans = signal<SalesPlan[]>([]);
 
   readonly salesReport = computed(() => this._salesReport());
   readonly isLoading = computed(() => this._isLoading());
   readonly customers = computed(() => this._customers());
   readonly scheduledVisits = computed(() => this._scheduledVisits());
+  readonly salesPlans = computed(() => this._salesPlans());
 
   loadCustomers(): void {
     this.salesDataService.getCustomers().subscribe(customers => {
@@ -64,5 +67,29 @@ export class SalesState {
         this._isLoading.set(false);
       }
     });
+  }
+
+  loadSalesPlans(): void {
+    const user = this.appStore.user();
+
+    if (!user) {
+      console.error('No user logged in');
+      return;
+    }
+
+    const userId = user.role === UserType.SELLER ? user.id : undefined;
+
+    this.salesDataService.getSalesPlans(userId).subscribe(salesPlans => {
+      this._salesPlans.set(salesPlans);
+    });
+  }
+
+  createSalesPlan(salesPlan: CreateSalesPlanModel): Observable<boolean> {
+    return this.salesDataService.createSalesPlan(salesPlan).pipe(
+      map((result) => {
+        this.loadSalesPlans();
+        return true;
+      })
+    );
   }
 }

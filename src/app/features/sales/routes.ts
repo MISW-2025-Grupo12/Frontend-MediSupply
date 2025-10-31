@@ -3,6 +3,7 @@ import { SalesComponent } from "./pages/sales/sales.component";
 import { SalesReportComponent } from "./pages/sales-report/sales-report.component";
 import { SalesPlanComponent } from "./pages/sales-plan/sales-plan";
 import { CreateSalesPlan } from "./pages/create-sales-plan/create-sales-plan";
+import { SalesPlanDetail } from "./pages/sales-plan-detail/sales-plan-detail";
 
 export const SALES_ROUTES: Routes = [
   { 
@@ -39,5 +40,15 @@ export const SALES_ROUTES: Routes = [
     path: 'anadir-plan-de-ventas',
     component: CreateSalesPlan,
     data: { titleKey: 'titles.addSalesPlan' }
+  },
+  {
+    path: 'sales-plan/:id',
+    component: SalesPlanDetail,
+    data: { titleKey: 'titles.salesPlanDetail' }
+  },
+  {
+    path: 'plan-de-ventas/:id',
+    component: SalesPlanDetail,
+    data: { titleKey: 'titles.salesPlanDetail' }
   }
 ];

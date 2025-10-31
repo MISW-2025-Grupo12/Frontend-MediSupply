@@ -7,6 +7,10 @@ import { AppUser } from '../../../shared/models/user.model';
 import { UserResponseDTO } from '../../../shared/DTOs/userReponseDTO.model';
 import { UserType } from '../../../shared/enums/user-type';
 import { PaginatedResponseDTO } from '../../../shared/DTOs/paginatedResponseDTO.model';
+import { CreateSalesPlanDTO } from '../../../shared/DTOs/createSalesPlanDTO.model';
+import { CreateSalesPlanModel } from '../../../shared/models/createSalesPlan.model';
+import { SalesPlan } from '../../../shared/models/salesPlan.model';
+import { SalesPlanDTO } from '../../../shared/DTOs/salesPlanDTO.model';
 
 
 @Injectable({
@@ -67,6 +71,53 @@ export class SalesDataService {
           email: customer.email,
           role: UserType.CUSTOMER
         })))
+      );
+  }
+
+  getSalesPlans(userId?: string): Observable<SalesPlan[]> {
+    const params: { [key: string]: string } = {};
+    
+    if (userId) {
+      params['user_id'] = userId;
+    }
+    
+    return this.apiClient.get<PaginatedResponseDTO<SalesPlanDTO>>('/planes', 'sales', { params })
+      .pipe(
+        map(response => response.items.map(salesPlan => ({
+          id: salesPlan.id,
+          name: salesPlan.nombre,
+          userId: salesPlan.id_usuario,
+          startDate: new Date(salesPlan.fecha_inicio),
+          endDate: new Date(salesPlan.fecha_fin),
+          customerVisits: salesPlan.visitas_clientes.map(visit => ({
+            id: visit.id_cliente,
+            visits: visit.visitas.map(visit => ({
+              id: visit.id?.toString() || '',
+              visitDate: new Date(visit.fecha_programada),
+              address: visit.direccion,
+              phone: visit.telefono,
+              status: visit.estado
+            }))
+          }))
+        })))
+      );
+  }
+
+  createSalesPlan(salesPlan: CreateSalesPlanModel): Observable<boolean> {
+    const dto: CreateSalesPlanDTO = {
+      nombre: salesPlan.name,
+      id_usuario: salesPlan.userId,
+      fecha_inicio: salesPlan.startDate.toISOString().split('T')[0],
+      fecha_fin: salesPlan.endDate.toISOString().split('T')[0],
+      visitas_clientes: salesPlan.visits.map(visit => ({
+        id_cliente: visit.customerId,
+        visitas: visit.visits
+      }))
+    }
+    
+    return this.apiClient.post<{ message: string, plan_id: string, success: boolean }>('/planes', dto, 'sales')
+      .pipe(
+        map(response => response.success)
       );
   }
 }

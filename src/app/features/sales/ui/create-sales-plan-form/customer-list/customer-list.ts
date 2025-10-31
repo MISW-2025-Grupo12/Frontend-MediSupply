@@ -53,10 +53,15 @@ export class CustomerList {
   @Input() onDateSelected!: (customer: AppUser, date: Date) => void;
   @Input() onCancelDateSelection!: () => void;
   @Input() getMinDate!: () => Date;
+  @Input() getMaxDate?: () => Date | null;
   @Input() isCustomerSelectedForVisit!: (customerId: string) => boolean;
 
   getMinDateValue(): Date {
     return this.getMinDate();
+  }
+
+  getMaxDateValue(): Date | null {
+    return this.getMaxDate ? this.getMaxDate() : null;
   }
 
   onSearchChange(term: string): void {

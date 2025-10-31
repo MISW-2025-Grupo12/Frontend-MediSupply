@@ -5,9 +5,7 @@ export interface ScheduledVisit {
   customerId: string;
   customerName: string;
   scheduledDate: Date;
-  scheduledTime: string;
   status: VisitStatus;
-  notes?: string;
 }
 
 export enum VisitStatus {
@@ -21,8 +19,6 @@ export interface ScheduledVisitDTO {
   cliente_id: string;
   nombre_cliente: string;
   fecha_visita: string;
-  hora_visita: string;
   estado: string;
-  notas?: string;
 }
 
