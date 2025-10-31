@@ -1,0 +1,22 @@
+| Nombre                                    | Correo electrónico                            | Número de identificación | Teléfono       | Dirección                                                    |
+|------------------------------------------:|-----------------------------------------------|--------------------------:|----------------|-------------------------------------------------------------|
+| Hospital Santa Lucía                      | contacto@hospitalsantalucia.com               | 900000001                | 6012310001     | Calle 72 #11-47, Chapinero, Bogotá D.C.                      |
+| Clínica Nuevo Horizonte                   | info@clinicanuevahorizonte.com                | 900000002                | 6012310002     | Carrera 15 #88-52, Usaquén, Bogotá D.C.                      |
+| Droguería La Esperanza 24/7               | ventas@droguerialaesperanza.com               | 900000003                | 6012310003     | Avenida Ciudad de Cali #26-85, Kennedy, Bogotá D.C.          |
+| IPS Médica Central                        | operaciones@ipsmedicacentral.com              | 900000004                | 6012310004     | Calle 63 #45-10, Teusaquillo, Bogotá D.C.                    |
+| Laboratorio Clínico Biomed                | contacto@biomedlab.com                        | 900000005                | 6012310005     | Carrera 24 #60-21, Chapinero, Bogotá D.C.                    |
+| ESE Salud Popular                         | administracion@saluPopular-ese.gov.co         | 900000006                | 6012310006     | Calle 13 #35-40, Santa Fe, Bogotá D.C.                       |
+| Clínica Infantil Renacer                  | contacto@clinicarenacer.com                   | 900000007                | 6012310007     | Carrera 7 #112-20, Usaquén, Bogotá D.C.                      |
+| Droguería Central Norte                   | servicio@drogueriacentralnorte.com            | 900000008                | 6012310008     | Calle 100 #15-30, Barrios Unidos, Bogotá D.C.                |
+| Hospital Comunitario Los Pinos            | compras@hospitallospinos.com                  | 900000009                | 6012310009     | Avenida Boyacá #85-60, Suba, Bogotá D.C.                     |
+| Clínica Senior Vida                       | reservas@clinicaseniovida.com                 | 900000010                | 6012310010     | Carrera 50 #24-75, Engativá, Bogotá D.C.                     |
+| Droguería Salud al Día                    | contacto@saludaldia-drogueria.com             | 900000011                | 6012310011     | Calle 26 #59-17, Teusaquillo, Bogotá D.C.                    |
+| Centro de Urgencias La 72                 | urgencias@centrol72.com                       | 900000012                | 6012310012     | Calle 72 #30-10, Chapinero, Bogotá D.C.                      |
+| Clínica Odontológica Sonrisa              | info@sonrisaclinica.com                       | 900000013                | 6012310013     | Carrera 11 #82-45, Usaquén, Bogotá D.C.                      |
+| Hospital El Roble                         | administracion@hospitalelroble.com            | 900000014                | 6012310014     | Avenida 68 #45-90, Engativá, Bogotá D.C.                     |
+| Droguería Barrio Kennedy                  | clientes@drogueriakennedy.com                 | 900000015                | 6012310015     | Calle 44 Sur #64-12, Kennedy, Bogotá D.C.                    |
+| Clínica Integral Salud y Vida             | contacto@integralsaludyvida.com               | 900000016                | 6012310016     | Carrera 30 #45-66, Teusaquillo, Bogotá D.C.                  |
+| Laboratorio de Patología Norte            | info@labpatologianorte.com                    | 900000017                | 6012310017     | Calle 94 #9-50, Barrios Unidos, Bogotá D.C.                  |
+| IPS Familia y Comunidad                   | administracion@ipsfamiliacomunidad.com        | 900000018                | 6012310018     | Carrera 86 #63-80, Suba, Bogotá D.C.                         |
+| Clínica Especializada Corazón y Pulmón    | citas@cardiopulmonarclinic.com                | 900000019                | 6012310019     | Calle 100 #19-20, Usaquén, Bogotá D.C.                       |
+| Droguería y Suministros Médicos Central   | pedidos@drogueriacentralmed.com               | 900000020                | 6012310020     | Avenida NQS #45-33, Teusaquillo, Bogotá D.C.                 |

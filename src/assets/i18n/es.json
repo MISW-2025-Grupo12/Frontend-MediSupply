@@ -11,6 +11,7 @@
     "language": "Idioma",
     "salesReport": "Reporte de Ventas",
     "salesPlan": "Plan de Ventas",
+    "salesPlanDetail": "Detalle del Plan de Ventas",
     "addSalesPlan": "Añadir Plan de Ventas"
   },
   "routes": {
@@ -36,6 +37,7 @@
     "users": "Usuarios - MediSupply",
     "salesReport": "Reporte de Ventas - MediSupply",
     "salesPlan": "Plan de Ventas - MediSupply",
+    "salesPlanDetail": "Detalle del Plan de Ventas - MediSupply",
     "addSalesPlan": "Añadir Plan de Ventas - MediSupply"
   },
   "login": {
@@ -310,5 +312,19 @@
       "cancel": "Cancelar",
       "create": "Crear Plan de Ventas"
     }
+  },
+  "salesPlan": {
+    "startDate": "Fecha de Inicio",
+    "endDate": "Fecha de Fin",
+    "customers": "Clientes",
+    "visits": "Visitas",
+    "noSalesPlans": "No hay planes de ventas disponibles"
+  },
+  "salesPlanDetail": {
+    "basicInfo": "Información Básica",
+    "loading": "Cargando plan de ventas...",
+    "scheduledVisits": "Visitas Programadas",
+    "visits": "visitas",
+    "noVisitsAvailable": "No hay visitas disponibles"
   }
 }

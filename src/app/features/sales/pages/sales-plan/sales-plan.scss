@@ -1,2 +1,87 @@
 @import '../../../../../styles/page.scss';
 @import '../../../../../styles/colors.scss';
+
+.sales-plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  padding: 8px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.sales-plan-card {
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  }
+
+  .plan-details {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .detail-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .detail-icon {
+      color: $primary-color;
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+
+    .detail-content {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      .detail-label {
+        font-size: 0.875rem;
+        color: $gray-600;
+        font-weight: 500;
+      }
+
+      .detail-value {
+        font-size: 1rem;
+        color: $main-dark;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  text-align: center;
+  padding: 2rem;
+
+  .empty-icon {
+    font-size: 5rem;
+    width: 5rem;
+    height: 5rem;
+    color: $gray-300;
+    margin-bottom: 1.5rem;
+    opacity: 0.6;
+  }
+
+  p {
+    color: $gray-500;
+    font-size: 1.25rem;
+    margin: 0;
+    font-weight: 500;
+  }
+}

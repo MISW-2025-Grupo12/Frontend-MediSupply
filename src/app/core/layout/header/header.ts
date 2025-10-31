@@ -5,6 +5,7 @@ import { TranslocoDirective, TranslocoService } from '@ngneat/transloco';
 import { LocaleRouteService } from '../../services/locale-route.service';
 import { AppStore } from '../../state/app.store';
 import { filter } from 'rxjs/operators';
+import { UserType } from '../../../shared/enums/user-type';
 
 @Component({
   selector: 'app-header',
@@ -70,5 +71,12 @@ export class Header implements OnInit {
 
   getUsersRoute(): string {
     return this.localeRouteService.getLocalizedUrl('users');
+  }
+
+  // Check if user can access sales module
+  canAccessSales(): boolean {
+    const user = this.appStore.user();
+    if (!user) return false;
+    return user.role === UserType.SELLER || user.role === UserType.ADMIN;
   }
 }

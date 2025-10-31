@@ -1,0 +1,273 @@
+@import '../../../../../styles/page.scss';
+@import '../../../../../styles/colors.scss';
+
+.page-header {
+  .header-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .back-button {
+      color: $primary-color;
+    }
+  }
+}
+
+.sales-plan-detail-card {
+  margin-top: 24px;
+
+  .plan-info {
+    padding: 16px 0;
+  }
+
+  .info-section {
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: $main-dark;
+      margin-bottom: 24px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .info-icon {
+        color: $primary-color;
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+      }
+
+      .info-content {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+
+        .info-label {
+          font-size: 0.875rem;
+          color: $gray-600;
+          font-weight: 500;
+        }
+
+        .info-value {
+          font-size: 1rem;
+          color: $main-dark;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  text-align: center;
+  padding: 2rem;
+
+  .loading-icon {
+    font-size: 5rem;
+    width: 5rem;
+    height: 5rem;
+    color: $gray-300;
+    margin-bottom: 1.5rem;
+    opacity: 0.6;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 0.6;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  p {
+    color: $gray-500;
+    font-size: 1.25rem;
+    margin: 0;
+    font-weight: 500;
+  }
+}
+
+.visits-section {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid $gray-200;
+
+  .visits-container {
+    margin-top: 24px;
+  }
+
+  .day-group {
+    margin-bottom: 32px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .day-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid $primary-color;
+
+      .day-icon {
+        color: $primary-color;
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+        line-height: 28px;
+      }
+
+      .day-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: $main-dark;
+        margin: 0;
+        flex: 1;
+      }
+
+      .visit-count-badge {
+        background-color: $primary-color;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+    }
+
+    .visits-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .visit-card {
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.2s ease;
+
+      &:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      }
+
+      mat-card-content {
+        padding: 16px !important;
+      }
+
+      .visit-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 16px;
+
+        @media (max-width: 768px) {
+          flex-direction: column;
+        }
+
+        .visit-customer-info {
+          display: flex;
+          gap: 12px;
+          flex: 1;
+
+          .customer-icon {
+            color: $primary-color;
+            font-size: 24px;
+            width: 24px;
+            height: 24px;
+            margin-top: 2px;
+          }
+
+          .customer-details {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            .customer-name {
+              font-size: 1.125rem;
+              font-weight: 600;
+              color: $main-dark;
+            }
+
+            .visit-details {
+              display: flex;
+              flex-direction: column;
+              gap: 6px;
+
+              .visit-detail-item {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 0.875rem;
+                color: $gray-600;
+
+                .detail-icon {
+                  font-size: 18px;
+                  width: 18px;
+                  height: 18px;
+                  color: $gray-500;
+                }
+              }
+            }
+          }
+        }
+
+        .visit-status {
+          display: flex;
+          align-items: center;
+
+          mat-chip {
+            font-size: 0.875rem;
+            font-weight: 500;
+
+            &.status-pending {
+              background-color: #fff3cd;
+              color: #856404;
+            }
+
+            &.status-completed {
+              background-color: #d4edda;
+              color: #155724;
+            }
+
+            &.status-cancelled {
+              background-color: #f8d7da;
+              color: #721c24;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .no-visits-message {
+    text-align: center;
+    color: $gray-500;
+    font-size: 1rem;
+    margin: 24px 0;
+    padding: 24px;
+    background-color: $gray-50;
+    border-radius: 8px;
+  }
+}
