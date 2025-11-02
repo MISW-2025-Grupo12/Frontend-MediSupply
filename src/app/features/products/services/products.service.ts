@@ -20,9 +20,9 @@ export class ProductsService {
   private serviceType: ServiceType = 'products';
 
   getProviders(): Observable<Provider[]> {
-    return this.apiClient.get<ProviderDTO[]>('/proveedores', 'users')
+      return this.apiClient.get<PaginatedResponseDTO<ProviderDTO>>('/proveedores', 'users')
       .pipe(
-        map(providers => providers.map(p => ({
+        map(response => response.items.map(p => ({
           id: p.id,
           name: p.nombre,
           email: p.email,
@@ -32,9 +32,9 @@ export class ProductsService {
   }
 
   getCategories(): Observable<Category[]> {
-    return this.apiClient.get<CategoryDTO[]>('/categorias/', this.serviceType)
+    return this.apiClient.get<PaginatedResponseDTO<CategoryDTO>>('/categorias/', this.serviceType)
       .pipe(
-        map(categories => categories.map(c => ({
+        map(response => response.items.map(c => ({
           id: c.id,
           name: c.nombre,
           description: c.descripcion
@@ -339,8 +339,6 @@ export class ProductsService {
   }
 
   getProductsWithLocation(): Observable<ProductWithLocation[]> {
-    
-    
     return this.apiClient.get<PaginatedResponseDTO<ProductWithLocationDTO>>('/bodegas/productos', 'logistics')
       .pipe(
         map(response => response.items.map(p => ({
