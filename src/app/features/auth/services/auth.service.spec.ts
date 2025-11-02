@@ -703,7 +703,7 @@ describe('AuthService', () => {
       });
     });
 
-    it('should set current user after successful creation', () => {
+    it('should not set current user after successful creation (user must log in manually)', () => {
       const mockUser: AppUser = {
         id: '',
         name: 'John Doe',
@@ -730,17 +730,21 @@ describe('AuthService', () => {
 
       mockApiClientService.post.and.returnValue(of(mockResponse));
 
-      service.createUser(mockUser).subscribe();
-
-      expect(mockAppStore.setUser).toHaveBeenCalledWith({
-        id: '123',
-        name: 'John Doe',
-        email: 'john@example.com',
-        legalId: '12345678',
-        phone: '+1234567890',
-        address: '123 Main Street',
-        role: UserType.CUSTOMER
+      service.createUser(mockUser).subscribe(result => {
+        // Verify the user is returned correctly
+        expect(result).toEqual({
+          id: '123',
+          name: 'John Doe',
+          email: 'john@example.com',
+          legalId: '12345678',
+          phone: '+1234567890',
+          address: '123 Main Street',
+          role: UserType.CUSTOMER
+        });
       });
+
+      // Verify that setUser is NOT called (user is not automatically logged in)
+      expect(mockAppStore.setUser).not.toHaveBeenCalled();
     });
   });
 
