@@ -77,22 +77,6 @@ export class AuthService {
       RegisterAdminResponseDTO |
       RegisterDeliveryResponseDTO>(`${this.baseUrl}/registro-${userPath}`, dto, 'users')
       .pipe(
-        tap(response => {
-          // Extract user data from the nested response structure
-          const userFromResponse = this.extractUserFromResponse(response, userData.role);
-          
-          // Set the created user in AppStore
-          const createdUser: AppUser = {
-            id: userFromResponse.id?.toString() || '',
-            name: userFromResponse.nombre,
-            email: userFromResponse.email,
-            legalId: userFromResponse.identificacion,
-            phone: userFromResponse.telefono,
-            address: userFromResponse.direccion || '',
-            role: userData.role,
-          };
-          this.appStore.setUser(createdUser);
-        }),
         map(response => {
           // Extract user data from the nested response structure
           const userFromResponse = this.extractUserFromResponse(response, userData.role);

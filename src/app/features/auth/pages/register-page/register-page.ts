@@ -4,7 +4,6 @@ import { LocaleRouteService } from '../../../../core/services/locale-route.servi
 import { RegisterForm, RegisterData } from '../../ui/register-form/register-form';
 import { AuthService } from '../../services/auth.service';
 import { AppUser } from '../../../../shared/models/user.model';
-import { AppStore } from '../../../../core/state/app.store';
 
 @Component({
   selector: 'app-register-page',
@@ -15,7 +14,6 @@ import { AppStore } from '../../../../core/state/app.store';
 export class RegisterPage {
   private localeRouteService = inject(LocaleRouteService);
   private authService = inject(AuthService);
-  private appStore = inject(AppStore);
 
   navigateToLogin(): void {
     this.localeRouteService.navigateToRoute('login');
@@ -38,20 +36,8 @@ export class RegisterPage {
     this.authService.createUser(appUser).subscribe({
       next: (user) => {
         console.log('User created successfully:', user);
-        
-        // Validate that the user is properly set in AppStore
-        const currentUser = this.appStore.user();
-        const isAuthenticated = this.appStore.isLoggedIn();
-        
-        if (currentUser && isAuthenticated) {
-          console.log('User is authenticated, navigating to dashboard');
-          // Navigate to dashboard after successful registration (user is automatically logged in)
-          this.localeRouteService.navigateToRoute('dashboard');
-        } else {
-          console.warn('User created but not properly authenticated, redirecting to login');
-          // Fallback to login if user is not properly set
-          this.localeRouteService.navigateToRoute('login');
-        }
+        // Navigate to login page after successful registration (user must log in manually)
+        this.localeRouteService.navigateToRoute('login');
       },
       error: (error) => {
         console.error('Registration failed:', error);
