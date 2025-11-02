@@ -5,6 +5,7 @@ import { provideZonelessChangeDetection } from '@angular/core';
 
 import { Footer } from './footer';
 import { AppStore } from '../../state/app.store';
+import { VersionDTO } from '../../../shared/DTOs/versionDTO.model';
 
 describe('Footer', () => {
   let httpMock: HttpTestingController;
@@ -42,7 +43,13 @@ describe('Footer', () => {
     expect(req.request.method).toBe('GET');
     
     // Flush the response synchronously
-    req.flush({ version: '1.0.0' });
+    const mockVersionDTO: VersionDTO = {
+      version: '1.0.0',
+      build_date: '2024-01-01T00:00:00Z',
+      commit_hash: 'abc123',
+      environment: 'test'
+    };
+    req.flush(mockVersionDTO);
     
     // The response is processed synchronously, so version should be set
     expect(component.version).toBe('1.0.0');
@@ -66,7 +73,13 @@ describe('Footer', () => {
     expect(req.request.method).toBe('GET');
     
     // Flush the response synchronously
-    req.flush({ version: mockVersion });
+    const mockVersionDTO: VersionDTO = {
+      version: mockVersion,
+      build_date: '2024-01-01T00:00:00Z',
+      commit_hash: 'def456',
+      environment: 'test'
+    };
+    req.flush(mockVersionDTO);
     
     // The response is processed synchronously, so version should be set
     expect(component.version).toBe(mockVersion);
