@@ -1,0 +1,61 @@
+@import '../../../../../styles/page.scss';
+
+.add-category-container {
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 2rem 0;
+}
+
+.category-card {
+	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+	border-radius: 1rem !important;
+
+	mat-card-header {
+		padding: 1.5rem 1.5rem 0 1.5rem;
+		margin-bottom: 1rem;
+	}
+
+	mat-card-content {
+		padding: 0 1.5rem !important;
+	}
+
+	mat-card-actions {
+		padding: 1rem 1.5rem 1.5rem 1.5rem !important;
+	}
+}
+
+.card-title {
+	text-align: center;
+	font-size: 1.75rem !important;
+	font-weight: 600 !important;
+	color: $main-dark;
+	margin: 0 !important;
+}
+
+.add-category-form {
+	margin-top: 1.5rem;
+
+	.full-width {
+		width: 100%;
+	}
+}
+
+// Responsive adjustments
+@media (max-width: 640px) {
+	.add-category-container {
+		padding: 1rem 0;
+	}
+
+	.category-card {
+		mat-card-header,
+		mat-card-content,
+		mat-card-actions {
+			padding-left: 1rem !important;
+			padding-right: 1rem !important;
+		}
+	}
+
+	.card-title {
+		font-size: 1.5rem !important;
+	}
+}

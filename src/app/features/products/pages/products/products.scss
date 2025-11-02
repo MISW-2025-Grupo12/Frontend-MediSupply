@@ -1,4 +1,14 @@
 @import '../../../../../styles/page.scss';
 
-// Products-specific styles can be added here if needed
-// The main page structure uses the shared page.scss styles
+.page-actions {
+	display: flex;
+	gap: 0.75rem;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+.page-action-button--secondary {
+	background-color: transparent !important;
+	color: $primary-color !important;
+	border: 1px solid rgba(0,0,0,0.08) !important;
+}

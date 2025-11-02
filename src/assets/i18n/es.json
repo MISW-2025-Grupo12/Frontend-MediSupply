@@ -1,30 +1,44 @@
 {
   "common": {
-    "comingSoon": "Próximamente"
+    "comingSoon": "Próximamente",
+    "back": "Atrás"
   },
   "header": {
     "products": "Productos",
     "clients": "Clientes",
     "sales": "Ventas",
+    "users": "Usuarios",
     "language": "Idioma",
-    "salesReport": "Reporte de Ventas"
+    "salesReport": "Reporte de Ventas",
+    "salesPlan": "Plan de Ventas",
+    "salesPlanDetail": "Detalle del Plan de Ventas",
+    "addSalesPlan": "Añadir Plan de Ventas"
   },
   "routes": {
     "products": "productos",
     "clients": "clientes",
+    "sales": "ventas",
+    "users": "usuarios",
+    "addUser": "anadir-usuario",
     "add": "anadir",
     "dashboard": "panel",
-    "sales": "ventas",
     "salesReport": "reporte-de-ventas"
   },
   "titles": {
     "products": "Productos - MediSupply",
     "addProduct": "Añadir Producto - MediSupply",
+    "addCategory": "Añadir Categoría - MediSupply",
+    "addUser": "Añadir Usuario - MediSupply",
     "login": "Iniciar Sesión - MediSupply",
+    "register": "Registrarse - MediSupply",
     "dashboard": "Panel de Control - MediSupply",
     "home": "MediSupply",
     "sales": "Ventas - MediSupply",
-    "salesReport": "Reporte de Ventas - MediSupply"
+    "users": "Usuarios - MediSupply",
+    "salesReport": "Reporte de Ventas - MediSupply",
+    "salesPlan": "Plan de Ventas - MediSupply",
+    "salesPlanDetail": "Detalle del Plan de Ventas - MediSupply",
+    "addSalesPlan": "Añadir Plan de Ventas - MediSupply"
   },
   "login": {
     "title": "Iniciar Sesión",
@@ -41,8 +55,44 @@
       "invalidEmail": "Por favor ingresa un correo electrónico válido",
       "minLength": "La contraseña debe tener al menos 6 caracteres",
       "loginButton": "Iniciar Sesión",
-      "forgotPassword": "¿Olvidaste tu contraseña?"
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "register": "¿No tienes una cuenta? Regístrate"
     }
+  },
+  "register": {
+    "title": "Crear Cuenta",
+    "subtitle": "Únete a MediSupply y comienza a gestionar tu inventario",
+    "formComingSoon": "Formulario de registro próximamente...",
+    "backToLogin": "¿Ya tienes una cuenta? Iniciar Sesión",
+    "form": {
+      "userType": "Tipo de Usuario",
+      "userTypePlaceholder": "Selecciona tu rol",
+      "name": "Nombre Completo",
+      "namePlaceholder": "Ingresa tu nombre completo",
+      "email": "Correo Electrónico",
+      "emailPlaceholder": "Ingresa tu correo electrónico",
+      "dni": "Identificación",
+      "dniPlaceholder": "Ingresa tu identificación",
+      "phone": "Teléfono",
+      "phonePlaceholder": "Ingresa tu número de teléfono",
+      "address": "Dirección",
+      "addressPlaceholder": "Ingresa tu dirección",
+      "password": "Contraseña",
+      "passwordPlaceholder": "Ingresa tu contraseña",
+      "required": "Este campo es requerido",
+      "invalidEmail": "Por favor ingresa un correo electrónico válido",
+      "minLength": "Longitud mínima no cumplida",
+      "invalidDni": "Por favor ingresa un DNI válido (8-12 dígitos)",
+      "invalidPhone": "Por favor ingresa un número de teléfono válido",
+      "createAccount": "Crear Cuenta"
+    }
+  },
+  "userTypes": {
+    "ADMIN": "Administrador",
+    "SELLER": "Vendedor",
+    "CUSTOMER": "Cliente",
+    "DELIVERY": "Repartidor",
+    "PROVIDER": "Proveedor"
   },
   "dashboard": {
     "welcome": "Bienvenido",
@@ -71,6 +121,10 @@
       "sales": {
         "title": "Ventas",
         "description": "Gestiona transacciones de ventas, rastrea ingresos y monitorea el rendimiento de ventas"
+      },
+      "users": {
+        "title": "Usuarios",
+        "description": "Gestiona cuentas de usuario, roles y permisos para acceso al sistema"
       }
     }
   },
@@ -106,6 +160,59 @@
       "create": "Añadir Producto"
     }
   },
+  "addCategory": {
+    "title": "Añadir Categoría",
+    "form": {
+      "name": "Nombre",
+      "namePlaceholder": "Ingrese el nombre de la categoría",
+      "description": "Descripción",
+      "descriptionPlaceholder": "Ingrese la descripción de la categoría",
+      "required": "Este campo es requerido",
+      "minValue": "El valor debe ser mayor a 0"
+    },
+    "actions": {
+      "cancel": "Cancelar",
+      "create": "Añadir Categoría"
+    },
+    "categories": {}
+  },
+  "addUser": {
+    "title": "Añadir Usuario",
+    "form": {
+      "name": "Nombre Completo",
+      "namePlaceholder": "Ingrese el nombre completo",
+      "email": "Correo Electrónico",
+      "emailPlaceholder": "Ingrese el correo electrónico",
+      "role": "Rol",
+      "rolePlaceholder": "Seleccione un rol",
+      "password": "Contraseña",
+      "passwordPlaceholder": "Ingrese la contraseña",
+      "confirmPassword": "Confirmar Contraseña",
+      "confirmPasswordPlaceholder": "Confirme la contraseña",
+      "department": "Departamento",
+      "departmentPlaceholder": "Seleccione departamento",
+      "required": "Este campo es requerido",
+      "invalidEmail": "Por favor ingrese un correo electrónico válido",
+      "minLength": "Longitud mínima no cumplida",
+      "passwordMismatch": "Las contraseñas no coinciden"
+    },
+    "roles": {
+      "admin": "Administrador",
+      "manager": "Gerente",
+      "employee": "Empleado",
+      "viewer": "Visualizador"
+    },
+    "departments": {
+      "pharmacy": "Farmacia",
+      "inventory": "Inventario",
+      "sales": "Ventas",
+      "administration": "Administración"
+    },
+    "actions": {
+      "cancel": "Cancelar",
+      "create": "Añadir Usuario"
+    }
+  },
   "productCard": {
     "price": "Precio",
     "stock": "Stock",
@@ -122,11 +229,17 @@
   },
   "productList": {
     "noProducts": "No hay productos disponibles",
-    "loadingProducts": "Cargando productos..."
+    "loadingProducts": "Cargando productos...",
+    "searchProducts": "Buscar Productos",
+    "searchPlaceholder": "Buscar por nombre de producto"
   },
   "sales": {
     "subtitle": "Selecciona una opción para gestionar ventas",
     "options": {
+      "salesPlan": {
+        "title": "Plan de Ventas",
+        "description": "Crear y gestionar tus estrategias y objetivos de ventas"
+      },
       "salesReport": {
         "title": "Reporte de Ventas",
         "description": "Ver reportes detallados de ventas y analíticas"
@@ -158,5 +271,60 @@
       },
       "salesAmount": "Monto de Ventas"
     }
+  },
+  "addSalesPlan": {
+    "title": "Añadir Plan de Ventas",
+    "form": {
+      "name": "Nombre del Plan de Ventas",
+      "namePlaceholder": "Ingrese el nombre del plan de ventas",
+      "startDate": "Fecha de Inicio",
+      "startTime": "Hora de Inicio",
+      "endDate": "Fecha de Fin",
+      "endTime": "Hora de Fin",
+      "required": "Este campo es requerido",
+      "invalidDate": "Fecha inválida",
+      "invalidTime": "Hora inválida"
+    },
+    "visits": {
+      "title": "Visitas Programadas",
+      "noVisits": "No hay visitas programadas aún",
+      "status": {
+        "pending": "Pendiente",
+        "completed": "Completada",
+        "cancelled": "Cancelada"
+      }
+    },
+    "scheduleVisit": {
+      "title": "Programar Visita",
+      "date": "Fecha de Visita",
+      "time": "Hora de Visita",
+      "confirm": "Programar Visita"
+    },
+    "customers": {
+      "title": "Clientes",
+      "search": "Buscar",
+      "searchPlaceholder": "Buscar por nombre de cliente",
+      "scheduleVisit": "Programar nueva visita",
+      "noCustomers": "No hay clientes disponibles",
+      "noResults": "No se encontraron clientes"
+    },
+    "actions": {
+      "cancel": "Cancelar",
+      "create": "Crear Plan de Ventas"
+    }
+  },
+  "salesPlan": {
+    "startDate": "Fecha de Inicio",
+    "endDate": "Fecha de Fin",
+    "customers": "Clientes",
+    "visits": "Visitas",
+    "noSalesPlans": "No hay planes de ventas disponibles"
+  },
+  "salesPlanDetail": {
+    "basicInfo": "Información Básica",
+    "loading": "Cargando plan de ventas...",
+    "scheduledVisits": "Visitas Programadas",
+    "visits": "visitas",
+    "noVisitsAvailable": "No hay visitas disponibles"
   }
 }

@@ -1,0 +1,62 @@
+@import '../../../../../styles/colors.scss';
+
+.register-form {
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+  
+  .submit-button {
+    background-color: $primary-color !important;
+    color: $white !important;
+    border-radius: 0.5rem;
+    padding: 0.75rem 2rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    min-width: 200px;
+    
+    &:hover:not(:disabled) {
+      background-color: darken($primary-color, 8%) !important;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(100, 97, 22, 0.2);
+    }
+    
+    &:active:not(:disabled) {
+      transform: translateY(0);
+    }
+    
+    &:disabled {
+      background-color: $gray-400 !important;
+      color: $gray-600 !important;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 640px) {
+  .register-form {
+    .submit-button {
+      min-width: 150px;
+      padding: 0.65rem 1.5rem;
+    }
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .register-form .submit-button {
+    transition: none !important;
+    
+    &:hover:not(:disabled) {
+      transform: none !important;
+    }
+  }
+}

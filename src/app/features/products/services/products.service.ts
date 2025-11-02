@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable, map, of } from 'rxjs';
-import { ApiClientService } from '../../../core/services/api-client.service';
+import { ApiClientService, ServiceType } from '../../../core/services/api-client.service';
 import { CategoryDTO } from '../../../shared/DTOs/categoryDTO.model';
 import { ProviderDTO } from '../../../shared/DTOs/providerDTO.model';
 import { Category } from '../../../shared/models/category.model';
@@ -10,12 +10,14 @@ import { AddProductDTO } from '../../../shared/DTOs/addProductDTO.model';
 import { ProductDTO } from '../../../shared/DTOs/productDTO.model';
 import { ProductWithLocationDTO } from '../../../shared/DTOs/productWithLocationDTO.model';
 import { ProductWithLocation } from '../../../shared/models/productWithLocation.model';
+import { PaginatedResponseDTO } from '../../../shared/DTOs/paginatedResponseDTO.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductsService {
   private apiClient = inject(ApiClientService);
+  private serviceType: ServiceType = 'products';
 
   getProviders(): Observable<Provider[]> {
     return this.apiClient.get<ProviderDTO[]>('/proveedores', 'users')
@@ -30,7 +32,7 @@ export class ProductsService {
   }
 
   getCategories(): Observable<Category[]> {
-    return this.apiClient.get<CategoryDTO[]>('/categorias', 'products')
+    return this.apiClient.get<CategoryDTO[]>('/categorias/', this.serviceType)
       .pipe(
         map(categories => categories.map(c => ({
           id: c.id,
@@ -52,9 +54,7 @@ export class ProductsService {
       proveedor_id: product.provider.id.toString(),
     }
 
-    debugger;
-
-    return this.apiClient.post<ProductDTO>('/productos/con-inventario', addProductDTO, 'products')
+    return this.apiClient.post<ProductDTO>('/productos/con-inventario', addProductDTO, this.serviceType)
       .pipe(
         map(product => ({
             id: product.id,
@@ -339,9 +339,11 @@ export class ProductsService {
   }
 
   getProductsWithLocation(): Observable<ProductWithLocation[]> {
-    return this.apiClient.get<ProductWithLocationDTO[]>('/bodegas/productos', 'logistics')
+    
+    
+    return this.apiClient.get<PaginatedResponseDTO<ProductWithLocationDTO>>('/bodegas/productos', 'logistics')
       .pipe(
-        map(products => products.map(p => ({
+        map(response => response.items.map(p => ({
           id: p.id,
           name: p.nombre,
           description: p.descripcion,
@@ -371,5 +373,19 @@ export class ProductsService {
         })))
       );
   }
-}
 
+  createProductCategory(category: Partial<Category>): Observable<Category> {
+    const dto = {
+      nombre: category.name,
+      descripcion: category.description
+    }
+
+    return this.apiClient.post<CategoryDTO>('/categorias/', dto, this.serviceType).pipe(
+      map(response => ({
+        id: response.id,
+        name: response.nombre,
+        description: response.descripcion
+      }))
+    );
+  }
+}

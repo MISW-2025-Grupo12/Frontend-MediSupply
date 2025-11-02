@@ -1,0 +1,122 @@
+<div class="page-container" *transloco="let t">
+  <div class="page-header">
+    <div class="header-content">
+      <button 
+        mat-icon-button 
+        class="back-button"
+        (click)="navigateBack()"
+        [attr.aria-label]="t('common.back')">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1 class="page-title">{{ t('header.salesPlanDetail') }}</h1>
+    </div>
+  </div>
+
+  <div class="page-content">
+    @if (salesPlan()) {
+      <mat-card class="sales-plan-detail-card">
+        <mat-card-header>
+          <mat-card-title>{{ salesPlan()!.name }}</mat-card-title>
+        </mat-card-header>
+        
+        <mat-card-content>
+          <div class="plan-info">
+            <div class="info-section">
+              <h2 class="section-title">{{ t('salesPlanDetail.basicInfo') }}</h2>
+              <div class="info-grid">
+                <div class="info-item">
+                  <mat-icon class="info-icon">calendar_today</mat-icon>
+                  <div class="info-content">
+                    <span class="info-label">{{ t('salesPlan.startDate') }}:</span>
+                    <span class="info-value">{{ salesPlan()!.startDate | date:'mediumDate' }}</span>
+                  </div>
+                </div>
+                
+                <div class="info-item">
+                  <mat-icon class="info-icon">event</mat-icon>
+                  <div class="info-content">
+                    <span class="info-label">{{ t('salesPlan.endDate') }}:</span>
+                    <span class="info-value">{{ salesPlan()!.endDate | date:'mediumDate' }}</span>
+                  </div>
+                </div>
+                
+                <div class="info-item">
+                  <mat-icon class="info-icon">people</mat-icon>
+                  <div class="info-content">
+                    <span class="info-label">{{ t('salesPlan.customers') }}:</span>
+                    <span class="info-value">{{ salesPlan()!.customerVisits.length || 0 }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            @if (groupedVisits().length > 0) {
+              <div class="info-section visits-section">
+                <h2 class="section-title">{{ t('salesPlanDetail.scheduledVisits') }}</h2>
+                
+                <div class="visits-container">
+                  @for (dayGroup of groupedVisits(); track dayGroup.dateString) {
+                    <div class="day-group">
+                      <div class="day-header">
+                        <mat-icon class="day-icon">calendar_today</mat-icon>
+                        <h3 class="day-title">{{ dayGroup.date | date:'fullDate' }}</h3>
+                        <span class="visit-count-badge">{{ dayGroup.visits.length }} {{ t('salesPlanDetail.visits') }}</span>
+                      </div>
+                      
+                      <div class="visits-list">
+                        @for (visit of dayGroup.visits; track visit.id) {
+                          <mat-card class="visit-card">
+                            <mat-card-content>
+                              <div class="visit-content">
+                                <div class="visit-customer-info">
+                                  <mat-icon class="customer-icon">person</mat-icon>
+                                  <div class="customer-details">
+                                    <span class="customer-name">{{ visit.customerName }}</span>
+                                    <div class="visit-details">
+                                      @if (visit.address) {
+                                        <div class="visit-detail-item">
+                                          <mat-icon class="detail-icon">location_on</mat-icon>
+                                          <span>{{ visit.address }}</span>
+                                        </div>
+                                      }
+                                      @if (visit.phone) {
+                                        <div class="visit-detail-item">
+                                          <mat-icon class="detail-icon">phone</mat-icon>
+                                          <span>{{ visit.phone }}</span>
+                                        </div>
+                                      }
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="visit-status">
+                                  <mat-chip [class]="getVisitStatusClass(visit.status)">
+                                    {{ visit.status || 'pending' }}
+                                  </mat-chip>
+                                </div>
+                              </div>
+                            </mat-card-content>
+                          </mat-card>
+                        }
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+            } @else {
+              @if (salesPlan()!.customerVisits.length > 0) {
+                <div class="info-section">
+                  <p class="no-visits-message">{{ t('salesPlanDetail.noVisitsAvailable') }}</p>
+                </div>
+              }
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+    } @else {
+      <div class="loading-state">
+        <mat-icon class="loading-icon">hourglass_empty</mat-icon>
+        <p>{{ t('salesPlanDetail.loading') }}</p>
+      </div>
+    }
+  </div>
+</div>

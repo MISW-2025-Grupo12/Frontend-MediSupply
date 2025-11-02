@@ -5,16 +5,24 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslocoTestingModule } from '@ngneat/transloco';
+import { signal } from '@angular/core';
 import { LoginPage } from './login.page';
 import { AuthStore } from '../../../state/auth.store';
+import { AppStore } from '../../../../../core/state/app.store';
 
 describe('LoginPage', () => {
   let component: LoginPage;
   let fixture: ComponentFixture<LoginPage>;
   let authStoreSpy: jasmine.SpyObj<AuthStore>;
+  let mockAppStore: jasmine.SpyObj<AppStore>;
 
   beforeEach(async () => {
     authStoreSpy = jasmine.createSpyObj('AuthStore', ['login']);
+    
+    mockAppStore = jasmine.createSpyObj('AppStore', ['setError', 'setApiBusy'], {
+      apiBusy: signal(false),
+      error: signal(null)
+    });
 
     await TestBed.configureTestingModule({
       imports: [
@@ -68,7 +76,8 @@ describe('LoginPage', () => {
         provideRouter([]),
         provideHttpClient(),
         provideHttpClientTesting(),
-        { provide: AuthStore, useValue: authStoreSpy }
+        { provide: AuthStore, useValue: authStoreSpy },
+        { provide: AppStore, useValue: mockAppStore }
       ]
     })
     .compileComponents();

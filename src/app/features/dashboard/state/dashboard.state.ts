@@ -59,6 +59,15 @@ export class DashboardState {
       color: '#10b981',
       enabled: false // Coming soon
     },
+    {
+      id: 'users',
+      titleKey: 'dashboard.cards.users.title',
+      descriptionKey: 'dashboard.cards.users.description',
+      icon: 'people_alt',
+      route: 'users',
+      color: '#f59e0b',
+      enabled: false
+    },
   ]);
 
   // Computed values
@@ -69,7 +78,7 @@ export class DashboardState {
     this._availableFeatures().filter(f => f.enabled)
   );
   readonly user = computed(() => this.appStore.user());
-  readonly userName = computed(() => this.appStore.user()?.name || 'User');
+  readonly userName = computed(() => this.appStore.user()?.name || '');
   readonly userRole = computed(() => this.appStore.user()?.role || 'user');
 
   // Actions

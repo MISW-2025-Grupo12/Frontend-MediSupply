@@ -1,13 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of, throwError } from 'rxjs';
 import { AddProduct } from './add-product';
 import { ProductsService } from '../../services/products.service';
 import { LocaleRouteService } from '../../../../core/services/locale-route.service';
+import { ApiClientService } from '../../../../core/services/api-client.service';
 import { Provider } from '../../../../shared/models/provider.model';
 import { Category } from '../../../../shared/models/category.model';
 import { TranslocoTestingModule } from '@ngneat/transloco';
@@ -18,6 +17,7 @@ describe('AddProduct', () => {
   let fixture: ComponentFixture<AddProduct>;
   let productsService: jasmine.SpyObj<ProductsService>;
   let localeRouteService: jasmine.SpyObj<LocaleRouteService>;
+  let apiClientServiceSpy: jasmine.SpyObj<ApiClientService>;
 
   const mockProviders: Provider[] = [
     { id: 1, name: 'Provider 1', email: 'provider1@test.com' },
@@ -32,9 +32,17 @@ describe('AddProduct', () => {
   beforeEach(async () => {
     const productsServiceSpy = jasmine.createSpyObj('ProductsService', ['getProviders', 'getCategories', 'createProduct', 'addProduct']);
     const localeRouteServiceSpy = jasmine.createSpyObj('LocaleRouteService', ['navigateToRoute']);
+    apiClientServiceSpy = jasmine.createSpyObj('ApiClientService', ['get', 'post', 'put', 'patch', 'delete']);
 
     productsServiceSpy.getProviders.and.returnValue(of(mockProviders));
     productsServiceSpy.getCategories.and.returnValue(of(mockCategories));
+
+    // Setup ApiClientService spy to return observables BEFORE TestBed configuration
+    apiClientServiceSpy.post.and.returnValue(of({}));
+    apiClientServiceSpy.get.and.returnValue(of({}));
+    apiClientServiceSpy.put.and.returnValue(of({}));
+    apiClientServiceSpy.patch.and.returnValue(of({}));
+    apiClientServiceSpy.delete.and.returnValue(of({}));
 
     await TestBed.configureTestingModule({
       imports: [
@@ -51,10 +59,9 @@ describe('AddProduct', () => {
       providers: [
         provideZonelessChangeDetection(),
         provideRouter([]),
-        provideHttpClient(),
-        provideHttpClientTesting(),
         { provide: ProductsService, useValue: productsServiceSpy },
-        { provide: LocaleRouteService, useValue: localeRouteServiceSpy }
+        { provide: LocaleRouteService, useValue: localeRouteServiceSpy },
+        { provide: ApiClientService, useValue: apiClientServiceSpy }
       ]
     }).compileComponents();
 
@@ -145,9 +152,11 @@ describe('AddProduct', () => {
     it('should handle provider loading error', () => {
       const error = new Error('API Error');
       productsService.getProviders.and.returnValue(throwError(() => error));
+      spyOn(console, 'error');
       
       component.ngOnInit();
       
+      expect(console.error).toHaveBeenCalled();
       expect(component.providers).toEqual([]);
       expect(component.loading).toBe(false);
     });
@@ -155,9 +164,11 @@ describe('AddProduct', () => {
     it('should handle category loading error', () => {
       const error = new Error('API Error');
       productsService.getCategories.and.returnValue(throwError(() => error));
+      spyOn(console, 'error');
       
       component.ngOnInit();
       
+      expect(console.error).toHaveBeenCalled();
       expect(component.categories).toEqual([]);
       expect(component.loading).toBe(false);
     });

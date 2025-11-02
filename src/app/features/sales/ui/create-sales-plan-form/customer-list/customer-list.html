@@ -1,0 +1,73 @@
+<div *transloco="let t">
+  <mat-card-content class="customers-section">
+    <div class="section-header">
+      <h3 class="section-title">{{ t('addSalesPlan.customers.title') }}</h3>
+      
+      <mat-form-field class="search-field">
+        <mat-label>{{ t('addSalesPlan.customers.search') }}</mat-label>
+        <input 
+          matInput 
+          [value]="searchTerm()"
+          (input)="onSearchChange($any($event.target).value)"
+          [placeholder]="t('addSalesPlan.customers.searchPlaceholder')">
+        <mat-icon matPrefix>search</mat-icon>
+      </mat-form-field>
+    </div>
+  
+  <!-- Customer List -->
+  <div class="customers-list">
+    @for (customer of getCustomersToDisplay(); track customer.id) {
+      <div class="customer-item">
+        <div class="customer-info">
+          <div class="customer-name">
+            <mat-icon class="customer-icon">person</mat-icon>
+            <span>{{ customer.name }}</span>
+          </div>
+          <div class="customer-address">
+            <mat-icon class="address-icon">location_on</mat-icon>
+            <span>{{ customer.address }}</span>
+          </div>
+          @if (isCustomerSelectedForVisit(customer.id)) {
+            <div class="datepicker-container">
+              <mat-form-field class="app-form-field">
+                <mat-label>{{ t('addSalesPlan.scheduleVisit.date') }}</mat-label>
+                <input 
+                  matInput 
+                  [matDatepicker]="picker"
+                  [min]="getMinDateValue()"
+                  [max]="getMaxDateValue()"
+                  #dateInput
+                  (dateChange)="onDateSelected(customer, $event.value)"
+                  required>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker [startAt]="getMinDateValue()"></mat-datepicker>
+              </mat-form-field>
+              <button 
+                mat-icon-button
+                (click)="onCancelDateSelection()"
+                class="cancel-date-button">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          }
+        </div>
+        @if (!isCustomerSelectedForVisit(customer.id)) {
+          <button 
+            mat-stroked-button 
+            class="schedule-button"
+            (click)="onScheduleVisit(customer)">
+            <mat-icon>event</mat-icon>
+            {{ t('addSalesPlan.customers.scheduleVisit') }}
+          </button>
+        }
+      </div>
+    } @empty {
+      <div class="no-customers">
+        <mat-icon>people_outline</mat-icon>
+        <p>{{ searchTerm().trim() ? t('addSalesPlan.customers.noResults') : t('addSalesPlan.customers.noCustomers') }}</p>
+      </div>
+    }
+  </div>
+</mat-card-content>
+</div>
+

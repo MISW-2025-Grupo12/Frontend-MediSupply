@@ -1,0 +1,174 @@
+@use 'sass:color';
+@import '../../../../../styles/colors.scss';
+
+.register-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $bg-color;
+  padding: 2rem;
+  
+  @media (max-width: 640px) {
+    padding: 1rem;
+    align-items: flex-start;
+    padding-top: 2rem;
+  }
+}
+
+.register-container {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  animation: slideUp 0.6s ease-out;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  
+  @media (max-width: 640px) {
+    background: rgba(255, 255, 255, 0.98);
+    max-width: 100%;
+    gap: 1.5rem;
+  }
+}
+
+.logo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  
+  .logo-image {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+    animation: logoFloat 3s ease-in-out infinite;
+    
+    @media (max-width: 640px) {
+      width: 80px;
+      height: 80px;
+    }
+  }
+}
+
+.form-section {
+  width: 100%;
+  text-align: center;
+  
+  .page-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin: 0 0 1.5rem 0;
+    letter-spacing: -0.025em;
+    
+    @media (max-width: 640px) {
+      font-size: 1.75rem;
+    }
+  }
+  
+  .page-subtitle {
+    font-size: 1rem;
+    color: $text-secondary;
+    margin: 0 0 2rem 0;
+    line-height: 1.5;
+  }
+}
+
+.login-section {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  
+  .login-link {
+    color: $primary-color;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    
+    &:hover {
+      color: darken($primary-color, 15%);
+      text-decoration: underline;
+      background-color: rgba($primary-color, 0.05);
+    }
+    
+    &:active {
+      color: darken($primary-color, 25%);
+    }
+    
+    &:focus {
+      outline: 2px solid rgba($primary-color, 0.3);
+      outline-offset: 2px;
+    }
+  }
+}
+
+// Animations
+@keyframes logoFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Enhanced responsive design
+@media (max-width: 480px) {
+  .register-page {
+    min-height: 100dvh;
+    padding: 1rem 0.5rem;
+  }
+  
+  .register-container {
+    gap: 1rem;
+  }
+  
+  .logo-section {
+    margin-bottom: 0.5rem;
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .logo-section .brand-name {
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.8);
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .logo-image {
+    animation: none;
+  }
+  
+  .register-container {
+    animation: none;
+  }
+  
+  .login-section .login-link {
+    transition: none !important;
+  }
+}

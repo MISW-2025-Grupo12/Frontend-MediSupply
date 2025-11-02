@@ -1,8 +1,5 @@
 export const environment = {
   production: true,
-  backendApiUrl: 'placeholder',
-  usersApiUrl: `placeholder`,
-  productsApiUrl: `placeholder`,
-  logisticsApiUrl: `placeholder`,
-  salesApiUrl: `placeholder`
+  baseApiUrl: 'http://localhost:8080',
+  version: '1.1.0',
 };
