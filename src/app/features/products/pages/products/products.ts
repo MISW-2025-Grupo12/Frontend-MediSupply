@@ -29,4 +29,8 @@ export class Products {
   navigateToAddCategory(): void {
     this.localeRouteService.navigateToNestedRoute(['products', 'add-category']);
   }
+
+  navigateToLoadProducts(): void {
+    this.localeRouteService.navigateToNestedRoute(['products', 'load-products']);
+  }
 }

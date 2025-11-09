@@ -27,6 +27,7 @@
     "products": "Products - MediSupply",
     "addProduct": "Add Product - MediSupply",
     "addCategory": "Add Category - MediSupply",
+    "loadProducts": "Bulk Load Products - MediSupply",
     "addUser": "Add User - MediSupply",
     "login": "Login - MediSupply",
     "register": "Register - MediSupply",
@@ -175,6 +176,34 @@
       "minValue": "Value must be greater than 0"
     },
     "categories": {}
+  },
+  "loadProducts": {
+    "title": "Bulk Load Products",
+    "description": "Upload a CSV file to import multiple products at once. Make sure the file has the correct format and structure.",
+    "exampleFile": {
+      "title": "Need an example?",
+      "description": "Download a sample CSV file with the correct format to help you structure your data.",
+      "button": "Download example"
+    },
+    "dropZone": {
+      "text": "Drag and drop the CSV file here to upload it, or click to select the file.",
+      "button": "Upload file"
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "upload": "Upload file"
+    },
+    "errors": {
+      "invalidFileType": "The file must be a CSV file",
+      "fileTooLarge": "The file is too large. Maximum size is 10MB",
+      "noFileSelected": "Please select a file",
+      "uploadFailed": "Error uploading file. Please try again",
+      "serverError": "The server returned an error. Please try again later.",
+      "networkError": "Unable to reach the server. Check your connection and try again."
+    },
+    "success": {
+      "uploadComplete": "File uploaded successfully. Products are being imported."
+    }
   },
   "addUser": {
     "title": "Add User",

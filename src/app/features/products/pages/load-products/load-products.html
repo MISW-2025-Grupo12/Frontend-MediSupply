@@ -1,0 +1,115 @@
+<div class="page-container" *transloco="let t">
+  <div class="page-header">
+    <h1 class="page-title">{{ t('loadProducts.title') }}</h1>
+  </div>
+
+  <div class="page-content">
+    <mat-card class="load-products-card">
+      <mat-card-content>
+        <p class="description">{{ t('loadProducts.description') }}</p>
+
+        <!-- Example File Download Section -->
+        <div class="example-file-section">
+          <div class="example-file-content">
+            <mat-icon class="example-icon">description</mat-icon>
+            <div class="example-file-text">
+              <p class="example-file-title">{{ t('loadProducts.exampleFile.title') }}</p>
+              <p class="example-file-description">{{ t('loadProducts.exampleFile.description') }}</p>
+            </div>
+            <button 
+              mat-stroked-button 
+              type="button"
+              (click)="downloadExampleFile()"
+              class="download-example-button">
+              <mat-icon>download</mat-icon>
+              {{ t('loadProducts.exampleFile.button') }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Drag and Drop Zone -->
+        <div 
+          class="drop-zone"
+          [class.drag-over]="isDragging"
+          [class.has-file]="selectedFile"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave($event)"
+          (drop)="onDrop($event)"
+          (click)="!selectedFile && fileInput.click()">
+          <input
+            #fileInput
+            type="file"
+            accept=".csv"
+            style="display: none"
+            (change)="onFileSelected($event)">
+          
+          <div class="drop-zone-content" *ngIf="!selectedFile">
+            <mat-icon class="upload-icon">cloud_upload</mat-icon>
+            <p class="drop-zone-text">{{ t('loadProducts.dropZone.text') }}</p>
+            <button mat-raised-button color="primary" type="button" class="select-file-button">
+              {{ t('loadProducts.dropZone.button') }}
+            </button>
+          </div>
+
+          <div class="file-selected" *ngIf="selectedFile">
+            <mat-icon class="file-icon">description</mat-icon>
+            <span class="file-name">{{ getFileName() }}</span>
+            <button mat-icon-button type="button" (click)="selectedFile = null; $event.stopPropagation()" class="remove-file-button">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- Error Message -->
+        <div class="error-message" *ngIf="errorMessage || errorDetails">
+          <mat-icon>error</mat-icon>
+          <span *ngIf="errorMessage">{{ t(errorMessage) }}</span>
+          <span *ngIf="errorDetails" class="error-details">{{ errorDetails }}</span>
+        </div>
+
+        <!-- Success Message -->
+        <div class="success-message" *ngIf="successMessage">
+          <mat-icon>check_circle</mat-icon>
+          <span>{{ t(successMessage) }}</span>
+        </div>
+
+        <!-- Upload Progress -->
+        <div class="upload-progress-container" *ngIf="isUploading || loadFileStatus">
+          <mat-progress-bar 
+            [mode]="progressBarMode" 
+            [value]="uploadProgress" 
+            class="upload-progress">
+          </mat-progress-bar>
+          <div class="upload-progress-details" *ngIf="loadFileStatus?.progress">
+            <span class="status-text">{{ loadFileStatus?.status }}</span>
+            <span class="progress-text">
+              {{ loadFileStatus?.progress?.processedLines || 0 }} / {{ loadFileStatus?.progress?.totalLines || 0 }}
+            </span>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions class="card-actions justify-end">
+        <div class="app-form-actions app-form-actions--horizontal">
+          <button 
+            mat-stroked-button 
+            type="button" 
+            (click)="onCancel()" 
+            [disabled]="isUploading"
+            class="app-btn app-btn--secondary">
+            {{ t('loadProducts.actions.cancel') }}
+          </button>
+          <button 
+            mat-raised-button 
+            color="primary" 
+            type="button" 
+            (click)="onUpload()" 
+            [disabled]="!selectedFile || isUploading"
+            class="app-btn app-btn--primary">
+            {{ t('loadProducts.actions.upload') }}
+          </button>
+        </div>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
