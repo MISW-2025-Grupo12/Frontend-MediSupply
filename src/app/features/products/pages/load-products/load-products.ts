@@ -1,4 +1,4 @@
-import { Component, OnDestroy, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatCardModule } from '@angular/material/card';
@@ -28,11 +28,42 @@ import { switchMap } from 'rxjs/operators';
   styleUrl: './load-products.scss'
 })
 export class LoadProducts implements OnDestroy {
-  private localeRouteService = inject(LocaleRouteService);
-  private productsService = inject(ProductsService);
+  private readonly localeRouteService = inject(LocaleRouteService);
+  private readonly productsService = inject(ProductsService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   private pollingSubscription: Subscription | null = null;
-  private readonly pollingInterval = 1000;
+  private readonly pollingIntervalMs = 1000;
+  private navigationTimeoutId: ReturnType<typeof setTimeout> | null = null;
+  private readonly navigationDelayMs = 2000;
+  private readonly terminalStatuses = new Set([
+    'completed',
+    'finished',
+    'success',
+    'done',
+    'failed',
+    'error',
+    'cancelled',
+    'canceled',
+    'fallido',
+    'fallida',
+    'completado',
+    'completada',
+    'terminado',
+    'terminada'
+  ]);
+  private readonly successStatuses = new Set([
+    'completed',
+    'finished',
+    'success',
+    'done',
+    'completado',
+    'completada',
+    'exitoso',
+    'exitosa',
+    'terminado',
+    'terminada'
+  ]);
 
   selectedFile: File | null = null;
   isDragging = false;
@@ -78,56 +109,44 @@ export class LoadProducts implements OnDestroy {
   }
 
   private handleFileSelection(file: File): void {
-    // Validate file type
+    this.stopPolling();
+    this.clearNavigationTimeout();
+
     if (!file.name.toLowerCase().endsWith('.csv')) {
-      this.errorMessage = 'loadProducts.errors.invalidFileType';
-      this.errorDetails = null;
       this.selectedFile = null;
+      this.resetProgressIndicators();
+      this.showError('loadProducts.errors.invalidFileType');
       return;
     }
 
-    // Validate file size (max 10MB)
     if (file.size > 10 * 1024 * 1024) {
-      this.errorMessage = 'loadProducts.errors.fileTooLarge';
-      this.errorDetails = null;
       this.selectedFile = null;
+      this.resetProgressIndicators();
+      this.showError('loadProducts.errors.fileTooLarge');
       return;
     }
 
     this.selectedFile = file;
-    this.errorMessage = null;
-    this.errorDetails = null;
-    this.successMessage = null;
-    this.isProgressDeterminate = false;
+    this.resetProgressIndicators();
+    this.clearFeedback();
   }
 
   onCancel(): void {
     this.selectedFile = null;
-    this.errorMessage = null;
-    this.errorDetails = null;
-    this.successMessage = null;
-    this.loadFileStatus = null;
+    this.clearNavigationTimeout();
     this.stopPolling();
-    this.isUploading = false;
-    this.uploadProgress = 0;
-    this.isProgressDeterminate = false;
+    this.resetProgressIndicators();
+    this.clearFeedback();
     this.localeRouteService.navigateToRoute('products');
   }
 
   onUpload(): void {
     if (!this.selectedFile) {
-      this.errorMessage = 'loadProducts.errors.noFileSelected';
+      this.showError('loadProducts.errors.noFileSelected');
       return;
     }
 
-    this.isUploading = true;
-    this.uploadProgress = 0;
-    this.isProgressDeterminate = false;
-    this.errorMessage = null;
-    this.errorDetails = null;
-    this.successMessage = null;
-    this.loadFileStatus = null;
-
+    this.beginUpload();
     this.productsService.addProductsFromFile(this.selectedFile).subscribe({
       next: (job: LoadFileJob) => {
         this.startPolling(job.jobId);
@@ -176,11 +195,12 @@ export class LoadProducts implements OnDestroy {
 
   ngOnDestroy(): void {
     this.stopPolling();
+    this.clearNavigationTimeout();
   }
 
   private startPolling(jobId: string): void {
     this.stopPolling();
-    this.pollingSubscription = timer(0, this.pollingInterval)
+    this.pollingSubscription = timer(0, this.pollingIntervalMs)
       .pipe(switchMap(() => this.productsService.getLoadFileStatus(jobId)))
       .subscribe({
         next: (status) => this.handleStatusUpdate(status),
@@ -206,30 +226,20 @@ export class LoadProducts implements OnDestroy {
       this.uploadProgress = computedProgress;
     }
 
-    if (this.isTerminalStatus(status.status)) {
-      this.isUploading = false;
-      this.stopPolling();
-
-      if (this.isSuccessStatus(status.status)) {
-        if (!this.isProgressDeterminate || this.uploadProgress < 100) {
-          this.uploadProgress = 100;
-          this.isProgressDeterminate = true;
-        }
-        this.successMessage = 'loadProducts.success.uploadComplete';
-        this.errorMessage = null;
-        this.errorDetails = null;
-        setTimeout(() => {
-          this.localeRouteService.navigateToRoute('products');
-        }, 2000);
-      } else {
-        this.errorMessage = 'loadProducts.errors.uploadFailed';
-        this.errorDetails = null;
-        this.successMessage = null;
-        if (!this.isProgressDeterminate) {
-          this.uploadProgress = 0;
-        }
-      }
+    if (!this.isTerminalStatus(status.status)) {
+      return;
     }
+
+    this.stopPolling();
+    this.isUploading = false;
+
+    if (this.isSuccessStatus(status.status)) {
+      this.finalizeUploadWithSuccess();
+    } else {
+      this.finalizeUploadWithFailure();
+    }
+
+    this.cdr.markForCheck();
   }
 
   private isTerminalStatus(status: string | undefined): boolean {
@@ -237,23 +247,8 @@ export class LoadProducts implements OnDestroy {
       return false;
     }
 
-    const normalized = status.toLowerCase();
-    return [
-      'completed',
-      'finished',
-      'success',
-      'done',
-      'failed',
-      'error',
-      'cancelled',
-      'canceled',
-      'fallido',
-      'fallida',
-      'completado',
-      'completada',
-      'terminado',
-      'terminada'
-    ].includes(normalized);
+    const normalized = status.trim().toLowerCase();
+    return this.terminalStatuses.has(normalized);
   }
 
   private isSuccessStatus(status: string | undefined): boolean {
@@ -261,46 +256,32 @@ export class LoadProducts implements OnDestroy {
       return false;
     }
 
-    const normalized = status.toLowerCase();
-    return [
-      'completed',
-      'finished',
-      'success',
-      'done',
-      'completado',
-      'completada',
-      'exitoso',
-      'exitosa',
-      'terminado',
-      'terminada'
-    ].includes(normalized);
+    const normalized = status.trim().toLowerCase();
+    return this.successStatuses.has(normalized);
   }
 
   private handleUploadError(error: unknown): void {
-    this.isUploading = false;
-    this.uploadProgress = 0;
-    this.isProgressDeterminate = false;
-    this.loadFileStatus = null;
-    this.successMessage = null;
+    this.stopPolling();
+    this.clearNavigationTimeout();
+    this.resetProgressIndicators();
 
     const httpError = this.extractHttpError(error);
 
     if (httpError) {
-      if (httpError.status >= 500) {
-        this.errorMessage = 'loadProducts.errors.serverError';
-      } else if (httpError.status === 0) {
-        this.errorMessage = 'loadProducts.errors.networkError';
-      } else {
-        this.errorMessage = 'loadProducts.errors.uploadFailed';
-      }
+      const details = this.buildHttpErrorDetails(httpError);
+      const messageKey =
+        httpError.status >= 500
+          ? 'loadProducts.errors.serverError'
+          : httpError.status === 0
+            ? 'loadProducts.errors.networkError'
+            : 'loadProducts.errors.uploadFailed';
 
-      this.errorDetails = this.buildHttpErrorDetails(httpError);
+      this.showError(messageKey, details);
     } else {
-      this.errorMessage = 'loadProducts.errors.uploadFailed';
-      this.errorDetails = null;
+      this.showError('loadProducts.errors.uploadFailed', this.extractGenericErrorDetails(error));
     }
 
-    this.stopPolling();
+    this.cdr.markForCheck();
   }
 
   private computeProgressPercentage(status: LoadFileStatus | null): number | null {
@@ -319,6 +300,92 @@ export class LoadProducts implements OnDestroy {
     if (totalLines > 0 && processedLines >= 0) {
       const computed = (processedLines / totalLines) * 100;
       return Math.max(0, Math.min(100, computed));
+    }
+
+    return null;
+  }
+
+  private beginUpload(): void {
+    this.stopPolling();
+    this.clearNavigationTimeout();
+    this.isUploading = true;
+    this.uploadProgress = 0;
+    this.isProgressDeterminate = false;
+    this.loadFileStatus = null;
+    this.clearFeedback();
+  }
+
+  private clearFeedback(): void {
+    this.errorMessage = null;
+    this.errorDetails = null;
+    this.successMessage = null;
+  }
+
+  private showError(messageKey: string, details?: string | null): void {
+    this.errorMessage = messageKey;
+    this.errorDetails = details ?? null;
+    this.successMessage = null;
+  }
+
+  private showSuccess(messageKey: string): void {
+    this.successMessage = messageKey;
+    this.errorMessage = null;
+    this.errorDetails = null;
+  }
+
+  private resetProgressIndicators(options?: { keepStatus?: boolean }): void {
+    const keepStatus = options?.keepStatus ?? false;
+    this.isUploading = false;
+    this.uploadProgress = 0;
+    this.isProgressDeterminate = false;
+    if (!keepStatus) {
+      this.loadFileStatus = null;
+    }
+  }
+
+  private clearNavigationTimeout(): void {
+    if (this.navigationTimeoutId !== null) {
+      clearTimeout(this.navigationTimeoutId);
+      this.navigationTimeoutId = null;
+    }
+  }
+
+  private scheduleNavigationAfterSuccess(): void {
+    this.clearNavigationTimeout();
+    this.navigationTimeoutId = setTimeout(() => {
+      this.navigationTimeoutId = null;
+      this.localeRouteService.navigateToRoute('products');
+    }, this.navigationDelayMs);
+  }
+
+  private finalizeUploadWithSuccess(): void {
+    if (!this.isProgressDeterminate || this.uploadProgress < 100) {
+      this.uploadProgress = 100;
+      this.isProgressDeterminate = true;
+    }
+    this.showSuccess('loadProducts.success.uploadComplete');
+    this.scheduleNavigationAfterSuccess();
+  }
+
+  private finalizeUploadWithFailure(): void {
+    this.showError('loadProducts.errors.uploadFailed');
+    if (!this.isProgressDeterminate) {
+      this.uploadProgress = 0;
+    }
+    this.clearNavigationTimeout();
+  }
+
+  private extractGenericErrorDetails(error: unknown): string | null {
+    if (!error) {
+      return null;
+    }
+
+    if (typeof error === 'string') {
+      return error;
+    }
+
+    if (error instanceof Error && error.message && !error.message.startsWith('Http failure response')) {
+      return error.message;
     }
 
     return null;
