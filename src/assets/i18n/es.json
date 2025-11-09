@@ -28,6 +28,7 @@
     "products": "Productos - MediSupply",
     "addProduct": "Añadir Producto - MediSupply",
     "addCategory": "Añadir Categoría - MediSupply",
+    "loadProducts": "Carga masiva de productos - MediSupply",
     "addUser": "Añadir Usuario - MediSupply",
     "login": "Iniciar Sesión - MediSupply",
     "register": "Registrarse - MediSupply",
@@ -175,6 +176,34 @@
       "create": "Añadir Categoría"
     },
     "categories": {}
+  },
+  "loadProducts": {
+    "title": "Carga masiva de productos",
+    "description": "Sube un archivo CSV para importar varios productos a la vez. Asegurate de que el archivo tenga el formato y la estructura correcta.",
+    "exampleFile": {
+      "title": "¿Necesitas un ejemplo?",
+      "description": "Descarga un archivo CSV de ejemplo con el formato correcto para ayudarte a estructurar tus datos.",
+      "button": "Descargar ejemplo"
+    },
+    "dropZone": {
+      "text": "Arrastra y suelta el archivo CSV aquí para subirlo. o haz clic para seleccionar el archivo.",
+      "button": "Subir archivo"
+    },
+    "actions": {
+      "cancel": "Cancelar",
+      "upload": "Subir archivo"
+    },
+    "errors": {
+      "invalidFileType": "El archivo debe ser un archivo CSV",
+      "fileTooLarge": "El archivo es demasiado grande. El tamaño máximo es 10MB",
+      "noFileSelected": "Por favor selecciona un archivo",
+      "uploadFailed": "Error al subir el archivo. Por favor intenta de nuevo",
+      "serverError": "El servidor devolvió un error. Inténtalo de nuevo más tarde.",
+      "networkError": "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo nuevamente."
+    },
+    "success": {
+      "uploadComplete": "Archivo subido exitosamente. Los productos se están importando."
+    }
   },
   "addUser": {
     "title": "Añadir Usuario",
