@@ -5,6 +5,7 @@
   },
   "header": {
     "products": "Productos",
+    "logistic": "Logística",
     "clients": "Clientes",
     "sales": "Ventas",
     "users": "Usuarios",
@@ -16,6 +17,7 @@
   },
   "routes": {
     "products": "productos",
+    "logistic": "logistica",
     "clients": "clientes",
     "sales": "ventas",
     "users": "usuarios",
@@ -33,6 +35,7 @@
     "login": "Iniciar Sesión - MediSupply",
     "register": "Registrarse - MediSupply",
     "dashboard": "Panel de Control - MediSupply",
+    "logistic": "Logística - MediSupply",
     "home": "MediSupply",
     "sales": "Ventas - MediSupply",
     "users": "Usuarios - MediSupply",
@@ -107,6 +110,10 @@
         "title": "Productos",
         "description": "Gestiona tu inventario de productos, añade nuevos artículos y controla niveles de stock"
       },
+      "logistic": {
+        "title": "Logística",
+        "description": "Planifica la distribución, rastrea entregas y optimiza las operaciones de la cadena de suministro"
+      },
       "clients": {
         "title": "Clientes",
         "description": "Visualiza y gestiona información de clientes, pedidos e historial"
@@ -126,6 +133,55 @@
       "users": {
         "title": "Usuarios",
         "description": "Gestiona cuentas de usuario, roles y permisos para acceso al sistema"
+      }
+    }
+  },
+  "logistic": {
+    "title": "Logística",
+    "description": "Monitorea entregas, gestiona proveedores y mantén tu cadena de suministro en movimiento.",
+    "placeholder": "Las herramientas de logística estarán disponibles próximamente.",
+    "actions": {
+      "createRoute": "Crear ruta",
+      "addToRoute": "Añadir a la ruta",
+      "removeFromRoute": "Quitar de la ruta"
+    },
+    "addRoute": {
+      "subtitle": "Registra una nueva ruta de entrega para organizar asignaciones y planificación de despachos.",
+      "fields": {
+        "date": "Fecha de la ruta",
+        "driver": "Identificador del conductor"
+      },
+      "selectedDeliveries": "Entregas seleccionadas para esta ruta",
+      "noDeliveriesSelected": "Selecciona entregas de la lista inferior para agregarlas a esta ruta.",
+      "selectedCount": "Entregas añadidas a esta ruta: {{ count }}"
+    },
+    "states": {
+      "loading": "Cargando entregas...",
+      "error": "No pudimos cargar las entregas."
+    },
+    "unassigned": {
+      "sectionTitle": "Entregas sin asignar",
+      "sectionDescription": "Revisa las entregas pendientes y asígnalas a tu equipo logístico para mantener los pedidos en movimiento.",
+      "title": "Entregas en espera de asignación",
+      "subtitle": "Asigna estas entregas a tus transportistas o actualiza su estado para mantener la cadena de suministro.",
+      "count": "{{ count }} pendientes",
+      "empty": "Todas las entregas están asignadas. ¡Buen trabajo!",
+      "labels": {
+        "deliveryId": "ID de entrega",
+        "deliveryAddress": "Dirección de entrega",
+        "deliveryDate": "Fecha de entrega",
+        "orderId": "ID del pedido",
+        "orderTotal": "Total del pedido",
+        "customer": "Cliente",
+        "customerPhone": "Teléfono",
+        "items": "Artículos"
+      },
+      "status": {
+        "en_ruta": "En ruta",
+        "pendiente": "Pendiente",
+        "entregado": "Entregado",
+        "preparando": "Preparando",
+        "unknown": "Desconocido"
       }
     }
   },

@@ -1,0 +1,95 @@
+<div class="page-container" *transloco="let t">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">{{ t('logistic.actions.createRoute') }}</h1>
+      <p class="page-subtitle">
+        {{ t('logistic.addRoute.subtitle') }}
+      </p>
+    </div>
+
+    <a class="page-action-button" routerLink="../">
+      {{ t('common.back') }}
+    </a>
+  </div>
+
+  <div class="page-content">
+    <form class="route-form" [formGroup]="routeForm" (ngSubmit)="onSubmit()">
+      <mat-card class="route-form-card">
+        <mat-card-content>
+          <div class="form-grid">
+            <mat-form-field class="form-field">
+              <mat-label>{{ t('logistic.addRoute.fields.date') }}</mat-label>
+              <input matInput [matDatepicker]="routeDatePicker" formControlName="date" />
+              <mat-datepicker-toggle matIconSuffix [for]="routeDatePicker"></mat-datepicker-toggle>
+              <mat-datepicker #routeDatePicker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="form-field">
+              <mat-label>{{ t('logistic.addRoute.fields.driver') }}</mat-label>
+              <input matInput type="text" formControlName="driverId" placeholder="DR-001" />
+            </mat-form-field>
+          </div>
+
+          <div class="form-summary">
+            <span class="form-summary__label">{{ t('logistic.addRoute.selectedDeliveries') }}</span>
+            @if (selectedDeliveriesCount()) {
+              <ul class="form-summary__list">
+                @for (delivery of selectedDeliveries(); track delivery.id) {
+                  <li class="form-summary__item">
+                    {{ delivery.id }} — {{ delivery.direccion }}
+                  </li>
+                }
+              </ul>
+            } @else {
+              <p class="form-summary__empty">
+                {{ t('logistic.addRoute.noDeliveriesSelected') }}
+              </p>
+            }
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions class="form-actions">
+          <button type="submit" class="page-action-button" [disabled]="routeForm.invalid">
+            {{ t('logistic.actions.createRoute') }}
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </form>
+
+    <section class="deliveries-section">
+      <header class="deliveries-section__header">
+        <h2 class="deliveries-section__title">
+          {{ t('logistic.unassigned.sectionTitle') }}
+        </h2>
+        <p class="deliveries-section__description">
+          {{ t('logistic.unassigned.sectionDescription') }}
+        </p>
+      </header>
+
+      <div class="deliveries-section__body">
+        @if (isLoading()) {
+          <div class="deliveries-section__state">
+            {{ t('logistic.states.loading') }}
+          </div>
+        } @else if (error()) {
+          <div class="deliveries-section__state deliveries-section__state--error">
+            {{ t('logistic.states.error') }}
+            <span class="deliveries-section__state-message">{{ error() }}</span>
+          </div>
+        } @else {
+          <app-unassigned-deliveries
+            [deliveries]="deliveries()"
+            [selectable]="true"
+            [selectedDeliveryIds]="selectedDeliveryIds()"
+            (deliveryToggled)="onDeliveryToggled($event)" />
+        }
+      </div>
+
+      <footer class="deliveries-section__footer">
+        <span class="deliveries-section__summary">
+          {{ t('logistic.addRoute.selectedCount', { count: selectedDeliveriesCount() }) }}
+        </span>
+      </footer>
+    </section>
+  </div>
+</div>
