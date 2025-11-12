@@ -5,6 +5,7 @@
   },
   "header": {
     "products": "Products",
+    "logistic": "Logistics",
     "clients": "Clients",
     "sales": "Sales",
     "users": "Users",
@@ -15,6 +16,7 @@
   },
   "routes": {
     "products": "products",
+    "logistic": "logistic",
     "clients": "clients",
     "sales": "sales",
     "users": "users",
@@ -32,6 +34,7 @@
     "login": "Login - MediSupply",
     "register": "Register - MediSupply",
     "dashboard": "Dashboard - MediSupply",
+    "logistic": "Logistics - MediSupply",
     "home": "MediSupply",
     "sales": "Sales - MediSupply",
     "users": "Users - MediSupply",
@@ -106,6 +109,10 @@
         "title": "Products",
         "description": "Manage your product inventory, add new items, and track stock levels"
       },
+      "logistic": {
+        "title": "Logistics",
+        "description": "Plan distribution, track deliveries, and optimize supply chain operations"
+      },
       "clients": {
         "title": "Clients",
         "description": "View and manage customer information, orders, and history"
@@ -125,6 +132,117 @@
       "users": {
         "title": "Users",
         "description": "Manage user accounts, roles, and permissions for system access"
+      }
+    }
+  },
+  "logistic": {
+    "title": "Logistics",
+    "description": "Monitor deliveries, manage providers, and keep your supply chain moving smoothly.",
+    "placeholder": "Logistics tools are coming soon. Stay tuned!",
+    "actions": {
+      "createRoute": "Create route",
+      "addToRoute": "Add to route",
+      "removeFromRoute": "Remove from route",
+      "calculateRoute": "Calculate routes"
+    },
+    "routes": {
+      "sectionTitle": "Scheduled routes",
+      "sectionDescription": "Review the routes you have already created and open one to see its full assignment details.",
+      "loading": "Loading routes...",
+      "empty": "No routes created yet. Create a new route to start planning deliveries.",
+      "driver": "Driver",
+      "warehouse": "Warehouse",
+      "deliveries": "Deliveries"
+    },
+    "addRoute": {
+      "subtitle": "Register a new delivery route to organize assignments and dispatch planning.",
+      "fields": {
+        "date": "Route date",
+        "driver": "Driver ID",
+        "driverPlaceholder": "Select a delivery driver",
+        "loadingDrivers": "Loading delivery drivers...",
+        "noDrivers": "No delivery drivers available"
+      },
+      "selectedDeliveries": "Deliveries selected for this route",
+      "noDeliveriesSelected": "Select deliveries from the list below to add them to this route.",
+      "selectedCount": "Deliveries added to this route: {{ count }}",
+      "map": {
+        "title": "Delivery map",
+        "description": "Visualize the selected delivery points directly on Google Maps.",
+        "noDeliveries": "Select deliveries to display their locations on the map.",
+        "missingKey": "Map preview unavailable. Configure the Google Maps API key to visualize routes.",
+        "loading": "Loading map...",
+        "loadError": "We couldn't load Google Maps. Try reloading the page."
+      }
+    },
+    "states": {
+      "loading": "Loading deliveries...",
+      "error": "We couldn't load the deliveries."
+    },
+    "unassigned": {
+      "sectionTitle": "Unassigned deliveries",
+      "sectionDescription": "Review pending deliveries and assign them to your logistics team to keep orders moving.",
+      "title": "Deliveries awaiting assignment",
+      "subtitle": "Assign these deliveries to your couriers or update their status to keep the supply chain on track.",
+      "count": "{{ count }} pending",
+      "empty": "All deliveries are assigned. Great job!",
+      "labels": {
+        "deliveryId": "Delivery ID",
+        "deliveryAddress": "Delivery address",
+        "deliveryDate": "Delivery date",
+        "orderId": "Order ID",
+        "orderTotal": "Order total",
+        "customer": "Customer",
+        "customerPhone": "Phone number",
+        "items": "Items"
+      },
+      "status": {
+        "en_ruta": "In transit",
+        "pendiente": "Pending",
+        "entregado": "Delivered",
+        "preparando": "Preparing",
+        "unknown": "Unknown"
+      }
+    },
+    "routeDetail": {
+      "loading": "Loading route details...",
+      "notFound": "We couldn't find the selected route.",
+      "error": "We couldn't load the route details.",
+      "header": {
+        "title": "Route #{{ id }}",
+        "subtitle": "Scheduled for {{ date }}",
+        "defaultTitle": "Route detail"
+      },
+      "summary": {
+        "title": "Route overview",
+        "description": "Check the essential information about this route assignment.",
+        "routeId": "Route ID",
+        "date": "Date",
+        "driver": "Driver",
+        "warehouse": "Warehouse",
+        "deliveries": "Deliveries"
+      },
+      "map": {
+        "title": "Route map",
+        "description": "Visualize the warehouse origin and each delivery point in the assigned order.",
+        "computing": "Generating the route preview...",
+        "missingKey": "Map preview unavailable. Configure the Google Maps API key to see the full route.",
+        "loading": "Loading map...",
+        "empty": "No deliveries assigned to this route yet.",
+        "missingWarehouseLocation": "We couldn't determine the warehouse location. The route line may be incomplete.",
+        "missingLocations": "We couldn't resolve the delivery locations. The map only shows available points.",
+        "partialLocations": "Some deliveries are missing location data, so the route line may be incomplete.",
+        "unableToBuildPath": "We couldn't build the route path. Try reloading the page."
+      },
+      "deliveries": {
+        "title": "Deliveries in this route",
+        "description": "This route includes {{ count }} deliveries.",
+        "empty": "There are no deliveries assigned to this route.",
+        "address": "Address",
+        "deliveryDate": "Delivery date",
+        "orderId": "Order",
+        "customer": "Customer",
+        "products": "{{ count }} items"
       }
     }
   },

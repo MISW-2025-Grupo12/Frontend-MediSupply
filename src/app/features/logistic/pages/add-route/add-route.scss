@@ -1,0 +1,237 @@
+@use 'sass:color';
+@import '../../../../../styles/page.scss';
+@import '../../../../../styles/colors.scss';
+
+.page-header__title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  @media (max-width: 640px) {
+    align-items: center;
+    text-align: center;
+  }
+}
+
+.page-header__title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  @media (max-width: 640px) {
+    justify-content: center;
+  }
+}
+
+.page-back-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  border: 1px solid $gray-300;
+  color: $primary-color;
+  background-color: white;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+
+  mat-icon {
+    font-size: 1.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  &:hover,
+  &:focus-visible {
+    background-color: color.scale($primary-color, $lightness: 45%);
+    border-color: $primary-color;
+    color: $primary-color;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px color.scale($primary-color, $lightness: 55%);
+  }
+}
+
+.page-content {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 2rem;
+  align-items: start;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.route-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.page-subtitle {
+  margin-top: 0.75rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (max-width: 640px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.route-form-card {
+  display: flex;
+  flex-direction: column;
+
+  .mat-mdc-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .mat-mdc-card-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem 1.5rem 1.5rem;
+  }
+}
+
+.form-field {
+  width: 100%;
+
+  .mat-mdc-text-field-wrapper,
+  .mat-mdc-form-field-focus-overlay {
+    background-color: #fff !important;
+  }
+}
+
+.delivery-map {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.delivery-map__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.delivery-map__title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: $gray-800;
+}
+
+.delivery-map__description {
+  margin: 0;
+  font-size: 0.95rem;
+  color: $gray-600;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+
+  .page-action-button--secondary {
+    background-color: transparent;
+    color: $primary-color;
+    border: 1px solid $primary-color;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 999px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background-color: color.scale($primary-color, $lightness: 45%);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.deliveries-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.deliveries-section__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.deliveries-section__title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: $gray-900;
+}
+
+.deliveries-section__description {
+  margin: 0;
+  color: $gray-600;
+  max-width: 720px;
+}
+
+.deliveries-section__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.deliveries-section__footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.deliveries-section__summary {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: $gray-700;
+}
+
+.deliveries-section__state {
+  padding: 1.75rem;
+  text-align: center;
+  border: 1px dashed $gray-200;
+  border-radius: 0.75rem;
+  background-color: $gray-50;
+  color: $gray-600;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.deliveries-section__state--error {
+  border-color: color.scale($error-color, $lightness: 20%);
+  background-color: color.scale($error-color, $lightness: 55%);
+  color: color.scale($error-color, $lightness: -25%);
+}
+
+.deliveries-section__state-message {
+  font-size: 0.875rem;
+  color: inherit;
+}
+

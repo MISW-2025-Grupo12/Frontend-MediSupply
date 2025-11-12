@@ -1,0 +1,92 @@
+<section class="unassigned-deliveries" *transloco="let t">
+  <header class="unassigned-deliveries__header">
+    <span class="unassigned-deliveries__badge">
+      {{ t('logistic.unassigned.count', { count: totalDeliveries() }) }}
+    </span>
+  </header>
+
+  <div class="unassigned-deliveries__list" role="list">
+    @for (delivery of deliveries(); track delivery.id) {
+      <article
+        class="delivery-card"
+        role="listitem"
+        [class.delivery-card--selected]="selectable() && isDeliverySelected(delivery)">
+        <header class="delivery-card__header">
+          <span class="delivery-card__status" [attr.data-status]="statusKey(delivery.order.status)">
+            {{ t('logistic.unassigned.status.' + statusKey(delivery.order.status), { defaultValue: delivery.order.status }) }}
+          </span>
+
+          @if (selectable()) {
+            <button
+              type="button"
+              class="delivery-card__action-button"
+              [class.delivery-card__action-button--selected]="isDeliverySelected(delivery)"
+              (click)="toggleDelivery(delivery)">
+              {{ isDeliverySelected(delivery) ? t('logistic.actions.removeFromRoute') : t('logistic.actions.addToRoute') }}
+            </button>
+          }
+        </header>
+
+        <div class="delivery-card__grid">
+          <div class="delivery-card__item">
+            <span class="delivery-card__label">
+              {{ t('logistic.unassigned.labels.deliveryAddress') }}
+            </span>
+            <span class="delivery-card__value">
+              {{ delivery.address }}
+            </span>
+          </div>
+
+          <div class="delivery-card__item">
+            <span class="delivery-card__label">
+              {{ t('logistic.unassigned.labels.deliveryDate') }}
+            </span>
+            <span class="delivery-card__value">
+              {{ delivery.deliveryDate | date: 'dd MMM yyyy' }}
+            </span>
+          </div>
+
+          <div class="delivery-card__item">
+            <span class="delivery-card__label">
+              {{ t('logistic.unassigned.labels.orderTotal') }}
+            </span>
+            <span class="delivery-card__value">
+              {{ delivery.order.total | currency:'COP':'symbol':'1.0-0' }}
+            </span>
+          </div>
+
+          <div class="delivery-card__item">
+            <span class="delivery-card__label">
+              {{ t('logistic.unassigned.labels.customer') }}
+            </span>
+            <span class="delivery-card__value">
+              {{ delivery.order.customer.name }}
+            </span>
+          </div>
+
+          <div class="delivery-card__item">
+            <span class="delivery-card__label">
+              {{ t('logistic.unassigned.labels.customerPhone') }}
+            </span>
+            <span class="delivery-card__value">
+              {{ delivery.order.customer.phone }}
+            </span>
+          </div>
+
+          <div class="delivery-card__item">
+            <span class="delivery-card__label">
+              {{ t('logistic.unassigned.labels.items') }}
+            </span>
+            <span class="delivery-card__value">
+              {{ delivery.order.products.length }}
+            </span>
+          </div>
+        </div>
+      </article>
+    } @empty {
+      <div class="unassigned-deliveries__empty">
+        {{ t('logistic.unassigned.empty') }}
+      </div>
+    }
+  </div>
+</section>

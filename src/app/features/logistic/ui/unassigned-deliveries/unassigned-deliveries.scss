@@ -1,0 +1,182 @@
+@use 'sass:color';
+@import '../../../../../styles/colors.scss';
+
+.unassigned-deliveries {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.75rem;
+  background-color: $white;
+  border-radius: 1rem;
+  box-shadow: 0 20px 45px rgba($gray-900, 0.08);
+}
+
+.unassigned-deliveries__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.unassigned-deliveries__title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: $gray-900;
+}
+
+.unassigned-deliveries__subtitle {
+  margin: 0.25rem 0 0;
+  color: $gray-600;
+  max-width: 38rem;
+}
+
+.unassigned-deliveries__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  background-color: color.scale($primary-color, $lightness: 60%);
+  color: color.scale($primary-color, $lightness: -20%);
+  font-weight: 600;
+  min-width: 3.5rem;
+}
+
+.unassigned-deliveries__list {
+  display: grid;
+  gap: 1rem;
+}
+
+.delivery-card {
+  border: 1px solid $gray-100;
+  border-radius: 0.875rem;
+  padding: 1.25rem;
+  background-color: $gray-50;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  &--selected {
+    border-color: color.scale($primary-color, $lightness: -5%);
+    background-color: color.scale($primary-color, $lightness: 60%);
+    box-shadow: 0 10px 30px rgba($primary-color, 0.18);
+  }
+}
+
+.delivery-card__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.delivery-card__id {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.delivery-card__label {
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: $gray-500;
+}
+
+.delivery-card__value {
+  font-size: 1rem;
+  color: $gray-900;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.delivery-card__action-button {
+  border: 1px solid color.scale($primary-color, $lightness: 5%);
+  background-color: $white;
+  color: color.scale($primary-color, $lightness: -15%);
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover,
+  &:focus-visible {
+    background-color: color.scale($primary-color, $lightness: 40%);
+    color: color.scale($primary-color, $lightness: -25%);
+    box-shadow: 0 6px 16px rgba($primary-color, 0.25);
+    outline: none;
+  }
+
+  &--selected {
+    background-color: color.scale($primary-color, $lightness: -10%);
+    color: $white;
+    border-color: color.scale($primary-color, $lightness: -15%);
+  }
+}
+
+.delivery-card__status {
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  background-color: $gray-200;
+  color: $gray-700;
+
+  &[data-status='en_ruta'],
+  &[data-status='en-ruta'] {
+    background-color: color.scale($info-color, $lightness: 40%);
+    color: color.scale($info-color, $lightness: -20%);
+  }
+
+  &[data-status='pendiente'] {
+    background-color: color.scale($warning-color, $lightness: 40%);
+    color: color.scale($warning-color, $lightness: -20%);
+  }
+
+  &[data-status='entregado'] {
+    background-color: color.scale($success-color, $lightness: 40%);
+    color: color.scale($success-color, $lightness: -20%);
+  }
+
+  &[data-status='preparando'] {
+    background-color: color.scale($primary-color, $lightness: 40%);
+    color: color.scale($primary-color, $lightness: -20%);
+  }
+}
+
+.delivery-card__grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.delivery-card__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.unassigned-deliveries__empty {
+  padding: 2rem;
+  text-align: center;
+  border: 1px dashed $gray-200;
+  border-radius: 0.75rem;
+  background-color: $gray-50;
+  color: $gray-600;
+}
+
+@media (max-width: 768px) {
+  .unassigned-deliveries {
+    padding: 1.25rem;
+  }
+
+  .delivery-card {
+    padding: 1rem;
+  }
+}
+

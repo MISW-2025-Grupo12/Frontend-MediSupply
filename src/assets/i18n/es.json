@@ -5,6 +5,7 @@
   },
   "header": {
     "products": "Productos",
+    "logistic": "Logística",
     "clients": "Clientes",
     "sales": "Ventas",
     "users": "Usuarios",
@@ -16,6 +17,7 @@
   },
   "routes": {
     "products": "productos",
+    "logistic": "logistica",
     "clients": "clientes",
     "sales": "ventas",
     "users": "usuarios",
@@ -33,6 +35,7 @@
     "login": "Iniciar Sesión - MediSupply",
     "register": "Registrarse - MediSupply",
     "dashboard": "Panel de Control - MediSupply",
+    "logistic": "Logística - MediSupply",
     "home": "MediSupply",
     "sales": "Ventas - MediSupply",
     "users": "Usuarios - MediSupply",
@@ -107,6 +110,10 @@
         "title": "Productos",
         "description": "Gestiona tu inventario de productos, añade nuevos artículos y controla niveles de stock"
       },
+      "logistic": {
+        "title": "Logística",
+        "description": "Planifica la distribución, rastrea entregas y optimiza las operaciones de la cadena de suministro"
+      },
       "clients": {
         "title": "Clientes",
         "description": "Visualiza y gestiona información de clientes, pedidos e historial"
@@ -126,6 +133,117 @@
       "users": {
         "title": "Usuarios",
         "description": "Gestiona cuentas de usuario, roles y permisos para acceso al sistema"
+      }
+    }
+  },
+  "logistic": {
+    "title": "Logística",
+    "description": "Monitorea entregas, gestiona proveedores y mantén tu cadena de suministro en movimiento.",
+    "placeholder": "Las herramientas de logística estarán disponibles próximamente.",
+    "actions": {
+      "createRoute": "Crear ruta",
+      "addToRoute": "Añadir a la ruta",
+      "removeFromRoute": "Quitar de la ruta",
+      "calculateRoute": "Calcular rutas"
+    },
+    "routes": {
+      "sectionTitle": "Rutas programadas",
+      "sectionDescription": "Consulta las rutas que ya creaste y abre una para ver los detalles completos de sus asignaciones.",
+      "loading": "Cargando rutas...",
+      "empty": "Aún no hay rutas creadas. Crea una nueva ruta para comenzar a planificar entregas.",
+      "driver": "Conductor",
+      "warehouse": "Bodega",
+      "deliveries": "Entregas"
+    },
+    "addRoute": {
+      "subtitle": "Registra una nueva ruta de entrega para organizar asignaciones y planificación de despachos.",
+      "fields": {
+        "date": "Fecha de la ruta",
+        "driver": "Identificador del conductor",
+        "driverPlaceholder": "Selecciona un conductor de entregas",
+        "loadingDrivers": "Cargando conductores de entrega...",
+        "noDrivers": "No hay conductores de entrega disponibles"
+      },
+      "selectedDeliveries": "Entregas seleccionadas para esta ruta",
+      "noDeliveriesSelected": "Selecciona entregas de la lista inferior para agregarlas a esta ruta.",
+      "selectedCount": "Entregas añadidas a esta ruta: {{ count }}",
+      "map": {
+        "title": "Mapa de entregas",
+        "description": "Visualiza los puntos de entrega seleccionados directamente en Google Maps.",
+        "noDeliveries": "Selecciona entregas para mostrar sus ubicaciones en el mapa.",
+        "missingKey": "Mapa no disponible. Configura la clave de Google Maps para visualizar las rutas.",
+        "loading": "Cargando mapa...",
+        "loadError": "No pudimos cargar Google Maps. Intenta recargar la página."
+      }
+    },
+    "states": {
+      "loading": "Cargando entregas...",
+      "error": "No pudimos cargar las entregas."
+    },
+    "unassigned": {
+      "sectionTitle": "Entregas sin asignar",
+      "sectionDescription": "Revisa las entregas pendientes y asígnalas a tu equipo logístico para mantener los pedidos en movimiento.",
+      "title": "Entregas en espera de asignación",
+      "subtitle": "Asigna estas entregas a tus transportistas o actualiza su estado para mantener la cadena de suministro.",
+      "count": "{{ count }} pendientes",
+      "empty": "Todas las entregas están asignadas. ¡Buen trabajo!",
+      "labels": {
+        "deliveryId": "ID de entrega",
+        "deliveryAddress": "Dirección de entrega",
+        "deliveryDate": "Fecha de entrega",
+        "orderId": "ID del pedido",
+        "orderTotal": "Total del pedido",
+        "customer": "Cliente",
+        "customerPhone": "Teléfono",
+        "items": "Artículos"
+      },
+      "status": {
+        "en_ruta": "En ruta",
+        "pendiente": "Pendiente",
+        "entregado": "Entregado",
+        "preparando": "Preparando",
+        "unknown": "Desconocido"
+      }
+    },
+    "routeDetail": {
+      "loading": "Cargando detalles de la ruta...",
+      "notFound": "No encontramos la ruta seleccionada.",
+      "error": "No fue posible cargar los detalles de la ruta.",
+      "header": {
+        "title": "Ruta #{{ id }}",
+        "subtitle": "Programada para {{ date }}",
+        "defaultTitle": "Detalle de la ruta"
+      },
+      "summary": {
+        "title": "Resumen de la ruta",
+        "description": "Consulta la información clave de esta asignación.",
+        "routeId": "Identificador",
+        "date": "Fecha",
+        "driver": "Conductor",
+        "warehouse": "Bodega",
+        "deliveries": "Entregas"
+      },
+      "map": {
+        "title": "Mapa de la ruta",
+        "description": "Visualiza la bodega de origen y cada punto de entrega en el orden asignado.",
+        "computing": "Generando la vista previa de la ruta...",
+        "missingKey": "Vista previa no disponible. Configura la clave de Google Maps para ver la ruta.",
+        "loading": "Cargando mapa...",
+        "empty": "Todavía no hay entregas asignadas a esta ruta.",
+        "missingWarehouseLocation": "No fue posible determinar la ubicación de la bodega. La línea de la ruta puede estar incompleta.",
+        "missingLocations": "No pudimos resolver las ubicaciones de las entregas. El mapa solo mostrará los puntos disponibles.",
+        "partialLocations": "Algunas entregas no tienen ubicación, por lo que la línea de la ruta podría estar incompleta.",
+        "unableToBuildPath": "No pudimos construir el recorrido de la ruta. Intenta recargar la página."
+      },
+      "deliveries": {
+        "title": "Entregas en esta ruta",
+        "description": "Esta ruta incluye {{ count }} entregas.",
+        "empty": "No hay entregas asignadas a esta ruta.",
+        "address": "Dirección",
+        "deliveryDate": "Fecha de entrega",
+        "orderId": "Pedido",
+        "customer": "Cliente",
+        "products": "{{ count }} productos"
       }
     }
   },

@@ -33,6 +33,15 @@ export class DashboardState {
       enabled: true
     },
     {
+      id: 'logistic',
+      titleKey: 'dashboard.cards.logistic.title',
+      descriptionKey: 'dashboard.cards.logistic.description',
+      icon: 'local_shipping',
+      route: 'logistic',
+      color: '#0ea5e9',
+      enabled: true
+    },
+    {
       id: 'sales',
       titleKey: 'dashboard.cards.sales.title',
       descriptionKey: 'dashboard.cards.sales.description',
