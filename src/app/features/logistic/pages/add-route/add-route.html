@@ -30,78 +30,10 @@
             </mat-form-field>
           </div>
 
-          <section class="selected-deliveries">
-            <header class="selected-deliveries__header">
-              <h3 class="selected-deliveries__title">
-                {{ t('logistic.addRoute.selectedDeliveries') }}
-              </h3>
-              <span class="selected-deliveries__count">
-                {{ t('logistic.addRoute.selectedCount', { count: selectedDeliveriesCount() }) }}
-              </span>
-            </header>
-
-            @if (selectedDeliveriesCount()) {
-              <div class="selected-deliveries__list" role="list">
-                @for (delivery of selectedDeliveries(); track delivery.id) {
-                  <article class="selected-deliveries__card" role="listitem">
-                    <header class="selected-deliveries__card-header">
-                      <span class="selected-deliveries__card-id">
-                        {{ delivery.id }}
-                      </span>
-                      <button
-                        type="button"
-                        class="selected-deliveries__remove-button"
-                        (click)="onDeliveryToggled(delivery)">
-                        {{ t('logistic.actions.removeFromRoute') }}
-                      </button>
-                    </header>
-
-                    <div class="selected-deliveries__card-body">
-                      <p class="selected-deliveries__card-row">
-                        <span class="selected-deliveries__card-label">
-                          {{ t('logistic.unassigned.labels.deliveryAddress') }}
-                        </span>
-                        <span class="selected-deliveries__card-value">
-                          {{ delivery.address }}
-                        </span>
-                      </p>
-
-                      <p class="selected-deliveries__card-row">
-                        <span class="selected-deliveries__card-label">
-                          {{ t('logistic.unassigned.labels.deliveryDate') }}
-                        </span>
-                        <span class="selected-deliveries__card-value">
-                          {{ delivery.deliveryDate | date: 'dd MMM yyyy' }}
-                        </span>
-                      </p>
-
-                      <p class="selected-deliveries__card-row">
-                        <span class="selected-deliveries__card-label">
-                          {{ t('logistic.unassigned.labels.orderTotal') }}
-                        </span>
-                        <span class="selected-deliveries__card-value">
-                          {{ delivery.order.total | currency:'COP':'symbol':'1.0-0' }}
-                        </span>
-                      </p>
-
-                      <p class="selected-deliveries__card-row">
-                        <span class="selected-deliveries__card-label">
-                          {{ t('logistic.unassigned.labels.customer') }}
-                        </span>
-                        <span class="selected-deliveries__card-value">
-                          {{ delivery.order.customer.name }}
-                        </span>
-                      </p>
-                    </div>
-                  </article>
-                }
-              </div>
-            } @else {
-              <p class="selected-deliveries__empty">
-                {{ t('logistic.addRoute.noDeliveriesSelected') }}
-              </p>
-            }
-        </section>
+          <app-selected-deliveries
+            [deliveries]="selectedDeliveries()"
+            [count]="selectedDeliveriesCount()"
+            (deliveryToggled)="onDeliveryToggled($event)" />
 
         <section class="delivery-map">
           <header class="delivery-map__header">

@@ -7,6 +7,7 @@ import { LogisticService } from '../services/logistic.service';
 import { PaginatedResponseDTO } from '../../../shared/DTOs/paginatedResponseDTO.model';
 import { UsersService } from '../../users/services/users.service';
 import { AppUser } from '../../../shared/models/user.model';
+import { Warehouse } from '../../../shared/models/warehouse.model';
 
 type LogisticPaginationResponse = PaginatedResponseDTO<Delivery>;
 
@@ -29,6 +30,8 @@ export class LogisticStore {
   private _deliveriesPagination = signal<Pagination>(DEFAULT_PAGINATION);
   private _deliveryUsers = signal<AppUser[]>([]);
   private _deliveryUsersPagination = signal<Pagination>(DEFAULT_PAGINATION);
+  private _warehouses = signal<Warehouse[]>([]);
+  private _warehousesPagination = signal<Pagination>(DEFAULT_PAGINATION);
   private _isLoading = signal<boolean>(false);
   private _error = signal<string | null>(null);
 
@@ -36,6 +39,8 @@ export class LogisticStore {
   readonly deliveriesPagination = computed(() => this._deliveriesPagination());
   readonly deliveryUsers = computed(() => this._deliveryUsers());
   readonly deliveryUsersPagination = computed(() => this._deliveryUsersPagination());
+  readonly warehouses = computed(() => this._warehouses());
+  readonly warehousesPagination = computed(() => this._warehousesPagination());
   readonly isLoading = computed(() => this._isLoading());
   readonly error = computed(() => this._error());
 
@@ -61,6 +66,16 @@ export class LogisticStore {
     });
   }
   
+  loadWarehouses(): void {
+    this._isLoading.set(true);
+    this._error.set(null);
+    this.appStore.setApiBusy(true);
+
+    this.logisticService.getWarehouses().subscribe({
+      next: (response) => this.handleWarehousesResponse(response),
+      error: (err) => this.handleWarehousesError(err)
+    });
+  }
 
   loadMockDeliveries(): void {
     this._isLoading.set(true);
@@ -102,6 +117,21 @@ export class LogisticStore {
 
   private handleDeliveryUsersError(error: unknown): void {
     const message = this.extractErrorMessage(error, 'Error loading delivery users');
+
+    this._error.set(message);
+    this._isLoading.set(false);
+    this.appStore.setApiBusy(false);
+  }
+
+  private handleWarehousesResponse(response: PaginatedResponseDTO<Warehouse>): void {
+    this._warehouses.set(response.items);
+    this._warehousesPagination.set(response.pagination ?? DEFAULT_PAGINATION);
+    this._isLoading.set(false);
+    this.appStore.setApiBusy(false);
+  }
+
+  private handleWarehousesError(error: unknown): void {
+    const message = this.extractErrorMessage(error, 'Error loading warehouses');
 
     this._error.set(message);
     this._isLoading.set(false);

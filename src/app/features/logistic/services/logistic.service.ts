@@ -11,6 +11,9 @@ import { DeliveryOrderDTO } from '../../../shared/DTOs/deliveryOrderDTO.model';
 import { DeliveryCustomerDTO } from '../../../shared/DTOs/deliveryCustomerDTO.model';
 import { DeliveryProductDTO } from '../../../shared/DTOs/deliveryProductDTO.model';
 import { MOCK_LOGISTIC_DELIVERIES_RESPONSE } from './logistic.mock';
+import { WarehouseDTO } from '../../../shared/DTOs/warehouseDTO.model';
+import { Warehouse } from '../../../shared/models/warehouse.model';
+import { Pagination } from '../../../shared/types/pagination';
 
 @Injectable({
   providedIn: 'root'
@@ -18,16 +21,47 @@ import { MOCK_LOGISTIC_DELIVERIES_RESPONSE } from './logistic.mock';
 export class LogisticService {
   private apiClient = inject(ApiClientService);
   private serviceType: ServiceType = 'logistics';
+  private readonly emptyPagination: Pagination = {
+    has_next: false,
+    has_prev: false,
+    page: 1,
+    page_size: 0,
+    total_items: 0,
+    total_pages: 0
+  };
 
   getDeliveries(): Observable<PaginatedResponseDTO<Delivery>> {
     return this.apiClient
       .get<PaginatedResponseDTO<DeliveryDTO>>('/entregas', this.serviceType)
       .pipe(
-        map(response => ({
-          items: response.items.map(delivery => this.mapDeliveryDtoToModel(delivery)),
-          pagination: response.pagination
-        }))
+        map(response => {
+          const items = (response?.items ?? []).map(delivery => this.mapDeliveryDtoToModel(delivery));
+          const pagination = response?.pagination ?? { ...this.emptyPagination };
+          return { items, pagination };
+        })
       );
+  }
+
+  getWarehouses(): Observable<PaginatedResponseDTO<Warehouse>> {
+    return this.apiClient
+      .get<PaginatedResponseDTO<WarehouseDTO>>('/bodegas', this.serviceType)
+      .pipe(
+        map(response => {
+          const items = (response?.items ?? []).map(warehouse => this.mapWarehouseDtoToModel(warehouse));
+          const pagination = response?.pagination ?? { ...this.emptyPagination };
+          return { items, pagination };
+        })
+      );
+  }
+
+  private mapWarehouseDtoToModel(warehouse: WarehouseDTO): Warehouse {
+    return {
+      id: warehouse.id,
+      name: warehouse.nombre,
+      address: warehouse.direccion,
+      createdAt: warehouse.created_at,
+      updatedAt: warehouse.updated_at
+    };
   }
 
   private mapDeliveryDtoToModel(delivery: DeliveryDTO): Delivery {
