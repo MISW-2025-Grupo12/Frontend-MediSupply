@@ -6,7 +6,14 @@ import { OptimalRoute } from '../../shared/types/optimalRoute';
 import { RouteSegment } from '../../shared/types/routeSegment';
 import { GoogleMapsLoaderService, GoogleRoute } from './google-maps-loader.service';
 
+type RouteOriginOption = {
+  id?: Delivery['id'] | string;
+  location: Location;
+};
+
 type RouteComputationOptions = {
+  origin?: RouteOriginOption;
+  preferredStartDeliveryId?: Delivery['id'];
   updateDeliveryLocation?: (deliveryId: Delivery['id'], location: Location | null | undefined) => void;
   getDeliveryById?: (deliveryId: Delivery['id']) => Delivery | undefined;
 };
@@ -15,6 +22,7 @@ export type RouteComputationResult = {
   optimalRoute: OptimalRoute;
   routePath: google.maps.LatLngLiteral[];
   routeSegments: Map<string, RouteSegment>;
+  origin?: RouteOriginOption;
 };
 
 @Injectable({
@@ -54,14 +62,24 @@ export class RouteComputationService {
       return null;
     }
 
-    const optimalRoute = this.findOptimalRoute(nodes, routeSegments);
+    const preferredStartId =
+      options.preferredStartDeliveryId && nodes.some((node) => node.delivery.id === options.preferredStartDeliveryId)
+        ? options.preferredStartDeliveryId
+        : undefined;
+
+    const optimalRoute = this.findOptimalRoute(nodes, routeSegments, preferredStartId);
 
     if (!optimalRoute) {
       console.warn('Unable to compute an optimal route with the available data.');
       return null;
     }
 
-    const routePath = await this.resolveRenderedRoutePath(apiKey, optimalRoute, routeSegments);
+    const routePath = await this.resolveRenderedRoutePath(
+      apiKey,
+      optimalRoute,
+      routeSegments,
+      options.origin?.location
+    );
 
     if (!routePath?.length) {
       console.warn('Unable to render the computed route because no path coordinates were available.');
@@ -71,7 +89,8 @@ export class RouteComputationService {
     return {
       optimalRoute,
       routePath,
-      routeSegments
+      routeSegments,
+      origin: options.origin
     };
   }
 
@@ -130,22 +149,71 @@ export class RouteComputationService {
   async resolveRenderedRoutePath(
     apiKey: string,
     optimalRoute: OptimalRoute,
-    routeSegments: Map<string, RouteSegment>
+    routeSegments: Map<string, RouteSegment>,
+    origin?: Location
   ): Promise<google.maps.LatLngLiteral[] | null> {
     const orderedWaypoints = optimalRoute.order.map((node) => node.location);
 
-    try {
-      const fullRoute = await this.googleMapsLoader.computeRouteWithWaypoints(apiKey, orderedWaypoints);
-      const computedPath = fullRoute ? this.resolveRoutePath(fullRoute) : [];
-
-      if (computedPath.length) {
-        return computedPath;
-      }
-    } catch (error) {
-      console.warn('Failed to compute a full route with waypoints from Google Maps.', error);
+    if (origin) {
+      orderedWaypoints.unshift(origin);
     }
 
-    return this.composeRoutePathFromSegments(optimalRoute.order, routeSegments);
+    if (orderedWaypoints.length >= 2) {
+      try {
+        const fullRoute = await this.googleMapsLoader.computeRouteWithWaypoints(apiKey, orderedWaypoints);
+        const computedPath = fullRoute ? this.resolveRoutePath(fullRoute) : [];
+
+        if (computedPath.length) {
+          return computedPath;
+        }
+      } catch (error) {
+        console.warn('Failed to compute a full route with waypoints from Google Maps.', error);
+      }
+    }
+
+    const fallbackPath = this.composeRoutePathFromSegments(optimalRoute.order, routeSegments);
+
+    if (!fallbackPath?.length) {
+      return null;
+    }
+
+    if (!origin) {
+      return fallbackPath;
+    }
+
+    const firstNode = optimalRoute.order[0];
+
+    if (!firstNode) {
+      return fallbackPath;
+    }
+
+    try {
+      const originRoutes = await this.googleMapsLoader.computeRoutesBetween(apiKey, origin, firstNode.location);
+      const primaryRoute = originRoutes?.[0];
+      const originPath = primaryRoute ? this.resolveRoutePath(primaryRoute) : [];
+
+      if (!originPath.length) {
+        return fallbackPath;
+      }
+
+      const combined = [...originPath];
+
+      if (
+        combined.length &&
+        fallbackPath.length &&
+        combined[combined.length - 1].lat === fallbackPath[0].lat &&
+        combined[combined.length - 1].lng === fallbackPath[0].lng
+      ) {
+        combined.push(...fallbackPath.slice(1));
+      } else {
+        combined.push(...fallbackPath);
+      }
+
+      return combined;
+    } catch (error) {
+      console.warn('Failed to compute route segment between origin and first delivery.', error);
+      return fallbackPath;
+    }
   }
 
   composeRoutePathFromSegments(
@@ -462,7 +530,8 @@ export class RouteComputationService {
 
   private findOptimalRoute(
     nodes: DeliveryRouteNode[],
-    routeSegments: Map<string, RouteSegment>
+    routeSegments: Map<string, RouteSegment>,
+    preferredStartDeliveryId?: Delivery['id']
   ): OptimalRoute | null {
     if (nodes.length < 2) {
       return { order: nodes, totalDistance: 0 };
@@ -471,24 +540,30 @@ export class RouteComputationService {
     const exactThreshold = 8;
 
     if (nodes.length <= exactThreshold) {
-      const exact = this.findExactOptimalRoute(nodes, routeSegments);
+      const exact = this.findExactOptimalRoute(nodes, routeSegments, preferredStartDeliveryId);
 
       if (exact) {
         return exact;
       }
     }
 
-    return this.findGreedyRoute(nodes, routeSegments);
+    return this.findGreedyRoute(nodes, routeSegments, preferredStartDeliveryId);
   }
 
   private findExactOptimalRoute(
     nodes: DeliveryRouteNode[],
-    routeSegments: Map<string, RouteSegment>
+    routeSegments: Map<string, RouteSegment>,
+    preferredStartDeliveryId?: Delivery['id']
   ): OptimalRoute | null {
     const used = new Array(nodes.length).fill(false);
     const currentOrder: DeliveryRouteNode[] = [];
     let bestOrder: DeliveryRouteNode[] | null = null;
     let bestDistance = Number.POSITIVE_INFINITY;
+
+    const preferredStartIndex =
+      preferredStartDeliveryId !== undefined
+        ? nodes.findIndex((node) => node.delivery.id === preferredStartDeliveryId)
+        : -1;
 
     const backtrack = (currentDistance: number) => {
       if (currentOrder.length === nodes.length) {
@@ -535,32 +610,75 @@ export class RouteComputationService {
       }
     };
 
-    backtrack(0);
+    if (preferredStartIndex >= 0) {
+      used[preferredStartIndex] = true;
+      currentOrder.push(nodes[preferredStartIndex]);
+      backtrack(0);
+      currentOrder.pop();
+      used[preferredStartIndex] = false;
+    } else {
+      backtrack(0);
+    }
 
     return bestOrder ? { order: bestOrder, totalDistance: bestDistance } : null;
   }
 
   private findGreedyRoute(
     nodes: DeliveryRouteNode[],
-    routeSegments: Map<string, RouteSegment>
+    routeSegments: Map<string, RouteSegment>,
+    preferredStartDeliveryId?: Delivery['id']
   ): OptimalRoute | null {
     if (!nodes.length) {
       return null;
     }
 
-    let startNode: DeliveryRouteNode | null = null;
+    let startNode: DeliveryRouteNode | null =
+      preferredStartDeliveryId !== undefined
+        ? nodes.find((node) => node.delivery.id === preferredStartDeliveryId) ?? null
+        : null;
     let bestAverageDistance = Number.POSITIVE_INFINITY;
 
-    for (const candidate of nodes) {
+    if (!startNode) {
+      for (const candidate of nodes) {
+        let totalDistance = 0;
+        let connections = 0;
+
+        for (const target of nodes) {
+          if (target === candidate) {
+            continue;
+          }
+
+          const segment = routeSegments.get(this.composeRouteCacheKey(candidate.delivery.id, target.delivery.id));
+
+          if (!segment) {
+            continue;
+          }
+
+          totalDistance += segment.distance;
+          connections += 1;
+        }
+
+        if (!connections) {
+          continue;
+        }
+
+        const average = totalDistance / connections;
+
+        if (average < bestAverageDistance) {
+          bestAverageDistance = average;
+          startNode = candidate;
+        }
+      }
+    } else {
       let totalDistance = 0;
       let connections = 0;
 
       for (const target of nodes) {
-        if (target === candidate) {
+        if (target === startNode) {
           continue;
         }
 
-        const segment = routeSegments.get(this.composeRouteCacheKey(candidate.delivery.id, target.delivery.id));
+        const segment = routeSegments.get(this.composeRouteCacheKey(startNode.delivery.id, target.delivery.id));
 
         if (!segment) {
           continue;
@@ -571,14 +689,9 @@ export class RouteComputationService {
       }
 
       if (!connections) {
-        continue;
-      }
-
-      const average = totalDistance / connections;
-
-      if (average < bestAverageDistance) {
-        bestAverageDistance = average;
-        startNode = candidate;
+        startNode = null;
+      } else {
+        bestAverageDistance = totalDistance / connections;
       }
     }
 

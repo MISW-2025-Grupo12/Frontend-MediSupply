@@ -17,7 +17,55 @@
   </div>
 
   <div class="page-content">
-    <section class="deliveries-section">
+    <section class="routes-section">
+      <header class="routes-section__header">
+        <h2 class="routes-section__title">
+          {{ t('logistic.routes.sectionTitle') }}
+        </h2>
+        <p class="routes-section__description">
+          {{ t('logistic.routes.sectionDescription') }}
+        </p>
+      </header>
+
+      <div class="routes-section__body">
+        @if (routesLoading()) {
+          <div class="routes-section__state">
+            {{ t('logistic.routes.loading') }}
+          </div>
+        } @else if (!routes().length) {
+          <div class="routes-section__state">
+            {{ t('logistic.routes.empty') }}
+          </div>
+        } @else {
+          <div class="routes-grid">
+            @for (route of routes(); track route.id) {
+              <a class="route-card" [routerLink]="getRouteDetailLink(route.id)">
+                <div class="route-card__header">
+                  <span class="route-card__id">#{{ route.id }}</span>
+                  <span class="route-card__date">{{ route.date | date: 'mediumDate' }}</span>
+                </div>
+                <div class="route-card__content">
+                  <div class="route-card__item">
+                    <span class="route-card__label">{{ t('logistic.routes.driver') }}</span>
+                    <span class="route-card__value">{{ route.driverId }}</span>
+                  </div>
+                  <div class="route-card__item">
+                    <span class="route-card__label">{{ t('logistic.routes.warehouse') }}</span>
+                    <span class="route-card__value">{{ route.warehouse.name }}</span>
+                  </div>
+                  <div class="route-card__item">
+                    <span class="route-card__label">{{ t('logistic.routes.deliveries') }}</span>
+                    <span class="route-card__value">{{ route.deliveries.length }}</span>
+                  </div>
+                </div>
+              </a>
+            }
+          </div>
+        }
+      </div>
+    </section>
+
+    <section class="deliveries-section mt-4">
       <header class="deliveries-section__header">
         <h2 class="deliveries-section__title">
           {{ t('logistic.unassigned.sectionTitle') }}

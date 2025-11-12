@@ -19,11 +19,28 @@ describe('LogisticPage', () => {
           langs: {
             en: {
               logistic: {
+                title: 'Logistics',
                 actions: {
+                  createRoute: 'Create route',
                   addToRoute: 'Add to route',
                   removeFromRoute: 'Remove from route'
                 },
+                routes: {
+                  sectionTitle: 'Scheduled routes',
+                  sectionDescription: 'Review the routes that were already created.',
+                  loading: 'Loading routes...',
+                  empty: 'No routes available.',
+                  driver: 'Driver',
+                  warehouse: 'Warehouse',
+                  deliveries: 'Deliveries'
+                },
+                states: {
+                  loading: 'Loading deliveries...',
+                  error: 'We could not load the deliveries.'
+                },
                 unassigned: {
+                  sectionTitle: 'Unassigned deliveries',
+                  sectionDescription: 'Review pending deliveries before assigning them.',
                   title: 'Deliveries awaiting assignment',
                   subtitle: 'Subtitle',
                   count: '{{ count }} pending',

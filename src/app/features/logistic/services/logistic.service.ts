@@ -14,6 +14,18 @@ import { MOCK_LOGISTIC_DELIVERIES_RESPONSE } from './logistic.mock';
 import { WarehouseDTO } from '../../../shared/DTOs/warehouseDTO.model';
 import { Warehouse } from '../../../shared/models/warehouse.model';
 import { Pagination } from '../../../shared/types/pagination';
+import { CreateRoute } from '../../../shared/models/createRoute.model';
+import { CreateRouteDTO } from '../../../shared/DTOs/createRouteDTO.model';
+import { RouteDTO } from '../../../shared/DTOs/routeDTO.model';
+import { Route } from '../../../shared/models/route.model';
+
+type GetRoutesFilters = {
+  page?: number;
+  pageSize?: number;
+  date?: string;
+  driverId?: string | number;
+  warehouseId?: string | number;
+};
 
 @Injectable({
   providedIn: 'root'
@@ -52,6 +64,35 @@ export class LogisticService {
           return { items, pagination };
         })
       );
+  }
+
+  getRoutes(filters?: GetRoutesFilters): Observable<PaginatedResponseDTO<Route>> {
+    const params = filters
+      ? this.apiClient.buildParams({
+          page: filters.page,
+          page_size: filters.pageSize,
+          fecha_ruta: filters.date,
+          repartidor_id: filters.driverId,
+          bodega_id: filters.warehouseId
+        })
+      : undefined;
+
+    const options = params ? { params } : undefined;
+
+    return this.apiClient.get<PaginatedResponseDTO<RouteDTO>>('/rutas', this.serviceType, options).pipe(
+      map(response => {
+        const items = (response?.items ?? []).map(route => this.mapRouteDtoToModel(route));
+        const pagination = response?.pagination ?? { ...this.emptyPagination };
+        return { items, pagination };
+      })
+    );
+  }
+
+  createRoute(route: CreateRoute): Observable<Route> {
+    const payload = this.mapCreateRouteModelToDto(route);
+    return this.apiClient.post<RouteDTO>('/rutas', payload, this.serviceType).pipe(
+      map(response => this.mapRouteDtoToModel(response))
+    );
   }
 
   private mapWarehouseDtoToModel(warehouse: WarehouseDTO): Warehouse {
@@ -102,6 +143,25 @@ export class LogisticService {
       price: product.precio_unitario,
       subtotal: product.subtotal,
       avatar: product.avatar
+    };
+  }
+
+  private mapRouteDtoToModel(route: RouteDTO): Route {
+    return {
+      id: route.id,
+      date: route.fecha_ruta,
+      driverId: route.repartidor_id,
+      deliveries: (route.entregas ?? []).map(delivery => this.mapDeliveryDtoToModel(delivery)),
+      warehouse: this.mapWarehouseDtoToModel(route.bodega)
+    };
+  }
+
+  private mapCreateRouteModelToDto(route: CreateRoute): CreateRouteDTO {
+    return {
+      fecha_ruta: route.date,
+      repartidor_id: route.driverId,
+      entregas: route.deliveries.map(delivery => delivery.id),
+      bodega_id: route.warehouse.id
     };
   }
 

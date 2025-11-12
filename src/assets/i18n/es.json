@@ -144,13 +144,25 @@
       "createRoute": "Crear ruta",
       "addToRoute": "Añadir a la ruta",
       "removeFromRoute": "Quitar de la ruta",
-      "calculateRoute": "Previsualizar rutas"
+      "calculateRoute": "Calcular rutas"
+    },
+    "routes": {
+      "sectionTitle": "Rutas programadas",
+      "sectionDescription": "Consulta las rutas que ya creaste y abre una para ver los detalles completos de sus asignaciones.",
+      "loading": "Cargando rutas...",
+      "empty": "Aún no hay rutas creadas. Crea una nueva ruta para comenzar a planificar entregas.",
+      "driver": "Conductor",
+      "warehouse": "Bodega",
+      "deliveries": "Entregas"
     },
     "addRoute": {
       "subtitle": "Registra una nueva ruta de entrega para organizar asignaciones y planificación de despachos.",
       "fields": {
         "date": "Fecha de la ruta",
-        "driver": "Identificador del conductor"
+        "driver": "Identificador del conductor",
+        "driverPlaceholder": "Selecciona un conductor de entregas",
+        "loadingDrivers": "Cargando conductores de entrega...",
+        "noDrivers": "No hay conductores de entrega disponibles"
       },
       "selectedDeliveries": "Entregas seleccionadas para esta ruta",
       "noDeliveriesSelected": "Selecciona entregas de la lista inferior para agregarlas a esta ruta.",
@@ -191,6 +203,47 @@
         "entregado": "Entregado",
         "preparando": "Preparando",
         "unknown": "Desconocido"
+      }
+    },
+    "routeDetail": {
+      "loading": "Cargando detalles de la ruta...",
+      "notFound": "No encontramos la ruta seleccionada.",
+      "error": "No fue posible cargar los detalles de la ruta.",
+      "header": {
+        "title": "Ruta #{{ id }}",
+        "subtitle": "Programada para {{ date }}",
+        "defaultTitle": "Detalle de la ruta"
+      },
+      "summary": {
+        "title": "Resumen de la ruta",
+        "description": "Consulta la información clave de esta asignación.",
+        "routeId": "Identificador",
+        "date": "Fecha",
+        "driver": "Conductor",
+        "warehouse": "Bodega",
+        "deliveries": "Entregas"
+      },
+      "map": {
+        "title": "Mapa de la ruta",
+        "description": "Visualiza la bodega de origen y cada punto de entrega en el orden asignado.",
+        "computing": "Generando la vista previa de la ruta...",
+        "missingKey": "Vista previa no disponible. Configura la clave de Google Maps para ver la ruta.",
+        "loading": "Cargando mapa...",
+        "empty": "Todavía no hay entregas asignadas a esta ruta.",
+        "missingWarehouseLocation": "No fue posible determinar la ubicación de la bodega. La línea de la ruta puede estar incompleta.",
+        "missingLocations": "No pudimos resolver las ubicaciones de las entregas. El mapa solo mostrará los puntos disponibles.",
+        "partialLocations": "Algunas entregas no tienen ubicación, por lo que la línea de la ruta podría estar incompleta.",
+        "unableToBuildPath": "No pudimos construir el recorrido de la ruta. Intenta recargar la página."
+      },
+      "deliveries": {
+        "title": "Entregas en esta ruta",
+        "description": "Esta ruta incluye {{ count }} entregas.",
+        "empty": "No hay entregas asignadas a esta ruta.",
+        "address": "Dirección",
+        "deliveryDate": "Fecha de entrega",
+        "orderId": "Pedido",
+        "customer": "Cliente",
+        "products": "{{ count }} productos"
       }
     }
   },

@@ -11,10 +11,17 @@ import {
   effect
 } from '@angular/core';
 import { Delivery } from '../../models/delivery.model';
+import type { Location } from '../../models/location.model';
 import { GoogleMapsLoaderService, GoogleMapsModules } from '../../../core/services/google-maps-loader.service';
 import { environment } from '../../../../environments/environment';
 
 type MapError = 'missingKey' | 'loadFailure';
+
+type MapOrigin = {
+  id: string;
+  label?: string;
+  position: google.maps.LatLngLiteral;
+};
 
 @Component({
   selector: 'app-maps',
@@ -36,6 +43,7 @@ export class Maps implements OnInit, AfterViewInit {
   readonly missingKeyMessage = input('La clave de Google Maps no está configurada.');
   readonly routePath = input<google.maps.LatLngLiteral[] | null>(null, { alias: 'routePath' });
   readonly routeOrder = input<Delivery['id'][] | null>(null, { alias: 'routeOrder' });
+  readonly origin = input<MapOrigin | null>(null, { alias: 'origin' });
 
   readonly isMapConfigured = !!environment.googleMapsApiKey;
   readonly isMapLoading = signal(false);
@@ -45,7 +53,9 @@ export class Maps implements OnInit, AfterViewInit {
   private geocoder?: google.maps.Geocoder;
   private markers: Array<google.maps.marker.AdvancedMarkerElement | google.maps.Marker> = [];
   private routePolyline?: google.maps.Polyline;
-  private readonly locationCache = new Map<string, google.maps.LatLngLiteral>();
+  private originMarker: google.maps.marker.AdvancedMarkerElement | google.maps.Marker | null = null;
+  private readonly addressLocationCache = new Map<string, google.maps.LatLngLiteral>();
+  private readonly deliveryLocationCache = new Map<Delivery['id'], google.maps.LatLngLiteral>();
   private markerRenderCycle = 0;
   private readonly fallbackCenter: google.maps.LatLngLiteral = { lat: 4.710989, lng: -74.07209 };
   private mapsModules?: GoogleMapsModules;
@@ -54,13 +64,14 @@ export class Maps implements OnInit, AfterViewInit {
   private readonly syncMarkers = effect(() => {
     const deliveries = this.deliveries();
     this.routeOrder();
+    const origin = this.origin();
     const isReady = this.mapApiLoaded();
 
     if (!isReady || !this.map) {
       return;
     }
 
-    void this.updateMarkers(deliveries);
+    void this.updateMarkers(deliveries, origin);
   });
 
   private readonly syncRoutePath = effect(() => {
@@ -143,7 +154,7 @@ export class Maps implements OnInit, AfterViewInit {
         this.geocoder = new GeocoderConstructor();
       }
 
-      await this.updateMarkers(this.deliveries());
+      await this.updateMarkers(this.deliveries(), this.origin());
     } catch (error) {
       console.error('Failed to initialize Google Maps', error);
       this.mapError.set('loadFailure');
@@ -162,7 +173,34 @@ export class Maps implements OnInit, AfterViewInit {
     this.markers = [];
   }
 
-  private async updateMarkers(deliveries: Delivery[]): Promise<void> {
+  private clearOriginMarker(): void {
+    if (!this.originMarker) {
+      return;
+    }
+
+    if (this.originMarker instanceof google.maps.Marker) {
+      this.originMarker.setMap(null);
+    } else {
+      this.originMarker.map = null;
+    }
+
+    this.originMarker = null;
+  }
+
+  private updateOriginMarker(origin: MapOrigin | null, bounds: google.maps.LatLngBounds): void {
+    if (!this.map || !origin?.position) {
+      return;
+    }
+
+    this.clearOriginMarker();
+
+    const marker = this.createOriginMarker(origin.position, origin.label ?? origin.id);
+
+    this.originMarker = marker;
+    bounds.extend(origin.position);
+  }
+
+  private async updateMarkers(deliveries: Delivery[], origin: MapOrigin | null): Promise<void> {
     if (!this.map) {
       return;
     }
@@ -170,19 +208,32 @@ export class Maps implements OnInit, AfterViewInit {
     const renderCycle = ++this.markerRenderCycle;
 
     this.clearMarkers();
-
-    if (!deliveries.length) {
-      this.map.setCenter(this.fallbackCenter);
-      this.map.setZoom(6);
-      return;
-    }
+    this.clearOriginMarker();
 
     const bounds = new google.maps.LatLngBounds();
     const routeOrder = this.routeOrder();
     const routeOrderMap = this.buildRouteOrderMap(routeOrder);
 
+    if (!deliveries.length) {
+      if (origin?.position) {
+        this.updateOriginMarker(origin, bounds);
+
+        if (!bounds.isEmpty()) {
+          this.map.fitBounds(bounds);
+        } else {
+          this.map.setCenter(origin.position);
+          this.map.setZoom(12);
+        }
+      } else {
+        this.map.setCenter(this.fallbackCenter);
+        this.map.setZoom(6);
+      }
+
+      return;
+    }
+
     for (const delivery of deliveries) {
-      const location = await this.resolveLocation(delivery.address);
+      const location = await this.resolveDeliveryPosition(delivery);
 
       if (renderCycle !== this.markerRenderCycle) {
         return;
@@ -196,6 +247,10 @@ export class Maps implements OnInit, AfterViewInit {
 
       this.markers.push(marker);
       bounds.extend(location);
+    }
+
+    if (origin?.position) {
+      this.updateOriginMarker(origin, bounds);
     }
 
     const hasRoutePath = !!this.routePath()?.length;
@@ -255,6 +310,14 @@ export class Maps implements OnInit, AfterViewInit {
       }
     }
 
+    if (this.originMarker) {
+      const originPosition = this.getMarkerPosition(this.originMarker);
+
+      if (originPosition) {
+        bounds.extend(originPosition);
+      }
+    }
+
     if (!bounds.isEmpty()) {
       this.map.fitBounds(bounds);
     }
@@ -290,7 +353,7 @@ export class Maps implements OnInit, AfterViewInit {
       return null;
     }
 
-    const cached = this.locationCache.get(address);
+    const cached = this.addressLocationCache.get(address);
 
     if (cached) {
       return cached;
@@ -308,7 +371,7 @@ export class Maps implements OnInit, AfterViewInit {
         if (status === 'OK' && results?.[0]?.geometry?.location) {
           const location = results[0].geometry.location.toJSON();
 
-          this.locationCache.set(address, location);
+          this.addressLocationCache.set(address, location);
           resolve(location);
           return;
         }
@@ -348,6 +411,47 @@ export class Maps implements OnInit, AfterViewInit {
     });
   }
 
+  private createOriginMarker(
+    position: google.maps.LatLngLiteral,
+    label: string
+  ): google.maps.marker.AdvancedMarkerElement | google.maps.Marker {
+    const title = label?.trim() ? label.trim() : 'Warehouse';
+    const displayLabel = title.charAt(0).toUpperCase() || 'W';
+
+    if (this.mapsModules?.marker?.AdvancedMarkerElement) {
+      const options: google.maps.marker.AdvancedMarkerElementOptions = {
+        map: this.map,
+        position,
+        title
+      };
+
+      options.content = this.createOriginAdvancedMarkerContent(displayLabel);
+
+      return new this.mapsModules.marker.AdvancedMarkerElement(options);
+    }
+
+    const icon: google.maps.Symbol = {
+      path: google.maps.SymbolPath.CIRCLE,
+      scale: 10,
+      fillColor: '#0f9d58',
+      fillOpacity: 1,
+      strokeColor: '#0b8043',
+      strokeWeight: 2
+    };
+
+    return new google.maps.Marker({
+      position,
+      map: this.map,
+      title,
+      label: {
+        text: displayLabel,
+        color: '#ffffff',
+        fontWeight: '600'
+      },
+      icon
+    });
+  }
+
   private buildRouteOrderMap(routeOrder: Delivery['id'][] | null): Map<Delivery['id'], number> {
     const map = new Map<Delivery['id'], number>();
 
@@ -380,5 +484,69 @@ export class Maps implements OnInit, AfterViewInit {
     container.textContent = label;
 
     return container;
+  }
+
+  private createOriginAdvancedMarkerContent(label: string): HTMLElement {
+    const container = document.createElement('div');
+
+    container.style.display = 'flex';
+    container.style.alignItems = 'center';
+    container.style.justifyContent = 'center';
+    container.style.width = '36px';
+    container.style.height = '36px';
+    container.style.borderRadius = '18px';
+    container.style.backgroundColor = '#0f9d58';
+    container.style.color = '#fff';
+    container.style.fontWeight = '600';
+    container.style.fontSize = '14px';
+    container.style.boxShadow = '0 2px 6px rgba(0, 0, 0, 0.3)';
+    container.style.border = '2px solid #0b8043';
+
+    container.textContent = label;
+
+    return container;
+  }
+
+  private async resolveDeliveryPosition(delivery: Delivery): Promise<google.maps.LatLngLiteral | null> {
+    const cachedById = this.deliveryLocationCache.get(delivery.id);
+
+    if (cachedById) {
+      return cachedById;
+    }
+
+    const modelLocation = this.toLatLngLiteralFromModel(delivery.location);
+
+    if (modelLocation) {
+      this.deliveryLocationCache.set(delivery.id, modelLocation);
+      return modelLocation;
+    }
+
+    const geocoded = await this.resolveLocation(delivery.address);
+
+    if (geocoded) {
+      this.deliveryLocationCache.set(delivery.id, geocoded);
+    }
+
+    return geocoded;
+  }
+
+  private toLatLngLiteralFromModel(location: Location | null | undefined): google.maps.LatLngLiteral | null {
+    if (!this.isValidLocation(location)) {
+      return null;
+    }
+
+    return {
+      lat: location.latitude,
+      lng: location.longitude
+    };
+  }
+
+  private isValidLocation(value: Location | null | undefined): value is Location {
+    return (
+      typeof value?.latitude === 'number' &&
+      Number.isFinite(value.latitude) &&
+      typeof value.longitude === 'number' &&
+      Number.isFinite(value.longitude)
+    );
   }
 }

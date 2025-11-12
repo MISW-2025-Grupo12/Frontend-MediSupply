@@ -2,6 +2,59 @@
 @import '../../../../../styles/page.scss';
 @import '../../../../../styles/colors.scss';
 
+.page-header__title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  @media (max-width: 640px) {
+    align-items: center;
+    text-align: center;
+  }
+}
+
+.page-header__title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  @media (max-width: 640px) {
+    justify-content: center;
+  }
+}
+
+.page-back-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  border: 1px solid $gray-300;
+  color: $primary-color;
+  background-color: white;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+
+  mat-icon {
+    font-size: 1.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  &:hover,
+  &:focus-visible {
+    background-color: color.scale($primary-color, $lightness: 45%);
+    border-color: $primary-color;
+    color: $primary-color;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px color.scale($primary-color, $lightness: 55%);
+  }
+}
+
 .page-content {
   display: grid;
   grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);

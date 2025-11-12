@@ -8,8 +8,10 @@ import { PaginatedResponseDTO } from '../../../shared/DTOs/paginatedResponseDTO.
 import { UsersService } from '../../users/services/users.service';
 import { AppUser } from '../../../shared/models/user.model';
 import { Warehouse } from '../../../shared/models/warehouse.model';
+import { Route } from '../../../shared/models/route.model';
 
 type LogisticPaginationResponse = PaginatedResponseDTO<Delivery>;
+type LogisticRoutesResponse = PaginatedResponseDTO<Route>;
 
 const DEFAULT_PAGINATION: Pagination = {
   has_next: false,
@@ -32,6 +34,9 @@ export class LogisticStore {
   private _deliveryUsersPagination = signal<Pagination>(DEFAULT_PAGINATION);
   private _warehouses = signal<Warehouse[]>([]);
   private _warehousesPagination = signal<Pagination>(DEFAULT_PAGINATION);
+  private _routesLoading = signal<boolean>(false);
+  private _routes = signal<Route[]>([]);
+  private _routesPagination = signal<Pagination>(DEFAULT_PAGINATION);
   private _isLoading = signal<boolean>(false);
   private _error = signal<string | null>(null);
 
@@ -41,6 +46,9 @@ export class LogisticStore {
   readonly deliveryUsersPagination = computed(() => this._deliveryUsersPagination());
   readonly warehouses = computed(() => this._warehouses());
   readonly warehousesPagination = computed(() => this._warehousesPagination());
+  readonly routesLoading = computed(() => this._routesLoading());
+  readonly routes = computed(() => this._routes());
+  readonly routesPagination = computed(() => this._routesPagination());
   readonly isLoading = computed(() => this._isLoading());
   readonly error = computed(() => this._error());
 
@@ -77,6 +85,24 @@ export class LogisticStore {
     });
   }
 
+  loadRoutes(filters?: {
+    page?: number;
+    pageSize?: number;
+    date?: string;
+    driverId?: string | number;
+    warehouseId?: string | number;
+  }): void {
+    this._isLoading.set(true);
+    this._error.set(null);
+    this.appStore.setApiBusy(true);
+    this._routesLoading.set(true);
+
+    this.logisticService.getRoutes(filters).subscribe({
+      next: (response) => this.handleRoutesResponse(response),
+      error: (err) => this.handleRoutesError(err)
+    });
+  }
+
   loadMockDeliveries(): void {
     this._isLoading.set(true);
     this._error.set(null);
@@ -90,6 +116,14 @@ export class LogisticStore {
   updateDeliveryLocation(deliveryId: Delivery['id'], location: Location | null | undefined): void {
     this._deliveries.update((deliveries) =>
       deliveries.map((delivery) => (delivery.id === deliveryId ? { ...delivery, location: location ?? undefined } : delivery))
+    );
+  }
+
+  updateWarehouseLocation(warehouseId: Warehouse['id'], location: Location | null | undefined): void {
+    this._warehouses.update((warehouses) =>
+      warehouses.map((warehouse) =>
+        warehouse.id === warehouseId ? { ...warehouse, location: location ?? undefined } : warehouse
+      )
     );
   }
 
@@ -134,6 +168,23 @@ export class LogisticStore {
     const message = this.extractErrorMessage(error, 'Error loading warehouses');
 
     this._error.set(message);
+    this._isLoading.set(false);
+    this.appStore.setApiBusy(false);
+  }
+
+  private handleRoutesResponse(response: LogisticRoutesResponse): void {
+    this._routes.set(response.items);
+    this._routesPagination.set(response.pagination ?? DEFAULT_PAGINATION);
+    this._routesLoading.set(false);
+    this._isLoading.set(false);
+    this.appStore.setApiBusy(false);
+  }
+
+  private handleRoutesError(error: unknown): void {
+    const message = this.extractErrorMessage(error, 'Error loading routes');
+
+    this._error.set(message);
+    this._routesLoading.set(false);
     this._isLoading.set(false);
     this.appStore.setApiBusy(false);
   }

@@ -1,15 +1,19 @@
 <div class="page-container" *transloco="let t">
   <div class="page-header">
-    <div>
-      <h1 class="page-title">{{ t('logistic.actions.createRoute') }}</h1>
+    <div class="page-header__title-block">
+      <div class="page-header__title">
+        <a
+          class="page-back-link"
+          routerLink="../"
+          [attr.aria-label]="t('common.back')">
+          <mat-icon>arrow_back</mat-icon>
+        </a>
+        <h1 class="page-title">{{ t('logistic.actions.createRoute') }}</h1>
+      </div>
       <p class="page-subtitle">
         {{ t('logistic.addRoute.subtitle') }}
       </p>
     </div>
-
-    <a class="page-action-button" routerLink="../">
-      {{ t('common.back') }}
-    </a>
   </div>
 
   <div class="page-content">
@@ -20,13 +24,24 @@
             <mat-form-field class="form-field">
               <mat-label>{{ t('logistic.addRoute.fields.date') }}</mat-label>
               <input matInput [matDatepicker]="routeDatePicker" formControlName="date" />
-              <mat-datepicker-toggle matIconSuffix [for]="routeDatePicker"></mat-datepicker-toggle>
-              <mat-datepicker #routeDatePicker></mat-datepicker>
+              <mat-datepicker-toggle matIconSuffix [for]="routeDatePicker" [disabled]="true"></mat-datepicker-toggle>
+              <mat-datepicker #routeDatePicker [disabled]="true"></mat-datepicker>
             </mat-form-field>
 
             <mat-form-field class="form-field">
               <mat-label>{{ t('logistic.addRoute.fields.driver') }}</mat-label>
-              <input matInput type="text" formControlName="driverId" placeholder="DR-001" />
+              <mat-select formControlName="driverId">
+                @if (isLoadingDeliveryUsers()) {
+                  <mat-option value="" disabled>{{ t('logistic.addRoute.fields.loadingDrivers') }}</mat-option>
+                } @else if (!deliveryUsers().length) {
+                  <mat-option value="" disabled>{{ t('logistic.addRoute.fields.noDrivers') }}</mat-option>
+                } @else {
+                  <mat-option value="" disabled>{{ t('logistic.addRoute.fields.driverPlaceholder') }}</mat-option>
+                  <mat-option *ngFor="let driver of deliveryUsers()" [value]="driver.id">
+                    {{ driver.name }}
+                  </mat-option>
+                }
+              </mat-select>
             </mat-form-field>
           </div>
 
@@ -35,26 +50,27 @@
             [count]="selectedDeliveriesCount()"
             (deliveryToggled)="onDeliveryToggled($event)" />
 
-        <section class="delivery-map">
-          <header class="delivery-map__header">
-            <h3 class="delivery-map__title">
-              {{ t('logistic.addRoute.map.title') }}
-            </h3>
-            <p class="delivery-map__description">
-              {{ t('logistic.addRoute.map.description') }}
-            </p>
-          </header>
+          <section class="delivery-map">
+            <header class="delivery-map__header">
+              <h3 class="delivery-map__title">
+                {{ t('logistic.addRoute.map.title') }}
+              </h3>
+              <p class="delivery-map__description">
+                {{ t('logistic.addRoute.map.description') }}
+              </p>
+            </header>
 
-          <app-maps
-            [deliveries]="selectedDeliveries()"
-            [ariaLabel]="t('logistic.addRoute.map.title')"
-            [loadingMessage]="t('logistic.addRoute.map.loading')"
-            [loadErrorMessage]="t('logistic.addRoute.map.loadError')"
-            [emptyMessage]="t('logistic.addRoute.map.noDeliveries')"
-            [missingKeyMessage]="t('logistic.addRoute.map.missingKey')"
-            [routePath]="calculatedRoutePath()"
-            [routeOrder]="calculatedRouteOrder()"></app-maps>
-        </section>
+            <app-maps
+              [deliveries]="selectedDeliveries()"
+              [ariaLabel]="t('logistic.addRoute.map.title')"
+              [loadingMessage]="t('logistic.addRoute.map.loading')"
+              [loadErrorMessage]="t('logistic.addRoute.map.loadError')"
+              [emptyMessage]="t('logistic.addRoute.map.noDeliveries')"
+              [missingKeyMessage]="t('logistic.addRoute.map.missingKey')"
+              [origin]="routeOrigin()"
+              [routePath]="calculatedRoutePath()"
+              [routeOrder]="calculatedRouteOrder()" />
+          </section>
         </mat-card-content>
 
         <mat-card-actions class="form-actions">
