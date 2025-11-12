@@ -12,8 +12,8 @@
         role="listitem"
         [class.delivery-card--selected]="selectable() && isDeliverySelected(delivery)">
         <header class="delivery-card__header">
-          <span class="delivery-card__status" [attr.data-status]="statusKey(delivery.pedido.estado)">
-            {{ t('logistic.unassigned.status.' + statusKey(delivery.pedido.estado), { defaultValue: delivery.pedido.estado }) }}
+          <span class="delivery-card__status" [attr.data-status]="statusKey(delivery.order.status)">
+            {{ t('logistic.unassigned.status.' + statusKey(delivery.order.status), { defaultValue: delivery.order.status }) }}
           </span>
 
           @if (selectable()) {
@@ -33,7 +33,7 @@
               {{ t('logistic.unassigned.labels.deliveryAddress') }}
             </span>
             <span class="delivery-card__value">
-              {{ delivery.direccion }}
+              {{ delivery.address }}
             </span>
           </div>
 
@@ -42,7 +42,7 @@
               {{ t('logistic.unassigned.labels.deliveryDate') }}
             </span>
             <span class="delivery-card__value">
-              {{ delivery.fecha_entrega | date: 'dd MMM yyyy' }}
+              {{ delivery.deliveryDate | date: 'dd MMM yyyy' }}
             </span>
           </div>
 
@@ -51,7 +51,7 @@
               {{ t('logistic.unassigned.labels.orderTotal') }}
             </span>
             <span class="delivery-card__value">
-              {{ delivery.pedido.total | currency:'COP':'symbol':'1.0-0' }}
+              {{ delivery.order.total | currency:'COP':'symbol':'1.0-0' }}
             </span>
           </div>
 
@@ -60,7 +60,7 @@
               {{ t('logistic.unassigned.labels.customer') }}
             </span>
             <span class="delivery-card__value">
-              {{ delivery.pedido.cliente.name }}
+              {{ delivery.order.customer.name }}
             </span>
           </div>
 
@@ -69,7 +69,7 @@
               {{ t('logistic.unassigned.labels.customerPhone') }}
             </span>
             <span class="delivery-card__value">
-              {{ delivery.pedido.cliente.phone }}
+              {{ delivery.order.customer.phone }}
             </span>
           </div>
 
@@ -78,7 +78,7 @@
               {{ t('logistic.unassigned.labels.items') }}
             </span>
             <span class="delivery-card__value">
-              {{ delivery.pedido.productos.length }}
+              {{ delivery.order.products.length }}
             </span>
           </div>
         </div>

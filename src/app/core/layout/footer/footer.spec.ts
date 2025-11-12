@@ -33,6 +33,9 @@ describe('Footer', () => {
   it('should create', () => {
     fixture = TestBed.createComponent(Footer);
     const component = fixture.componentInstance;
+    let latestVersion: string | undefined;
+    const subscription = component.version$.subscribe((version) => (latestVersion = version));
+
     expect(component).toBeTruthy();
     
     // Trigger ngOnInit - this will make the HTTP request
@@ -51,8 +54,10 @@ describe('Footer', () => {
     };
     req.flush(mockVersionDTO);
     
-    // The response is processed synchronously, so version should be set
-    expect(component.version).toBe('1.0.0');
+    // The response is processed synchronously, so the latest emitted version should match
+    expect(latestVersion).toBe('1.0.0');
+
+    subscription.unsubscribe();
   });
 
   it('should fetch version on init', () => {
@@ -64,6 +69,8 @@ describe('Footer', () => {
     // Create a fresh fixture for this test
     fixture = TestBed.createComponent(Footer);
     const component = fixture.componentInstance;
+    let latestVersion: string | undefined;
+    const subscription = component.version$.subscribe((version) => (latestVersion = version));
     
     // Trigger ngOnInit - this will make the HTTP request
     fixture.detectChanges();
@@ -81,7 +88,9 @@ describe('Footer', () => {
     };
     req.flush(mockVersionDTO);
     
-    // The response is processed synchronously, so version should be set
-    expect(component.version).toBe(mockVersion);
+    // The response is processed synchronously, so the latest emitted version should match
+    expect(latestVersion).toBe(mockVersion);
+
+    subscription.unsubscribe();
   });
 });

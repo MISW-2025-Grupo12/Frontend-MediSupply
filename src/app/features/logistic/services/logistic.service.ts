@@ -33,9 +33,9 @@ export class LogisticService {
   private mapDeliveryDtoToModel(delivery: DeliveryDTO): Delivery {
     return {
       id: delivery.id,
-      direccion: delivery.direccion,
-      fecha_entrega: delivery.fecha_entrega,
-      pedido: this.mapDeliveryOrderDtoToModel(delivery.pedido)
+      address: delivery.direccion,
+      deliveryDate: delivery.fecha_entrega,
+      order: this.mapDeliveryOrderDtoToModel(delivery.pedido)
     };
   }
 
@@ -43,11 +43,11 @@ export class LogisticService {
     return {
       id: order.id,
       total: order.total,
-      estado: order.estado,
-      fecha_confirmacion: order.fecha_confirmacion,
-      vendedor_id: order.vendedor_id,
-      cliente: this.mapDeliveryCustomerDtoToModel(order.cliente),
-      productos: order.productos.map(product => this.mapDeliveryProductDtoToModel(product))
+      status: order.estado,
+      confirmationDate: order.fecha_confirmacion,
+      sellerId: order.vendedor_id,
+      customer: this.mapDeliveryCustomerDtoToModel(order.cliente),
+      products: order.productos.map(product => this.mapDeliveryProductDtoToModel(product))
     };
   }
 

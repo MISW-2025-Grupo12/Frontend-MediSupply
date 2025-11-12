@@ -30,25 +30,110 @@
             </mat-form-field>
           </div>
 
-          <div class="form-summary">
-            <span class="form-summary__label">{{ t('logistic.addRoute.selectedDeliveries') }}</span>
+          <section class="selected-deliveries">
+            <header class="selected-deliveries__header">
+              <h3 class="selected-deliveries__title">
+                {{ t('logistic.addRoute.selectedDeliveries') }}
+              </h3>
+              <span class="selected-deliveries__count">
+                {{ t('logistic.addRoute.selectedCount', { count: selectedDeliveriesCount() }) }}
+              </span>
+            </header>
+
             @if (selectedDeliveriesCount()) {
-              <ul class="form-summary__list">
+              <div class="selected-deliveries__list" role="list">
                 @for (delivery of selectedDeliveries(); track delivery.id) {
-                  <li class="form-summary__item">
-                    {{ delivery.id }} — {{ delivery.direccion }}
-                  </li>
+                  <article class="selected-deliveries__card" role="listitem">
+                    <header class="selected-deliveries__card-header">
+                      <span class="selected-deliveries__card-id">
+                        {{ delivery.id }}
+                      </span>
+                      <button
+                        type="button"
+                        class="selected-deliveries__remove-button"
+                        (click)="onDeliveryToggled(delivery)">
+                        {{ t('logistic.actions.removeFromRoute') }}
+                      </button>
+                    </header>
+
+                    <div class="selected-deliveries__card-body">
+                      <p class="selected-deliveries__card-row">
+                        <span class="selected-deliveries__card-label">
+                          {{ t('logistic.unassigned.labels.deliveryAddress') }}
+                        </span>
+                        <span class="selected-deliveries__card-value">
+                          {{ delivery.address }}
+                        </span>
+                      </p>
+
+                      <p class="selected-deliveries__card-row">
+                        <span class="selected-deliveries__card-label">
+                          {{ t('logistic.unassigned.labels.deliveryDate') }}
+                        </span>
+                        <span class="selected-deliveries__card-value">
+                          {{ delivery.deliveryDate | date: 'dd MMM yyyy' }}
+                        </span>
+                      </p>
+
+                      <p class="selected-deliveries__card-row">
+                        <span class="selected-deliveries__card-label">
+                          {{ t('logistic.unassigned.labels.orderTotal') }}
+                        </span>
+                        <span class="selected-deliveries__card-value">
+                          {{ delivery.order.total | currency:'COP':'symbol':'1.0-0' }}
+                        </span>
+                      </p>
+
+                      <p class="selected-deliveries__card-row">
+                        <span class="selected-deliveries__card-label">
+                          {{ t('logistic.unassigned.labels.customer') }}
+                        </span>
+                        <span class="selected-deliveries__card-value">
+                          {{ delivery.order.customer.name }}
+                        </span>
+                      </p>
+                    </div>
+                  </article>
                 }
-              </ul>
+              </div>
             } @else {
-              <p class="form-summary__empty">
+              <p class="selected-deliveries__empty">
                 {{ t('logistic.addRoute.noDeliveriesSelected') }}
               </p>
             }
-          </div>
+        </section>
+
+        <section class="delivery-map">
+          <header class="delivery-map__header">
+            <h3 class="delivery-map__title">
+              {{ t('logistic.addRoute.map.title') }}
+            </h3>
+            <p class="delivery-map__description">
+              {{ t('logistic.addRoute.map.description') }}
+            </p>
+          </header>
+
+          <app-maps
+            [deliveries]="selectedDeliveries()"
+            [ariaLabel]="t('logistic.addRoute.map.title')"
+            [loadingMessage]="t('logistic.addRoute.map.loading')"
+            [loadErrorMessage]="t('logistic.addRoute.map.loadError')"
+            [emptyMessage]="t('logistic.addRoute.map.noDeliveries')"
+            [missingKeyMessage]="t('logistic.addRoute.map.missingKey')"
+            [routePath]="calculatedRoutePath()"
+            [routeOrder]="calculatedRouteOrder()"></app-maps>
+        </section>
         </mat-card-content>
 
         <mat-card-actions class="form-actions">
+          <button
+            type="button"
+            class="page-action-button page-action-button--secondary"
+            [disabled]="selectedDeliveriesCount() < 2 || isCalculatingRoutes()"
+            (click)="onCalculateRoutes()">
+            {{ t('logistic.actions.calculateRoute') }}
+          </button>
+
           <button type="submit" class="page-action-button" [disabled]="routeForm.invalid">
             {{ t('logistic.actions.createRoute') }}
           </button>
@@ -78,18 +163,12 @@
           </div>
         } @else {
           <app-unassigned-deliveries
-            [deliveries]="deliveries()"
+            [deliveries]="availableDeliveries()"
             [selectable]="true"
             [selectedDeliveryIds]="selectedDeliveryIds()"
             (deliveryToggled)="onDeliveryToggled($event)" />
         }
       </div>
-
-      <footer class="deliveries-section__footer">
-        <span class="deliveries-section__summary">
-          {{ t('logistic.addRoute.selectedCount', { count: selectedDeliveriesCount() }) }}
-        </span>
-      </footer>
     </section>
   </div>
 </div>

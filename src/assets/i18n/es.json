@@ -143,7 +143,8 @@
     "actions": {
       "createRoute": "Crear ruta",
       "addToRoute": "Añadir a la ruta",
-      "removeFromRoute": "Quitar de la ruta"
+      "removeFromRoute": "Quitar de la ruta",
+      "calculateRoute": "Previsualizar rutas"
     },
     "addRoute": {
       "subtitle": "Registra una nueva ruta de entrega para organizar asignaciones y planificación de despachos.",
@@ -153,7 +154,15 @@
       },
       "selectedDeliveries": "Entregas seleccionadas para esta ruta",
       "noDeliveriesSelected": "Selecciona entregas de la lista inferior para agregarlas a esta ruta.",
-      "selectedCount": "Entregas añadidas a esta ruta: {{ count }}"
+      "selectedCount": "Entregas añadidas a esta ruta: {{ count }}",
+      "map": {
+        "title": "Mapa de entregas",
+        "description": "Visualiza los puntos de entrega seleccionados directamente en Google Maps.",
+        "noDeliveries": "Selecciona entregas para mostrar sus ubicaciones en el mapa.",
+        "missingKey": "Mapa no disponible. Configura la clave de Google Maps para visualizar las rutas.",
+        "loading": "Cargando mapa...",
+        "loadError": "No pudimos cargar Google Maps. Intenta recargar la página."
+      }
     },
     "states": {
       "loading": "Cargando entregas...",

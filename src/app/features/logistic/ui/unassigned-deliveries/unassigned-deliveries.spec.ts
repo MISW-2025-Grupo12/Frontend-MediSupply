@@ -12,21 +12,21 @@ describe('UnassignedDeliveries', () => {
   const mockDeliveries: Delivery[] = [
     {
       id: 'DEL-1',
-      direccion: 'Main St 123',
-      fecha_entrega: '2025-11-15T09:00:00Z',
-      pedido: {
+      address: 'Main St 123',
+      deliveryDate: '2025-11-15T09:00:00Z',
+      order: {
         id: 'PED-1',
         total: 150000,
-        estado: 'PENDIENTE',
-        fecha_confirmacion: '2025-11-10T09:30:00Z',
-        vendedor_id: 'VEN-1',
-        cliente: {
+        status: 'PENDIENTE',
+        confirmationDate: '2025-11-10T09:30:00Z',
+        sellerId: 'VEN-1',
+        customer: {
           name: 'Clinic Example',
           phone: '+57 1 5550000',
           address: 'Main St 123',
           avatar: ''
         },
-        productos: []
+        products: []
       }
     }
   ];
@@ -92,7 +92,7 @@ describe('UnassignedDeliveries', () => {
 
   it('should render delivery information', () => {
     const compiled: HTMLElement = fixture.nativeElement;
-    const deliveryId = compiled.querySelector('.delivery-card__value');
-    expect(deliveryId?.textContent).toContain('DEL-1');
+    const deliveryAddress = compiled.querySelector('.delivery-card__value');
+    expect(deliveryAddress?.textContent).toContain('Main St 123');
   });
 });

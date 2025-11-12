@@ -142,7 +142,8 @@
     "actions": {
       "createRoute": "Create route",
       "addToRoute": "Add to route",
-      "removeFromRoute": "Remove from route"
+      "removeFromRoute": "Remove from route",
+      "calculateRoute": "Preview routes"
     },
     "addRoute": {
       "subtitle": "Register a new delivery route to organize assignments and dispatch planning.",
@@ -152,7 +153,15 @@
       },
       "selectedDeliveries": "Deliveries selected for this route",
       "noDeliveriesSelected": "Select deliveries from the list below to add them to this route.",
-      "selectedCount": "Deliveries added to this route: {{ count }}"
+      "selectedCount": "Deliveries added to this route: {{ count }}",
+      "map": {
+        "title": "Delivery map",
+        "description": "Visualize the selected delivery points directly on Google Maps.",
+        "noDeliveries": "Select deliveries to display their locations on the map.",
+        "missingKey": "Map preview unavailable. Configure the Google Maps API key to visualize routes.",
+        "loading": "Loading map...",
+        "loadError": "We couldn't load Google Maps. Try reloading the page."
+      }
     },
     "states": {
       "loading": "Loading deliveries...",

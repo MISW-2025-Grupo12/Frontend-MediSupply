@@ -1,8 +1,10 @@
 import { DeliveryOrder } from "./deliveryOrder.model";
+import { Location } from "./location.model";
 
 export interface Delivery {
   id: string | number;
-  direccion: string;
-  fecha_entrega: string;
-  pedido: DeliveryOrder;
+  address: string;
+  location?: Location;
+  deliveryDate: string;
+  order: DeliveryOrder;
 }
