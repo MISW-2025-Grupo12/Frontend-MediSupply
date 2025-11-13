@@ -378,7 +378,14 @@
     "noProducts": "No products available",
     "loadingProducts": "Loading products...",
     "searchProducts": "Search Products",
-    "searchPlaceholder": "Search by product name"
+    "filters": {
+      "nameLabel": "Product name",
+      "namePlaceholder": "Search by product name",
+      "categoryLabel": "Category",
+      "categoryAll": "All categories",
+      "warehouseLabel": "Warehouse",
+      "warehouseAll": "All warehouses"
+    }
   },
   "sales": {
     "subtitle": "Select an option to manage sales",
