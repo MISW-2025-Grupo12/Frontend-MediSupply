@@ -148,7 +148,7 @@ export class AddRoute implements OnInit {
 
   ngOnInit(): void {
     if (!this.deliveries().length) {
-      this.logisticStore.loadMockDeliveries();
+      this.logisticStore.loadUnassignedDeliveries();
     }
 
     if (!this.warehouses().length) {

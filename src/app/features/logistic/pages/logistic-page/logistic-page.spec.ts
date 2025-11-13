@@ -54,10 +54,10 @@ describe('LogisticPage', () => {
                     items: 'Items'
                   },
                   status: {
-                    pendiente: 'Pending',
-                    en_ruta: 'In transit',
+                    borrador: 'Draft',
+                    confirmado: 'Confirmed',
+                    'en-transito': 'In transit',
                     entregado: 'Delivered',
-                    preparando: 'Preparing',
                     unknown: 'Unknown'
                   }
                 }

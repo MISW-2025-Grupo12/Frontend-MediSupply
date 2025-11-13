@@ -17,7 +17,7 @@ describe('UnassignedDeliveries', () => {
       order: {
         id: 'PED-1',
         total: 150000,
-        status: 'PENDIENTE',
+        status: 'CONFIRMADO',
         confirmationDate: '2025-11-10T09:30:00Z',
         sellerId: 'VEN-1',
         customer: {
@@ -61,10 +61,10 @@ describe('UnassignedDeliveries', () => {
                     items: 'Items'
                   },
                   status: {
-                    pendiente: 'Pending',
-                    en_ruta: 'In transit',
+                    borrador: 'Draft',
+                    confirmado: 'Confirmed',
+                    'en-transito': 'In transit',
                     entregado: 'Delivered',
-                    preparando: 'Preparing',
                     unknown: 'Unknown'
                   }
                 }

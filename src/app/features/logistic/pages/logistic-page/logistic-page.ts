@@ -24,7 +24,7 @@ export class LogisticPage implements OnInit {
     }
 
     if (!this.deliveries().length) {
-      this.logisticStore.loadMockDeliveries();
+      this.logisticStore.loadUnassignedDeliveries();
     }
   }
 

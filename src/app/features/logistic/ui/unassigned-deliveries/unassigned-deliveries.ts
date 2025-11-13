@@ -27,6 +27,11 @@ export class UnassignedDeliveries {
   }
 
   statusKey(status: string | undefined): string {
-    return status?.toLowerCase() ?? 'unknown';
+    return status
+      ? status
+          .toLowerCase()
+          .replace(/\s+/g, '-')
+          .replace(/_/g, '-')
+      : 'unknown';
   }
 }

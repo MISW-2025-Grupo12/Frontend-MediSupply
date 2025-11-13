@@ -198,10 +198,10 @@
         "items": "Artículos"
       },
       "status": {
-        "en_ruta": "En ruta",
-        "pendiente": "Pendiente",
+        "borrador": "Borrador",
+        "confirmado": "Confirmado",
+        "en-transito": "En tránsito",
         "entregado": "Entregado",
-        "preparando": "Preparando",
         "unknown": "Desconocido"
       }
     },

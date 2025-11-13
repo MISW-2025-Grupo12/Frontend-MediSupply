@@ -127,25 +127,25 @@
   background-color: $gray-200;
   color: $gray-700;
 
-  &[data-status='en_ruta'],
-  &[data-status='en-ruta'] {
-    background-color: color.scale($info-color, $lightness: 40%);
-    color: color.scale($info-color, $lightness: -20%);
+  &[data-status='borrador'] {
+    background-color: color.scale($gray-300, $lightness: 20%);
+    color: color.scale($gray-700, $lightness: -10%);
   }
 
-  &[data-status='pendiente'] {
-    background-color: color.scale($warning-color, $lightness: 40%);
-    color: color.scale($warning-color, $lightness: -20%);
+  &[data-status='confirmado'] {
+    background-color: color.scale($primary-color, $lightness: 40%);
+    color: color.scale($primary-color, $lightness: -20%);
+  }
+
+  &[data-status='en transito'],
+  &[data-status='en-transito'] {
+    background-color: color.scale($info-color, $lightness: 35%);
+    color: color.scale($info-color, $lightness: -25%);
   }
 
   &[data-status='entregado'] {
     background-color: color.scale($success-color, $lightness: 40%);
     color: color.scale($success-color, $lightness: -20%);
-  }
-
-  &[data-status='preparando'] {
-    background-color: color.scale($primary-color, $lightness: 40%);
-    color: color.scale($primary-color, $lightness: -20%);
   }
 }
 

@@ -197,10 +197,10 @@
         "items": "Items"
       },
       "status": {
-        "en_ruta": "In transit",
-        "pendiente": "Pending",
+        "borrador": "Draft",
+        "confirmado": "Confirmed",
+        "en-transito": "In transit",
         "entregado": "Delivered",
-        "preparando": "Preparing",
         "unknown": "Unknown"
       }
     },
