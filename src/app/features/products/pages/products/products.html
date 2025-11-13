@@ -29,5 +29,24 @@
   
   <div class="page-content">
     <app-product-list [products]="productsStore.products()" />
+
+    <div class="loading-container" *ngIf="productsStore.isLoading()">
+      <mat-progress-spinner mode="indeterminate" diameter="32"></mat-progress-spinner>
+    </div>
+
+    <div class="load-more-container" *ngIf="productsStore.hasMore()">
+      <button
+        mat-stroked-button
+        color="primary"
+        class="load-more-button"
+        (click)="productsStore.loadNextPage()"
+        [disabled]="productsStore.isLoading()">
+        Load more products
+      </button>
+    </div>
+
+    <div class="end-of-results" *ngIf="!productsStore.isLoading() && !productsStore.hasMore() && productsStore.products().length">
+      No more products to load.
+    </div>
   </div>
 </div>

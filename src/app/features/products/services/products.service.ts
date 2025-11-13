@@ -15,6 +15,7 @@ import { LoadFileJobDTO } from '../../../shared/DTOs/loadFileJobDTO.model';
 import { LoadFileJob } from '../../../shared/models/loadFileJob.model';
 import { LoadFileStatus } from '../../../shared/models/loadFileStatus.model';
 import { LoadFileStatusDTO } from '../../../shared/DTOs/loadFileStatusDTO.model';
+import { PaginationRequestDTO } from '../../../shared/DTOs/paginationRequestDTO.model';
 
 @Injectable({
   providedIn: 'root'
@@ -114,37 +115,42 @@ export class ProductsService {
       })))
   }
 
-  getProductsWithLocation(): Observable<ProductWithLocation[]> {
-    return this.apiClient.get<PaginatedResponseDTO<ProductWithLocationDTO>>('/bodegas/productos', 'logistics')
+  getProductsWithLocation(pagination: PaginationRequestDTO): Observable<PaginatedResponseDTO<ProductWithLocation>> {
+    const params = this.apiClient.buildParams(pagination);
+
+    return this.apiClient.get<PaginatedResponseDTO<ProductWithLocationDTO>>('/bodegas/productos', 'logistics', { params })
       .pipe(
-        map(response => response.items.map(p => ({
-          id: p.id,
-          name: p.nombre,
-          description: p.descripcion,
-          price: p.precio,
-          stock: p.stock,
-          expirationDate: new Date(p.fecha_vencimiento),
-          category: {
-            id: p.categoria.id,
-            name: p.categoria.nombre,
-            description: p.categoria.descripcion
-          },
-          provider: {
-            id: p.proveedor.id,
-            name: p.proveedor.nombre,
-            email: p.proveedor.email,
-            address: p.proveedor.direccion
-          },
-          requiresColdChain: p.requiere_cadena_frio,
-          locations: p.ubicaciones.map(l => ({
-            id: l.id,
-            name: l.nombre,
-            aisle: l.pasillo,
-            rack: l.estante,
-            available_quantity: l.stock_disponible,
-            reserved_quantity: l.stock_reservado
-          }))
-        })))
+        map(response => ({
+          items: response.items.map(p => ({
+            id: p.id,
+            name: p.nombre,
+            description: p.descripcion,
+            price: p.precio,
+            stock: p.stock,
+            expirationDate: new Date(p.fecha_vencimiento),
+            category: {
+              id: p.categoria.id,
+              name: p.categoria.nombre,
+              description: p.categoria.descripcion
+            },
+            provider: {
+              id: p.proveedor.id,
+              name: p.proveedor.nombre,
+              email: p.proveedor.email,
+              address: p.proveedor.direccion
+            },
+            requiresColdChain: p.requiere_cadena_frio,
+            locations: p.ubicaciones.map(l => ({
+              id: l.id,
+              name: l.nombre,
+              aisle: l.pasillo,
+              rack: l.estante,
+              available_quantity: l.stock_disponible,
+              reserved_quantity: l.stock_reservado
+            }))
+          })),
+          pagination: response.pagination
+        }))
       );
   }
 

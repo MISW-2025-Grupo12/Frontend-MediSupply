@@ -5,28 +5,81 @@
   width: 100%;
 }
 
-.search-container {
+.filters {
   margin-bottom: 2rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
   @media (max-width: 768px) {
     margin-bottom: 1.5rem;
   }
 }
 
-.search-input-wrapper {
-  position: relative;
+.filter {
   width: 100%;
-  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-wrapper,
+.select-wrapper {
+  position: relative;
+}
+
+.input-wrapper {
   display: flex;
   align-items: center;
 }
 
-.search-icon {
+.filter-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: $gray-700;
+  margin-bottom: 0.5rem;
+}
+
+.filter-input,
+.filter-select {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 1rem;
+  color: $gray-900;
+  background-color: $white;
+  border: 1px solid $gray-300;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+
+  &::placeholder {
+    color: $gray-400;
+  }
+
+  &:hover {
+    border-color: $gray-400;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $primary-color;
+    border-width: 2px;
+    box-shadow: 0 0 0 3px rgba(100, 97, 22, 0.1);
+  }
+}
+
+.filter-select {
+  appearance: none;
+  padding-right: 48px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cpath fill='%23666666' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 16px;
+}
+
+.filter-icon {
   position: absolute;
   left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
   color: $gray-500;
   font-size: 24px;
   width: 24px;
@@ -35,34 +88,23 @@
   transition: color 0.2s ease;
 }
 
-.search-input {
-  width: 100%;
-  padding: 14px 16px 14px 52px;
-  font-size: 1rem;
-  color: $gray-900;
-  background-color: $white;
-  border: 1px solid $gray-300;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-  
-  &::placeholder {
-    color: $gray-400;
-  }
-  
-  &:focus {
-    outline: none;
-    border-color: $primary-color;
-    border-width: 2px;
-    box-shadow: 0 0 0 3px rgba(100, 97, 22, 0.1);
-    
-    ~ .search-icon {
-      color: $primary-color;
-    }
-  }
-  
-  &:hover {
-    border-color: $gray-400;
-  }
+.control-text .input-wrapper:focus-within .filter-icon {
+  color: $primary-color;
+}
+
+.control-text .filter-input {
+  padding-left: 52px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }
 
 .product-grid {

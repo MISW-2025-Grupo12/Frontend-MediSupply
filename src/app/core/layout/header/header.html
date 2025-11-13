@@ -9,18 +9,22 @@
 
       <!-- Navigation -->
       <nav class="hidden md:flex items-center space-x-4">
-        <a [routerLink]="getProductsRoute()" 
-           routerLinkActive="active" 
-           [routerLinkActiveOptions]="{ matrixParams: 'exact', queryParams: 'exact', paths: 'subset', fragment: 'ignored' }"
-           class="header-nav-link">
-          {{ t('header.products') }}
-        </a>
-        <a [routerLink]="getLogisticRoute()" 
-           routerLinkActive="active" 
-           [routerLinkActiveOptions]="{ matrixParams: 'exact', queryParams: 'exact', paths: 'subset', fragment: 'ignored' }"
-           class="header-nav-link">
-          {{ t('header.logistic') }}
-        </a>
+        @if (canAccessProducts()) {
+          <a [routerLink]="getProductsRoute()" 
+             routerLinkActive="active" 
+             [routerLinkActiveOptions]="{ matrixParams: 'exact', queryParams: 'exact', paths: 'subset', fragment: 'ignored' }"
+             class="header-nav-link">
+            {{ t('header.products') }}
+          </a>
+        }
+        @if (canAccessLogistic()) {
+          <a [routerLink]="getLogisticRoute()" 
+             routerLinkActive="active" 
+             [routerLinkActiveOptions]="{ matrixParams: 'exact', queryParams: 'exact', paths: 'subset', fragment: 'ignored' }"
+             class="header-nav-link">
+            {{ t('header.logistic') }}
+          </a>
+        }
         @if (canAccessSales()) {
           <a [routerLink]="getSalesRoute()" 
              routerLinkActive="active" 

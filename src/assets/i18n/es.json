@@ -378,7 +378,14 @@
     "noProducts": "No hay productos disponibles",
     "loadingProducts": "Cargando productos...",
     "searchProducts": "Buscar Productos",
-    "searchPlaceholder": "Buscar por nombre de producto"
+    "filters": {
+      "nameLabel": "Nombre del producto",
+      "namePlaceholder": "Buscar por nombre de producto",
+      "categoryLabel": "Categoría",
+      "categoryAll": "Todas las categorías",
+      "warehouseLabel": "Bodega",
+      "warehouseAll": "Todas las bodegas"
+    }
   },
   "sales": {
     "subtitle": "Selecciona una opción para gestionar ventas",

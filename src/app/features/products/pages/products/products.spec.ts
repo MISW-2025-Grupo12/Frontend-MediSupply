@@ -11,16 +11,17 @@ import { ProductsState } from '../../state/products.store';
 describe('Products', () => {
   let component: Products;
   let fixture: ComponentFixture<Products>;
+  let mockProductsState: jasmine.SpyObj<ProductsState>;
 
   beforeEach(async () => {
     // Mock ProductsState to prevent actual HTTP calls
-    const mockProductsState = jasmine.createSpyObj('ProductsState', ['loadProducts']);
-    
-    // Mock the products signal
-    Object.defineProperty(mockProductsState, 'products', {
-      get: () => () => [],
-      configurable: true
-    });
+    mockProductsState = jasmine.createSpyObj(
+      'ProductsState',
+      ['loadInitialProducts', 'loadNextPage', 'products', 'isLoading', 'hasMore']
+    );
+    mockProductsState.products.and.returnValue([]);
+    mockProductsState.isLoading.and.returnValue(false);
+    mockProductsState.hasMore.and.returnValue(false);
 
     await TestBed.configureTestingModule({
       imports: [
@@ -53,6 +54,10 @@ describe('Products', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should load initial products on init', () => {
+    expect(mockProductsState.loadInitialProducts).toHaveBeenCalled();
   });
 
   it('should navigate to add product page', () => {
