@@ -59,6 +59,7 @@ export class Maps implements OnInit, AfterViewInit {
   private markerRenderCycle = 0;
   private readonly fallbackCenter: google.maps.LatLngLiteral = { lat: 4.710989, lng: -74.07209 };
   private mapsModules?: GoogleMapsModules;
+  private readonly singleMarkerMaxZoom = 13;
   private hasWarnedMissingMapId = false;
 
   private readonly syncMarkers = effect(() => {
@@ -226,7 +227,7 @@ export class Maps implements OnInit, AfterViewInit {
         }
       } else {
         this.map.setCenter(this.fallbackCenter);
-        this.map.setZoom(6);
+        this.map.setZoom(12);
       }
 
       return;
@@ -258,9 +259,17 @@ export class Maps implements OnInit, AfterViewInit {
     if (!hasRoutePath) {
       if (this.markers.length && !bounds.isEmpty()) {
         this.map.fitBounds(bounds);
+
+        if (this.markers.length === 1) {
+          const currentZoom = this.map.getZoom();
+
+          if (typeof currentZoom === 'number' && currentZoom > this.singleMarkerMaxZoom) {
+            this.map.setZoom(this.singleMarkerMaxZoom);
+          }
+        }
       } else {
         this.map.setCenter(this.fallbackCenter);
-        this.map.setZoom(6);
+        this.map.setZoom(12);
       }
     }
 

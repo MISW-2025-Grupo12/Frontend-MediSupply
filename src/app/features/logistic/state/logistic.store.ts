@@ -5,8 +5,6 @@ import { Delivery } from '../../../shared/models/delivery.model';
 import { Location } from '../../../shared/models/location.model';
 import { LogisticService } from '../services/logistic.service';
 import { PaginatedResponseDTO } from '../../../shared/DTOs/paginatedResponseDTO.model';
-import { UsersService } from '../../users/services/users.service';
-import { AppUser } from '../../../shared/models/user.model';
 import { Warehouse } from '../../../shared/models/warehouse.model';
 import { Route } from '../../../shared/models/route.model';
 
@@ -26,12 +24,9 @@ const DEFAULT_PAGINATION: Pagination = {
 export class LogisticStore {
   private appStore = inject(AppStore);
   private logisticService = inject(LogisticService);
-  private usersService = inject(UsersService);
 
   private _deliveries = signal<Delivery[]>([]);
   private _deliveriesPagination = signal<Pagination>(DEFAULT_PAGINATION);
-  private _deliveryUsers = signal<AppUser[]>([]);
-  private _deliveryUsersPagination = signal<Pagination>(DEFAULT_PAGINATION);
   private _warehouses = signal<Warehouse[]>([]);
   private _warehousesPagination = signal<Pagination>(DEFAULT_PAGINATION);
   private _routesLoading = signal<boolean>(false);
@@ -42,8 +37,6 @@ export class LogisticStore {
 
   readonly deliveries = computed(() => this._deliveries());
   readonly deliveriesPagination = computed(() => this._deliveriesPagination());
-  readonly deliveryUsers = computed(() => this._deliveryUsers());
-  readonly deliveryUsersPagination = computed(() => this._deliveryUsersPagination());
   readonly warehouses = computed(() => this._warehouses());
   readonly warehousesPagination = computed(() => this._warehousesPagination());
   readonly routesLoading = computed(() => this._routesLoading());
@@ -52,28 +45,17 @@ export class LogisticStore {
   readonly isLoading = computed(() => this._isLoading());
   readonly error = computed(() => this._error());
 
-  loadDeliveries(): void {
+  loadUnassignedDeliveries(): void {
     this._isLoading.set(true);
     this._error.set(null);
     this.appStore.setApiBusy(true);
 
-    this.logisticService.getDeliveries().subscribe({
+    this.logisticService.getDeliveries({ con_ruta: false }).subscribe({
       next: (response) => this.handleDeliveriesResponse(response),
       error: (err) => this.handleDeliveriesError(err)
     });
   }
 
-  loadDeliveryUsers(): void {
-    this._isLoading.set(true);
-    this._error.set(null);
-    this.appStore.setApiBusy(true);
-
-    this.usersService.getDeliveryUsers().subscribe({
-      next: (response) => this.handleDeliveryUsersResponse(response),
-      error: (err) => this.handleDeliveryUsersError(err)
-    });
-  }
-  
   loadWarehouses(): void {
     this._isLoading.set(true);
     this._error.set(null);
@@ -103,16 +85,6 @@ export class LogisticStore {
     });
   }
 
-  loadMockDeliveries(): void {
-    this._isLoading.set(true);
-    this._error.set(null);
-
-    this.logisticService.getMockDeliveries().subscribe({
-      next: (response) => this.handleDeliveriesResponse(response),
-      error: (err) => this.handleDeliveriesError(err)
-    });
-  }
-
   updateDeliveryLocation(deliveryId: Delivery['id'], location: Location | null | undefined): void {
     this._deliveries.update((deliveries) =>
       deliveries.map((delivery) => (delivery.id === deliveryId ? { ...delivery, location: location ?? undefined } : delivery))
@@ -136,21 +108,6 @@ export class LogisticStore {
 
   private handleDeliveriesError(error: unknown): void {
     const message = this.extractErrorMessage(error, 'Error loading deliveries');
-
-    this._error.set(message);
-    this._isLoading.set(false);
-    this.appStore.setApiBusy(false);
-  }
-
-  private handleDeliveryUsersResponse(response: PaginatedResponseDTO<AppUser>): void {
-    this._deliveryUsers.set(response.items);
-    this._deliveryUsersPagination.set(response.pagination ?? DEFAULT_PAGINATION);
-    this._isLoading.set(false);
-    this.appStore.setApiBusy(false);
-  }
-
-  private handleDeliveryUsersError(error: unknown): void {
-    const message = this.extractErrorMessage(error, 'Error loading delivery users');
 
     this._error.set(message);
     this._isLoading.set(false);

@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { map, Observable, of } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { DeliveryDTO } from '../../../shared/DTOs/deliveryDTO.model';
+import { DeliveryRequestParamsDTO } from '../../../shared/DTOs/deliveryRequestParamsDTO.model';
 import { PaginatedResponseDTO } from '../../../shared/DTOs/paginatedResponseDTO.model';
 import { ApiClientService, ServiceType } from '../../../core/services/api-client.service';
 import { Delivery } from '../../../shared/models/delivery.model';
@@ -10,7 +11,6 @@ import { DeliveryProduct } from '../../../shared/models/deliveryProduct.model';
 import { DeliveryOrderDTO } from '../../../shared/DTOs/deliveryOrderDTO.model';
 import { DeliveryCustomerDTO } from '../../../shared/DTOs/deliveryCustomerDTO.model';
 import { DeliveryProductDTO } from '../../../shared/DTOs/deliveryProductDTO.model';
-import { MOCK_LOGISTIC_DELIVERIES_RESPONSE } from './logistic.mock';
 import { WarehouseDTO } from '../../../shared/DTOs/warehouseDTO.model';
 import { Warehouse } from '../../../shared/models/warehouse.model';
 import { Pagination } from '../../../shared/types/pagination';
@@ -42,9 +42,23 @@ export class LogisticService {
     total_pages: 0
   };
 
-  getDeliveries(): Observable<PaginatedResponseDTO<Delivery>> {
+  getDeliveries(filters?: Partial<DeliveryRequestParamsDTO>): Observable<PaginatedResponseDTO<Delivery>> {
+    const params = filters
+      ? this.apiClient.buildParams({
+          page: filters.page,
+          page_size: filters.page_size,
+          fecha_inicio: filters.fecha_inicio,
+          fecha_fin: filters.fecha_fin,
+          estado_pedido: filters.estado_pedido,
+          cliente_id: filters.cliente_id,
+          con_ruta: filters.con_ruta
+        })
+      : undefined;
+
+    const options = params ? { params } : undefined;
+
     return this.apiClient
-      .get<PaginatedResponseDTO<DeliveryDTO>>('/entregas', this.serviceType)
+      .get<PaginatedResponseDTO<DeliveryDTO>>('/entregas', this.serviceType, options)
       .pipe(
         map(response => {
           const items = (response?.items ?? []).map(delivery => this.mapDeliveryDtoToModel(delivery));
@@ -163,14 +177,5 @@ export class LogisticService {
       entregas: route.deliveries.map(delivery => delivery.id),
       bodega_id: route.warehouse.id
     };
-  }
-
-  getMockDeliveries(): Observable<PaginatedResponseDTO<Delivery>> {
-    return of(MOCK_LOGISTIC_DELIVERIES_RESPONSE).pipe(
-      map(response => ({
-        items: response.items.map(delivery => this.mapDeliveryDtoToModel(delivery)),
-        pagination: response.pagination
-      }))
-    );
   }
 }

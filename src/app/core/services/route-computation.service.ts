@@ -50,14 +50,15 @@ export class RouteComputationService {
       nodes.push({ delivery, location });
     }
 
-    if (nodes.length < 2) {
-      console.warn('Unable to compute routes because fewer than two deliveries have valid locations.');
+    if (!nodes.length) {
+      console.warn('Unable to compute routes because no deliveries have valid locations.');
       return null;
     }
 
-    const routeSegments = await this.buildRouteSegments(apiKey, nodes);
+    const routeSegments =
+      nodes.length >= 2 ? await this.buildRouteSegments(apiKey, nodes) : new Map<string, RouteSegment>();
 
-    if (!routeSegments.size) {
+    if (nodes.length >= 2 && !routeSegments.size) {
       console.warn('Unable to compute routes: no paths were returned for the selected deliveries.');
       return null;
     }
@@ -171,7 +172,18 @@ export class RouteComputationService {
       }
     }
 
-    const fallbackPath = this.composeRoutePathFromSegments(optimalRoute.order, routeSegments);
+    let fallbackPath = this.composeRoutePathFromSegments(optimalRoute.order, routeSegments);
+
+    if ((!fallbackPath || !fallbackPath.length) && optimalRoute.order.length === 1) {
+      const firstNode = optimalRoute.order[0];
+
+      if (origin && firstNode) {
+        fallbackPath = [
+          this.toLatLngLiteral(origin),
+          this.toLatLngLiteral(firstNode.location)
+        ];
+      }
+    }
 
     if (!fallbackPath?.length) {
       return null;

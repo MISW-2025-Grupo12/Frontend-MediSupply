@@ -148,7 +148,7 @@ export class AddRoute implements OnInit {
 
   ngOnInit(): void {
     if (!this.deliveries().length) {
-      this.logisticStore.loadMockDeliveries();
+      this.logisticStore.loadUnassignedDeliveries();
     }
 
     if (!this.warehouses().length) {
@@ -172,8 +172,8 @@ export class AddRoute implements OnInit {
 
     const deliveries = this.selectedDeliveries();
 
-    if (deliveries.length < 2) {
-      console.warn('Select at least two deliveries to compute routes.');
+    if (!deliveries.length) {
+      console.warn('Select at least one delivery to compute routes.');
       this.resetCalculatedRoute();
       return;
     }
@@ -194,8 +194,8 @@ export class AddRoute implements OnInit {
         getDeliveryById
       );
 
-      if (deliveriesWithLocation.length < 2) {
-        console.warn('Unable to compute routes because fewer than two deliveries have valid locations.');
+      if (!deliveriesWithLocation.length) {
+        console.warn('Unable to compute routes because no deliveries have valid locations.');
         return;
       }
 
