@@ -26,7 +26,7 @@ const localizedRoutes: Routes = LOCALES.map(locale => ({
     { 
       path: locale === 'en' ? 'logistic' : 'logistica', 
       loadChildren: () => import('./features/logistic/routes').then(m => m.LOGISTIC_ROUTES),
-      canActivate: [authGuard],
+      canActivate: [authGuard, roleGuard([UserType.ADMIN, UserType.DELIVERY])],
       data: { titleKey: 'titles.logistic' }
     },
     { 
