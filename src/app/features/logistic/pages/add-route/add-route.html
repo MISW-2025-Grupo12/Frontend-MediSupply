@@ -77,7 +77,7 @@
           <button
             type="button"
             class="page-action-button page-action-button--secondary"
-            [disabled]="selectedDeliveriesCount() < 2 || isCalculatingRoutes()"
+            [disabled]="selectedDeliveriesCount() < 1 || isCalculatingRoutes()"
             (click)="onCalculateRoutes()">
             {{ t('logistic.actions.calculateRoute') }}
           </button>
