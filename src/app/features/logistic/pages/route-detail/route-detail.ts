@@ -21,6 +21,8 @@ import { Location } from '../../../../shared/models/location.model';
 import { RouteComputationService } from '../../../../core/services/route-computation.service';
 import { GoogleMapsLoaderService, GoogleRoute } from '../../../../core/services/google-maps-loader.service';
 import { environment } from '../../../../../environments/environment';
+import { UsersStore } from '../../../users/state/users.store';
+import { LocaleRouteService } from '../../../../core/services/locale-route.service';
 
 type MapOriginMarker = {
   id: string;
@@ -41,6 +43,8 @@ export class RouteDetail implements OnInit {
   private readonly transloco = inject(TranslocoService);
   private readonly routeComputation = inject(RouteComputationService);
   private readonly googleMapsLoader = inject(GoogleMapsLoaderService);
+  private readonly usersStore = inject(UsersStore);
+  private readonly localeRouteService = inject(LocaleRouteService);
 
   private readonly googleMapsApiKey = environment.googleMapsApiKey?.trim() || null;
   private readonly requestedRouteId = signal<string | null>(null);
@@ -61,8 +65,27 @@ export class RouteDetail implements OnInit {
   readonly totalDeliveries = computed(() => this.currentRoute()?.deliveries.length ?? 0);
   readonly driverId = computed(() => this.currentRoute()?.driverId ?? '');
   readonly warehouseName = computed(() => this.currentRoute()?.warehouse.name ?? '');
-  readonly backLink = computed(() => ['../']);
+  readonly backLink = computed(() => this.localeRouteService.getLocalizedUrl('logistic'));
   readonly activeLanguage = computed(() => this.transloco.getActiveLang() ?? 'en');
+  readonly driverUser = computed(() => {
+    const driverId = this.currentRoute()?.driverId;
+
+    if (!driverId) {
+      return null;
+    }
+
+    const driverIdStr = String(driverId);
+    return this.usersStore.deliveryUsers().find((user) => String(user.id) === driverIdStr) ?? null;
+  });
+  readonly driverDisplay = computed(() => {
+    const driver = this.driverUser();
+
+    if (driver?.name?.trim()) {
+      return driver.name;
+    }
+
+    return this.shortId(this.currentRoute()?.driverId ?? '');
+  });
 
   private readonly syncRouteEffect = effect(() => {
     const id = this.requestedRouteId();
@@ -111,6 +134,10 @@ export class RouteDetail implements OnInit {
 
     if (!this.logisticStore.routes().length && !this.logisticStore.routesLoading()) {
       this.logisticStore.loadRoutes();
+    }
+
+    if (!this.usersStore.deliveryUsers().length && !this.usersStore.isLoadingDeliveryUsers()) {
+      this.usersStore.loadDeliveryUsers();
     }
   }
 
@@ -402,5 +429,14 @@ export class RouteDetail implements OnInit {
       typeof value.longitude === 'number' &&
       Number.isFinite(value.longitude)
     );
+  }
+
+  shortId(value: string | number | null | undefined): string {
+    if (value === null || value === undefined) {
+      return '';
+    }
+
+    const id = String(value);
+    return id.length <= 6 ? id : id.slice(-6);
   }
 }

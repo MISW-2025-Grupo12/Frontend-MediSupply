@@ -9,7 +9,6 @@ import { Warehouse } from '../../../shared/models/warehouse.model';
 import { Route } from '../../../shared/models/route.model';
 
 type LogisticPaginationResponse = PaginatedResponseDTO<Delivery>;
-type LogisticRoutesResponse = PaginatedResponseDTO<Route>;
 
 const DEFAULT_PAGINATION: Pagination = {
   has_next: false,
@@ -31,7 +30,6 @@ export class LogisticStore {
   private _warehousesPagination = signal<Pagination>(DEFAULT_PAGINATION);
   private _routesLoading = signal<boolean>(false);
   private _routes = signal<Route[]>([]);
-  private _routesPagination = signal<Pagination>(DEFAULT_PAGINATION);
   private _isLoading = signal<boolean>(false);
   private _error = signal<string | null>(null);
 
@@ -41,7 +39,6 @@ export class LogisticStore {
   readonly warehousesPagination = computed(() => this._warehousesPagination());
   readonly routesLoading = computed(() => this._routesLoading());
   readonly routes = computed(() => this._routes());
-  readonly routesPagination = computed(() => this._routesPagination());
   readonly isLoading = computed(() => this._isLoading());
   readonly error = computed(() => this._error());
 
@@ -67,19 +64,13 @@ export class LogisticStore {
     });
   }
 
-  loadRoutes(filters?: {
-    page?: number;
-    pageSize?: number;
-    date?: string;
-    driverId?: string | number;
-    warehouseId?: string | number;
-  }): void {
+  loadRoutes(): void {
     this._isLoading.set(true);
     this._error.set(null);
     this.appStore.setApiBusy(true);
     this._routesLoading.set(true);
 
-    this.logisticService.getRoutes(filters).subscribe({
+    this.logisticService.getRoutes().subscribe({
       next: (response) => this.handleRoutesResponse(response),
       error: (err) => this.handleRoutesError(err)
     });
@@ -129,9 +120,8 @@ export class LogisticStore {
     this.appStore.setApiBusy(false);
   }
 
-  private handleRoutesResponse(response: LogisticRoutesResponse): void {
-    this._routes.set(response.items);
-    this._routesPagination.set(response.pagination ?? DEFAULT_PAGINATION);
+  private handleRoutesResponse(routes: Route[]): void {
+    this._routes.set(routes);
     this._routesLoading.set(false);
     this._isLoading.set(false);
     this.appStore.setApiBusy(false);

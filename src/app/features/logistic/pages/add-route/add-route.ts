@@ -21,8 +21,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { environment } from '../../../../../environments/environment';
 import { SelectedDeliveries } from '../../ui/selected-deliveries/selected-deliveries';
-import { UsersService } from '../../../users/services/users.service';
-import { AppUser } from '../../../../shared/models/user.model';
+import { UsersStore } from '../../../users/state/users.store';
 import { LogisticService } from '../../services/logistic.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -57,9 +56,9 @@ type RouteOriginMarker = {
 export class AddRoute implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly logisticStore = inject(LogisticStore);
+  private readonly usersStore = inject(UsersStore);
   private readonly routeComputation = inject(RouteComputationService);
   private readonly googleMapsLoader = inject(GoogleMapsLoaderService);
-  private readonly usersService = inject(UsersService);
   private readonly logisticService = inject(LogisticService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly googleMapsApiKey = environment.googleMapsApiKey;
@@ -113,8 +112,8 @@ export class AddRoute implements OnInit {
     });
   });
 
-  readonly deliveryUsers = signal<AppUser[]>([]);
-  readonly isLoadingDeliveryUsers = signal(false);
+  readonly deliveryUsers = this.usersStore.deliveryUsers;
+  readonly isLoadingDeliveryUsers = this.usersStore.isLoadingDeliveryUsers;
   readonly isCreatingRoute = signal(false);
 
   private readonly syncDeliveriesControl = effect(() => {
@@ -378,22 +377,7 @@ export class AddRoute implements OnInit {
   }
 
   private loadDeliveryUsers(): void {
-    this.isLoadingDeliveryUsers.set(true);
-
-    this.usersService
-      .getDeliveryUsers()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: ({ items }) => {
-          this.deliveryUsers.set(items ?? []);
-          this.isLoadingDeliveryUsers.set(false);
-        },
-        error: (error) => {
-          console.error('Failed to load delivery users.', error);
-          this.deliveryUsers.set([]);
-          this.isLoadingDeliveryUsers.set(false);
-        }
-      });
+    this.usersStore.loadDeliveryUsers();
   }
 
   private async ensureDeliveriesWithLocation(
