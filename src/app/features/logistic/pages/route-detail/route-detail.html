@@ -1,14 +1,16 @@
 <div class="route-detail-page" *transloco="let t">
   <header class="route-detail-header">
-    <a class="route-detail-back" [routerLink]="backLink()">
+    <a
+      class="route-detail-back"
+      [routerLink]="backLink"
+      [attr.aria-label]="t('common.back')">
       <mat-icon fontIcon="arrow_back"></mat-icon>
-      <span>{{ t('common.back') }}</span>
     </a>
 
     @if (currentRoute(); as routeDetail) {
       <div class="route-detail-heading">
         <h1 class="route-detail-title">
-          {{ t('logistic.routeDetail.header.title', { id: routeDetail.id }) }}
+          {{ t('logistic.routeDetail.header.title', { id: shortId(routeDetail.id) }) }}
         </h1>
         <p class="route-detail-subtitle">
           {{ t('logistic.routeDetail.header.subtitle', { date: (routeDetail.date | date: 'mediumDate') }) }}
@@ -47,7 +49,7 @@
           <dl class="route-summary-card__list">
             <div class="route-summary-card__item">
               <dt>{{ t('logistic.routeDetail.summary.routeId') }}</dt>
-              <dd>#{{ routeDetail.id }}</dd>
+              <dd>#{{ shortId(routeDetail.id) }}</dd>
             </div>
             <div class="route-summary-card__item">
               <dt>{{ t('logistic.routeDetail.summary.date') }}</dt>
@@ -55,7 +57,7 @@
             </div>
             <div class="route-summary-card__item">
               <dt>{{ t('logistic.routeDetail.summary.driver') }}</dt>
-              <dd>{{ routeDetail.driverId }}</dd>
+              <dd>{{ driverDisplay() }}</dd>
             </div>
             <div class="route-summary-card__item">
               <dt>{{ t('logistic.routeDetail.summary.warehouse') }}</dt>
@@ -134,7 +136,7 @@
                         </span>
                         <span>
                           {{ t('logistic.routeDetail.deliveries.orderId') }}:
-                          <strong>#{{ delivery.order.id }}</strong>
+                          <strong>#{{ shortId(delivery.order.id) }}</strong>
                         </span>
                         <span>
                           {{ t('logistic.routeDetail.deliveries.customer') }}:

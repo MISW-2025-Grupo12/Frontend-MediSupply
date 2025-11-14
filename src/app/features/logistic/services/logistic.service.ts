@@ -19,14 +19,6 @@ import { CreateRouteDTO } from '../../../shared/DTOs/createRouteDTO.model';
 import { RouteDTO } from '../../../shared/DTOs/routeDTO.model';
 import { Route } from '../../../shared/models/route.model';
 
-type GetRoutesFilters = {
-  page?: number;
-  pageSize?: number;
-  date?: string;
-  driverId?: string | number;
-  warehouseId?: string | number;
-};
-
 @Injectable({
   providedIn: 'root'
 })
@@ -80,25 +72,9 @@ export class LogisticService {
       );
   }
 
-  getRoutes(filters?: GetRoutesFilters): Observable<PaginatedResponseDTO<Route>> {
-    const params = filters
-      ? this.apiClient.buildParams({
-          page: filters.page,
-          page_size: filters.pageSize,
-          fecha_ruta: filters.date,
-          repartidor_id: filters.driverId,
-          bodega_id: filters.warehouseId
-        })
-      : undefined;
-
-    const options = params ? { params } : undefined;
-
-    return this.apiClient.get<PaginatedResponseDTO<RouteDTO>>('/rutas', this.serviceType, options).pipe(
-      map(response => {
-        const items = (response?.items ?? []).map(route => this.mapRouteDtoToModel(route));
-        const pagination = response?.pagination ?? { ...this.emptyPagination };
-        return { items, pagination };
-      })
+  getRoutes(): Observable<Route[]> {
+    return this.apiClient.get<RouteDTO[]>('/rutas', this.serviceType).pipe(
+      map(response => (response ?? []).map(route => this.mapRouteDtoToModel(route)))
     );
   }
 
