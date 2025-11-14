@@ -65,7 +65,7 @@ export class RouteDetail implements OnInit {
   readonly totalDeliveries = computed(() => this.currentRoute()?.deliveries.length ?? 0);
   readonly driverId = computed(() => this.currentRoute()?.driverId ?? '');
   readonly warehouseName = computed(() => this.currentRoute()?.warehouse.name ?? '');
-  readonly backLink = computed(() => this.localeRouteService.getLocalizedUrl('logistic'));
+  readonly backLink = this.localeRouteService.getLocalizedUrl('logistic');
   readonly activeLanguage = computed(() => this.transloco.getActiveLang() ?? 'en');
   readonly driverUser = computed(() => {
     const driverId = this.currentRoute()?.driverId;

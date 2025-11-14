@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideZonelessChangeDetection } from '@angular/core';
+import { TranslocoTestingModule } from '@ngneat/transloco';
 
 import { RoutesList } from './routes-list';
 
@@ -8,7 +10,14 @@ describe('RoutesList', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RoutesList]
+      imports: [
+        RoutesList,
+        TranslocoTestingModule.forRoot({
+          langs: { en: {} },
+          translocoConfig: { availableLangs: ['en'], defaultLang: 'en' }
+        })
+      ],
+      providers: [provideZonelessChangeDetection()]
     })
     .compileComponents();
 
