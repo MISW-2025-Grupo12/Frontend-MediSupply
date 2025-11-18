@@ -9,12 +9,14 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Header } from './header';
 import { LocaleRouteService } from '../../services/locale-route.service';
+import { AppStore } from '../../state/app.store';
 
 describe('Header', () => {
   let component: Header;
   let fixture: ComponentFixture<Header>;
   let iconRegistry: MatIconRegistry;
   let sanitizer: DomSanitizer;
+  let appStore: AppStore;
 
   beforeEach(async () => {
     const localeRouteServiceSpy = jasmine.createSpyObj('LocaleRouteService', [
@@ -58,6 +60,8 @@ describe('Header', () => {
       sanitizer.bypassSecurityTrustResourceUrl('assets/icons/logo-header.svg')
     );
 
+    appStore = TestBed.inject(AppStore);
+    appStore.setLocale('en');
     fixture = TestBed.createComponent(Header);
     component = fixture.componentInstance;
     fixture.detectChanges();
