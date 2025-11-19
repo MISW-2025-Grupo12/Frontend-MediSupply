@@ -1,0 +1,44 @@
+<div class="customer-visits-report" *transloco="let t">
+  <div *ngIf="tableData().length === 0" class="no-data-message">
+    {{ t('salesReport.table.noData') }}
+  </div>
+  
+  <table mat-table [dataSource]="tableData()" class="visits-table" *ngIf="tableData().length > 0">
+    <!-- Position Column -->
+    <ng-container matColumnDef="position">
+      <th mat-header-cell *matHeaderCellDef>{{ t('salesReport.table.position') }}</th>
+      <td mat-cell *matCellDef="let row">{{ row.position }}</td>
+    </ng-container>
+
+    <!-- Seller Name Column -->
+    <ng-container matColumnDef="sellerName">
+      <th mat-header-cell *matHeaderCellDef>{{ t('salesReport.table.sellerName') }}</th>
+      <td mat-cell *matCellDef="let row">{{ row.sellerName }}</td>
+    </ng-container>
+
+    <!-- Customer Name Column -->
+    <ng-container matColumnDef="customerName">
+      <th mat-header-cell *matHeaderCellDef>{{ t('salesReport.table.customerName') }}</th>
+      <td mat-cell *matCellDef="let row">{{ row.customerName }}</td>
+    </ng-container>
+
+    <!-- Visit Status Column -->
+    <ng-container matColumnDef="visitStatus">
+      <th mat-header-cell *matHeaderCellDef>{{ t('salesReport.table.visitStatus') }}</th>
+      <td mat-cell *matCellDef="let row">
+        <span [class]="'status-badge status-' + getStatusClass(row.visitStatus)">
+          {{ row.visitStatus }}
+        </span>
+      </td>
+    </ng-container>
+
+    <!-- Visit Date Column -->
+    <ng-container matColumnDef="visitDate">
+      <th mat-header-cell *matHeaderCellDef>{{ t('salesReport.table.visitDate') }}</th>
+      <td mat-cell *matCellDef="let row">{{ row.visitDate | date:'mediumDate' }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

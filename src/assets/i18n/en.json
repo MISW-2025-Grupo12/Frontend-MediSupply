@@ -480,5 +480,30 @@
     "scheduledVisits": "Scheduled Visits",
     "visits": "visits",
     "noVisitsAvailable": "No visits available"
+  },
+  "salesReport": {
+    "loadCustomerVisits": "Load Customer Visits",
+    "loading": "Loading customer visits...",
+    "filters": {
+      "title": "Date Filters",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "apply": "Apply Filters",
+      "clear": "Clear Filters"
+    },
+    "table": {
+      "title": "Customer Visits Report",
+      "subtitle": "Showing {{ count }} visit(s)",
+      "position": "No.",
+      "sellerName": "Seller Name",
+      "customerName": "Customer Name",
+      "visitStatus": "Visit Status",
+      "visitDate": "Visit Date",
+      "noData": "No customer visits data available"
+    },
+    "empty": {
+      "title": "No Visits Found",
+      "message": "There are no customer visits to display. Click the button above to load visits data."
+    }
   }
 }
