@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TranslocoTestingModule } from '@ngneat/transloco';
 
 import { SalesReportComponent } from './sales-report.component';
@@ -40,7 +42,9 @@ describe('SalesReportComponent', () => {
         })
       ],
       providers: [
-        provideZonelessChangeDetection()
+        provideZonelessChangeDetection(),
+        provideHttpClient(),
+        provideHttpClientTesting()
       ]
     })
     .compileComponents();
