@@ -1,8 +1,87 @@
 <div class="page-container" *transloco="let t">
   <div class="page-header">
     <h1 class="page-title">{{ t('header.salesReport') }}</h1>
+    <div class="page-actions">
+      <button 
+        mat-raised-button 
+        color="primary"
+        class="page-action-button"
+        (click)="loadReportCustomerVisits()">
+        <mat-icon>people</mat-icon>
+        {{ t('salesReport.loadCustomerVisits') }}
+      </button>
+    </div>
   </div>
 
   <div class="page-content">
+    <!-- Date Filters Section -->
+    <mat-card *ngIf="showCustomerVisitsReport()" class="filters-card">
+      <mat-card-header>
+        <mat-card-title>{{ t('salesReport.filters.title') }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="filters-container">
+          <mat-form-field class="date-field">
+            <mat-label>{{ t('salesReport.filters.startDate') }}</mat-label>
+            <input matInput [matDatepicker]="startPicker" [(ngModel)]="startDate">
+            <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field class="date-field">
+            <mat-label>{{ t('salesReport.filters.endDate') }}</mat-label>
+            <input matInput [matDatepicker]="endPicker" [(ngModel)]="endDate">
+            <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+          </mat-form-field>
+
+          <div class="filter-actions">
+            <button mat-raised-button color="primary" (click)="onApplyFilters()">
+              <mat-icon>search</mat-icon>
+              {{ t('salesReport.filters.apply') }}
+            </button>
+            <button mat-stroked-button (click)="onClearFilters()">
+              <mat-icon>clear</mat-icon>
+              {{ t('salesReport.filters.clear') }}
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Loading State -->
+    <div *ngIf="showCustomerVisitsReport() && salesState.isLoading()" class="loading-container">
+      <mat-progress-spinner mode="indeterminate" diameter="50"></mat-progress-spinner>
+      <p>{{ t('salesReport.loading') }}</p>
+    </div>
+
+    <!-- Customer Visits Report Card -->
+    <mat-card *ngIf="showCustomerVisitsReport() && !salesState.isLoading()" class="report-card">
+      <mat-card-header>
+        <div class="card-header-content">
+          <div>
+            <mat-card-title>{{ t('salesReport.table.title') }}</mat-card-title>
+            <mat-card-subtitle *ngIf="visitCount() > 0">
+              {{ t('salesReport.table.subtitle', { count: visitCount() }) }}
+            </mat-card-subtitle>
+          </div>
+          <div class="visit-count-badge" *ngIf="visitCount() > 0">
+            <mat-icon>people</mat-icon>
+            <span>{{ visitCount() }}</span>
+          </div>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <app-customer-visits-report 
+          [visits]="salesState.reportCustomerVisits()" />
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Empty State -->
+    <div *ngIf="showCustomerVisitsReport() && !salesState.isLoading() && visitCount() === 0" class="empty-state">
+      <mat-icon class="empty-icon">inbox</mat-icon>
+      <h3>{{ t('salesReport.empty.title') }}</h3>
+      <p>{{ t('salesReport.empty.message') }}</p>
+    </div>
   </div>
 </div>

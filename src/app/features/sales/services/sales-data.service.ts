@@ -4,6 +4,7 @@ import { SalesReportDTO } from '../../../shared/DTOs/salesReportDTO.model';
 import { SalesReport } from '../../../shared/models/salesReport.model';
 import { ApiClientService } from '../../../core/services/api-client.service';
 import { AppUser } from '../../../shared/models/user.model';
+import { AppUserDTO } from '../../../shared/DTOs/appUserDTO.model';
 import { UserResponseDTO } from '../../../shared/DTOs/userReponseDTO.model';
 import { UserType } from '../../../shared/enums/user-type';
 import { PaginatedResponseDTO } from '../../../shared/DTOs/paginatedResponseDTO.model';
@@ -11,13 +12,24 @@ import { CreateSalesPlanDTO } from '../../../shared/DTOs/createSalesPlanDTO.mode
 import { CreateSalesPlanModel } from '../../../shared/models/createSalesPlan.model';
 import { SalesPlan } from '../../../shared/models/salesPlan.model';
 import { SalesPlanDTO } from '../../../shared/DTOs/salesPlanDTO.model';
-
+import { ReportCustomerVisit } from '../../../shared/models/reportCustomerVisit.model';
+import { ReportCustomerVisitDTO } from '../../../shared/DTOs/reportCustomerVisitDTO.model';
+import { PaginationRequestDTO } from '../../../shared/DTOs/paginationRequestDTO.model';
+import { Pagination } from '../../../shared/types/pagination';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SalesDataService {
   private apiClient = inject(ApiClientService);
+  private readonly emptyPagination: Pagination = {
+    has_next: false,
+    has_prev: false,
+    page: 1,
+    page_size: 0,
+    total_items: 0,
+    total_pages: 0
+  };
 
   getSalesReportData(startDate?: Date, endDate?: Date): Observable<SalesReport> {
     // Build query parameters for date filtering
@@ -56,6 +68,39 @@ export class SalesDataService {
             }))
             : []
         }))
+      );
+  }
+
+  getReportCustomerVisits(filters?: PaginationRequestDTO, startDate?: Date, endDate?: Date): Observable<PaginatedResponseDTO<ReportCustomerVisit>> {
+    const paramsObj: { [key: string]: string } = {};
+    
+    if (filters) {
+      paramsObj['page'] = filters.page.toString();
+      paramsObj['page_size'] = filters.page_size.toString();
+    }
+
+    if (startDate) {
+      paramsObj['fecha_inicio'] = startDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+    }
+
+    if (endDate) {
+      paramsObj['fecha_fin'] = endDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+    }
+
+    const params = Object.keys(paramsObj).length > 0
+      ? this.apiClient.buildParams(paramsObj)
+      : undefined;
+
+    const options = params ? { params } : undefined;
+
+    return this.apiClient
+      .get<PaginatedResponseDTO<ReportCustomerVisitDTO>>('/visitas', 'sales', options)
+      .pipe(
+        map(response => {
+          const items = (response?.items ?? []).map(visit => this.mapReportCustomerVisitDtoToModel(visit));
+          const pagination = response?.pagination ?? { ...this.emptyPagination };
+          return { items, pagination };
+        })
       );
   }
 
@@ -119,5 +164,30 @@ export class SalesDataService {
       .pipe(
         map(response => response.success)
       );
+  }
+
+  private mapReportCustomerVisitDtoToModel(visit: ReportCustomerVisitDTO): ReportCustomerVisit {
+    return {
+      id: visit.id,
+      visitDate: new Date(visit.fecha_programada),
+      address: visit.direccion,
+      phone: visit.telefono,
+      status: visit.estado,
+      description: visit.descripcion,
+      seller: visit.vendedor ? this.mapAppUserDtoToPartialModel(visit.vendedor) : {},
+      customer: visit.cliente ? this.mapAppUserDtoToPartialModel(visit.cliente) : {}
+    };
+  }
+
+  private mapAppUserDtoToPartialModel(user: Partial<AppUserDTO>): Partial<AppUser> {
+    return {
+      id: user.id?.toString(),
+      name: user.nombre,
+      email: user.email,
+      legalId: user.identificacion,
+      phone: user.telefono,
+      address: user.direccion,
+      role: user.tipo_usuario as UserType
+    };
   }
 }

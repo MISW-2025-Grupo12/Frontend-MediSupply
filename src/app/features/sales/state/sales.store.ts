@@ -9,6 +9,9 @@ import { ScheduledVisit } from '../../../shared/models/scheduledVisit.model';
 import { CreateSalesPlanModel } from '../../../shared/models/createSalesPlan.model';
 import { SalesPlan } from '../../../shared/models/salesPlan.model';
 import { UserType } from '../../../shared/enums/user-type';
+import { ReportCustomerVisit } from '../../../shared/models/reportCustomerVisit.model';
+import { PaginationRequestDTO } from '../../../shared/DTOs/paginationRequestDTO.model';
+import { Pagination } from '../../../shared/types/pagination';
 
 @Injectable({ providedIn: 'root' })
 export class SalesState {
@@ -27,12 +30,23 @@ export class SalesState {
   private _customers = signal<AppUser[]>([]);
   private _scheduledVisits = signal<ScheduledVisit[]>([]);
   private _salesPlans = signal<SalesPlan[]>([]);
+  private _reportCustomerVisits = signal<ReportCustomerVisit[]>([]);
+  private _reportCustomerVisitsPagination = signal<Pagination>({
+    has_next: false,
+    has_prev: false,
+    page: 1,
+    page_size: 0,
+    total_items: 0,
+    total_pages: 0
+  });
 
   readonly salesReport = computed(() => this._salesReport());
   readonly isLoading = computed(() => this._isLoading());
   readonly customers = computed(() => this._customers());
   readonly scheduledVisits = computed(() => this._scheduledVisits());
   readonly salesPlans = computed(() => this._salesPlans());
+  readonly reportCustomerVisits = computed(() => this._reportCustomerVisits());
+  readonly reportCustomerVisitsPagination = computed(() => this._reportCustomerVisitsPagination());
 
   loadCustomers(): void {
     this.salesDataService.getCustomers().subscribe(customers => {
@@ -91,5 +105,24 @@ export class SalesState {
         return true;
       })
     );
+  }
+
+  loadReportCustomerVisits(filters?: PaginationRequestDTO, startDate?: Date, endDate?: Date): void {
+    this._isLoading.set(true);
+    const defaultFilters: PaginationRequestDTO = {
+      page: filters?.page ?? 1,
+      page_size: filters?.page_size ?? 100
+    };
+    this.salesDataService.getReportCustomerVisits(defaultFilters, startDate, endDate).subscribe({
+      next: (response) => {
+        this._reportCustomerVisits.set(response.items);
+        this._reportCustomerVisitsPagination.set(response.pagination);
+        this._isLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Error loading report customer visits:', error);
+        this._isLoading.set(false);
+      }
+    });
   }
 }
