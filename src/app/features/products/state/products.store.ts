@@ -8,16 +8,18 @@ import { ProductsService } from '../services/products.service';
 export class ProductsState {
   private productsService = inject(ProductsService);
   
-  private readonly pageSize = 3;
+  private readonly pageSize = 9;
 
   private _products = signal<ProductWithLocation[]>([]);
   private _isLoading = signal(false);
   private _hasNext = signal(true);
   private _currentPage = signal(0);
+  private _totalItems = signal(0);
 
   readonly products = computed(() => this._products());
   readonly isLoading = computed(() => this._isLoading());
   readonly hasMore = computed(() => this._hasNext());
+  readonly totalItems = computed(() => this._totalItems());
 
   loadInitialProducts(): void {
     this.resetState();
@@ -48,6 +50,7 @@ export class ProductsState {
         next: response => {
           this._currentPage.set(pagination.page);
           this._hasNext.set(response.pagination.has_next);
+          this._totalItems.set(response.pagination.total_items);
           this._products.update(products =>
             replace ? response.items : [...products, ...response.items]
           );
@@ -60,5 +63,6 @@ export class ProductsState {
     this._isLoading.set(false);
     this._hasNext.set(true);
     this._currentPage.set(0);
+    this._totalItems.set(0);
   }
 }

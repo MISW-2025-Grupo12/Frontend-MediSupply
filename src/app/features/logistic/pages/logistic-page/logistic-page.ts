@@ -20,13 +20,10 @@ export class LogisticPage implements OnInit {
   private usersStore = inject(UsersStore);
 
   ngOnInit(): void {
-    if (!this.routes().length) {
-      this.logisticStore.loadRoutes();
-    }
-
-    if (!this.deliveries().length) {
-      this.logisticStore.loadUnassignedDeliveries();
-    }
+    // Always reload routes and deliveries to ensure data is up-to-date
+    // This is especially important after creating a new route
+    this.logisticStore.loadRoutes();
+    this.logisticStore.loadUnassignedDeliveries();
 
     if (!this.deliveryUsers().length) {
       this.usersStore.loadDeliveryUsers();

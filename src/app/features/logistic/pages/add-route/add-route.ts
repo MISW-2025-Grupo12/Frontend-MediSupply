@@ -24,6 +24,7 @@ import { SelectedDeliveries } from '../../ui/selected-deliveries/selected-delive
 import { UsersStore } from '../../../users/state/users.store';
 import { LogisticService } from '../../services/logistic.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { LocaleRouteService } from '../../../../core/services/locale-route.service';
 
 type RouteOriginMarker = {
   id: Warehouse['id'];
@@ -61,6 +62,7 @@ export class AddRoute implements OnInit {
   private readonly googleMapsLoader = inject(GoogleMapsLoaderService);
   private readonly logisticService = inject(LogisticService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly localeRouteService = inject(LocaleRouteService);
   private readonly googleMapsApiKey = environment.googleMapsApiKey;
 
   readonly routeForm = this.fb.group({
@@ -368,6 +370,7 @@ export class AddRoute implements OnInit {
         next: (route) => {
           console.info('Route created successfully', route);
           this.isCreatingRoute.set(false);
+          this.localeRouteService.navigateToRoute('logistic');
         },
         error: (error) => {
           console.error('Failed to create route.', error);

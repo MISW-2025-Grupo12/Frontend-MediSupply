@@ -309,7 +309,8 @@
     },
     "actions": {
       "cancel": "Cancelar",
-      "upload": "Subir archivo"
+      "upload": "Subir archivo",
+      "downloadReport": "Descargar Reporte"
     },
     "errors": {
       "invalidFileType": "El archivo debe ser un archivo CSV",
@@ -373,6 +374,9 @@
     "required": "Requerido",
     "locations": "Ubicaciones",
     "available": "disponible"
+  },
+  "products": {
+    "totalProducts": "Total de productos"
   },
   "productList": {
     "noProducts": "No hay productos disponibles",

@@ -309,7 +309,8 @@
     },
     "actions": {
       "cancel": "Cancel",
-      "upload": "Upload file"
+      "upload": "Upload file",
+      "downloadReport": "Download Report"
     },
     "errors": {
       "invalidFileType": "The file must be a CSV file",
@@ -373,6 +374,9 @@
     "required": "Required",
     "locations": "Locations",
     "available": "available"
+  },
+  "products": {
+    "totalProducts": "Total products"
   },
   "productList": {
     "noProducts": "No products available",

@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
+import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -18,6 +19,7 @@ import { switchMap } from 'rxjs/operators';
   standalone: true,
   imports: [
     CommonModule,
+    RouterLink,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
@@ -34,8 +36,7 @@ export class LoadProducts implements OnDestroy {
 
   private pollingSubscription: Subscription | null = null;
   private readonly pollingIntervalMs = 1000;
-  private navigationTimeoutId: ReturnType<typeof setTimeout> | null = null;
-  private readonly navigationDelayMs = 2000;
+  reportUrl: string | null = null;
   private readonly terminalStatuses = new Set([
     'completed',
     'finished',
@@ -110,7 +111,6 @@ export class LoadProducts implements OnDestroy {
 
   private handleFileSelection(file: File): void {
     this.stopPolling();
-    this.clearNavigationTimeout();
 
     if (!file.name.toLowerCase().endsWith('.csv')) {
       this.selectedFile = null;
@@ -133,10 +133,10 @@ export class LoadProducts implements OnDestroy {
 
   onCancel(): void {
     this.selectedFile = null;
-    this.clearNavigationTimeout();
     this.stopPolling();
     this.resetProgressIndicators();
     this.clearFeedback();
+    this.reportUrl = null;
     this.localeRouteService.navigateToRoute('products');
   }
 
@@ -161,6 +161,10 @@ export class LoadProducts implements OnDestroy {
     return this.selectedFile?.name || '';
   }
 
+  getProductsRoute(): string {
+    return this.localeRouteService.getLocalizedUrl('products');
+  }
+
   downloadExampleFile(): void {
     // CSV header with product fields
     const csvHeader = 'nombre,descripcion,precio,stock,fecha_vencimiento,categoria,proveedor\n';
@@ -175,8 +179,6 @@ export class LoadProducts implements OnDestroy {
     ];
     
     const csvContent = csvHeader + exampleRows.join('\n');
-    
-    // Create blob and download
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
@@ -195,7 +197,6 @@ export class LoadProducts implements OnDestroy {
 
   ngOnDestroy(): void {
     this.stopPolling();
-    this.clearNavigationTimeout();
   }
 
   private startPolling(jobId: string): void {
@@ -262,8 +263,8 @@ export class LoadProducts implements OnDestroy {
 
   private handleUploadError(error: unknown): void {
     this.stopPolling();
-    this.clearNavigationTimeout();
     this.resetProgressIndicators();
+    this.reportUrl = null;
 
     const httpError = this.extractHttpError(error);
 
@@ -307,11 +308,11 @@ export class LoadProducts implements OnDestroy {
 
   private beginUpload(): void {
     this.stopPolling();
-    this.clearNavigationTimeout();
     this.isUploading = true;
     this.uploadProgress = 0;
     this.isProgressDeterminate = false;
     this.loadFileStatus = null;
+    this.reportUrl = null;
     this.clearFeedback();
   }
 
@@ -343,19 +344,22 @@ export class LoadProducts implements OnDestroy {
     }
   }
 
-  private clearNavigationTimeout(): void {
-    if (this.navigationTimeoutId !== null) {
-      clearTimeout(this.navigationTimeoutId);
-      this.navigationTimeoutId = null;
-    }
-  }
 
-  private scheduleNavigationAfterSuccess(): void {
-    this.clearNavigationTimeout();
-    this.navigationTimeoutId = setTimeout(() => {
-      this.navigationTimeoutId = null;
-      this.localeRouteService.navigateToRoute('products');
-    }, this.navigationDelayMs);
+  downloadReport(): void {
+    if (!this.reportUrl) {
+      return;
+    }
+    
+    // Create a temporary link to download the file
+    const link = document.createElement('a');
+    link.href = this.reportUrl;
+    link.download = `reporte_carga_productos_${new Date().getTime()}.csv`;
+    link.target = '_blank';
+    link.style.visibility = 'hidden';
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 
   private finalizeUploadWithSuccess(): void {
@@ -363,8 +367,8 @@ export class LoadProducts implements OnDestroy {
       this.uploadProgress = 100;
       this.isProgressDeterminate = true;
     }
+    this.reportUrl = this.loadFileStatus?.resultUrl || null;
     this.showSuccess('loadProducts.success.uploadComplete');
-    this.scheduleNavigationAfterSuccess();
   }
 
   private finalizeUploadWithFailure(): void {
@@ -372,7 +376,7 @@ export class LoadProducts implements OnDestroy {
     if (!this.isProgressDeterminate) {
       this.uploadProgress = 0;
     }
-    this.clearNavigationTimeout();
+    this.reportUrl = this.loadFileStatus?.resultUrl || null;
   }
 
   private extractGenericErrorDetails(error: unknown): string | null {

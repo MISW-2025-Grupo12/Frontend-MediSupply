@@ -53,6 +53,8 @@
                 }
               ],
               "outputHashing": "all",
+              "optimization": true,
+              "sourceMap": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",

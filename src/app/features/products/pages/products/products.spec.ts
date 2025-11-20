@@ -17,11 +17,12 @@ describe('Products', () => {
     // Mock ProductsState to prevent actual HTTP calls
     mockProductsState = jasmine.createSpyObj(
       'ProductsState',
-      ['loadInitialProducts', 'loadNextPage', 'products', 'isLoading', 'hasMore']
+      ['loadInitialProducts', 'loadNextPage', 'products', 'isLoading', 'hasMore', 'totalItems']
     );
     mockProductsState.products.and.returnValue([]);
     mockProductsState.isLoading.and.returnValue(false);
     mockProductsState.hasMore.and.returnValue(false);
+    mockProductsState.totalItems.and.returnValue(0);
 
     await TestBed.configureTestingModule({
       imports: [
