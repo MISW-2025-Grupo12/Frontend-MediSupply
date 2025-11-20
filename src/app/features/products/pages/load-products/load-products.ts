@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
+import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -18,6 +19,7 @@ import { switchMap } from 'rxjs/operators';
   standalone: true,
   imports: [
     CommonModule,
+    RouterLink,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
@@ -159,6 +161,10 @@ export class LoadProducts implements OnDestroy {
     return this.selectedFile?.name || '';
   }
 
+  getProductsRoute(): string {
+    return this.localeRouteService.getLocalizedUrl('products');
+  }
+
   downloadExampleFile(): void {
     // CSV header with product fields
     const csvHeader = 'nombre,descripcion,precio,stock,fecha_vencimiento,categoria,proveedor\n';
@@ -173,12 +179,7 @@ export class LoadProducts implements OnDestroy {
     ];
     
     const csvContent = csvHeader + exampleRows.join('\n');
-    
-    // Add UTF-8 BOM to ensure proper encoding recognition (especially for Excel)
-    const csvContentWithBOM = '\uFEFF' + csvContent;
-    
-    // Create blob and download with UTF-8 encoding
-    const blob = new Blob([csvContentWithBOM], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
     

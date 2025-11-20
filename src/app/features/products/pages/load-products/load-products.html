@@ -4,7 +4,7 @@
       <div class="page-header__title">
         <a
           class="page-back-link"
-          routerLink="../"
+          [routerLink]="getProductsRoute()"
           [attr.aria-label]="t('common.back')">
           <mat-icon>arrow_back</mat-icon>
         </a>
