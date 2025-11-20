@@ -45,7 +45,19 @@ describe('Header', () => {
       ],
       providers: [
         provideZonelessChangeDetection(),
-        provideRouter([]),
+        provideRouter([
+          {
+            path: ':locale',
+            children: [
+              { path: 'products', component: {} as any },
+              { path: 'productos', component: {} as any },
+              { path: 'clients', component: {} as any },
+              { path: 'clientes', component: {} as any },
+              { path: '**', component: {} as any }
+            ]
+          },
+          { path: '**', component: {} as any }
+        ]),
         provideHttpClient(),
         provideHttpClientTesting(),
         { provide: LocaleRouteService, useValue: localeRouteServiceSpy }

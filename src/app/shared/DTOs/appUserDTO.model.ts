@@ -7,4 +7,5 @@ export interface AppUserDTO {
   direccion?: string;
   password: string;
   tipo_usuario?: string;
+  entidad_id?: string | number;
 }

@@ -4,6 +4,7 @@ import { provideRouter } from '@angular/router';
 import { TranslocoTestingModule } from '@ngneat/transloco';
 
 import { SalesOptionsComponent } from './sales-options.component';
+import { TEST_ROUTES } from '../../../../core/testing/test-routes';
 
 describe('SalesOptionsComponent', () => {
   let component: SalesOptionsComponent;
@@ -40,7 +41,7 @@ describe('SalesOptionsComponent', () => {
       ],
       providers: [
         provideZonelessChangeDetection(),
-        provideRouter([])
+        provideRouter(TEST_ROUTES)
       ]
     })
     .compileComponents();

@@ -808,7 +808,7 @@ describe('AuthService', () => {
       token_type: 'Bearer',
       expires_in: 3600,
       user_info: {
-        id: '123',
+        entidad_id: 123,
         nombre: 'John Doe',
         email: 'john@example.com',
         identificacion: '12345678',

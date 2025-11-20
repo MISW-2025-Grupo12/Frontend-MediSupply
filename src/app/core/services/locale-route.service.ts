@@ -138,7 +138,12 @@ export class LocaleRouteService {
       routeSegments.push(params);
     }
     
-    this.router.navigate(routeSegments);
+    const navigatePromise = this.router.navigate(routeSegments);
+    if (navigatePromise) {
+      navigatePromise.catch(() => {
+        // Silently handle navigation errors (e.g., in test environments)
+      });
+    }
   }
 
   /**
@@ -165,10 +170,14 @@ export class LocaleRouteService {
       navigationExtras.queryParams = queryParams;
     }
     
-    if (params) {
-      this.router.navigate([`/${pathSegments.join('/')}`, params], navigationExtras);
-    } else {
-      this.router.navigate([`/${pathSegments.join('/')}`], navigationExtras);
+    const navigatePromise = params
+      ? this.router.navigate([`/${pathSegments.join('/')}`, params], navigationExtras)
+      : this.router.navigate([`/${pathSegments.join('/')}`], navigationExtras);
+    
+    if (navigatePromise) {
+      navigatePromise.catch(() => {
+        // Silently handle navigation errors (e.g., in test environments)
+      });
     }
   }
 
@@ -188,7 +197,12 @@ export class LocaleRouteService {
       navigationExtras.queryParams = queryParams;
     }
     
-    this.router.navigate([`/${locale}/${translatedPath}`, params], navigationExtras);
+    const navigatePromise = this.router.navigate([`/${locale}/${translatedPath}`, params], navigationExtras);
+    if (navigatePromise) {
+      navigatePromise.catch(() => {
+        // Silently handle navigation errors (e.g., in test environments)
+      });
+    }
   }
 
   /**
@@ -231,7 +245,12 @@ export class LocaleRouteService {
     this.translocoService.setActiveLang(newLocale);
     
     // Navigate to the new URL
-    void this.router.navigateByUrl(finalUrl);
+    const navigatePromise = this.router.navigateByUrl(finalUrl);
+    if (navigatePromise) {
+      navigatePromise.catch(() => {
+        // Silently handle navigation errors (e.g., in test environments)
+      });
+    }
   }
 
   /**

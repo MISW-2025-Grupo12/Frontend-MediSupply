@@ -6,6 +6,7 @@ import { TranslocoTestingModule } from '@ngneat/transloco';
 import { provideRouter } from '@angular/router';
 
 import { AddRoute } from './add-route';
+import { TEST_ROUTES } from '../../../../core/testing/test-routes';
 
 describe('AddRoute', () => {
   let component: AddRoute;
@@ -27,7 +28,7 @@ describe('AddRoute', () => {
       ],
       providers: [
         provideZonelessChangeDetection(),
-        provideRouter([]),
+        provideRouter(TEST_ROUTES),
         provideHttpClient(),
         provideHttpClientTesting()
       ]
