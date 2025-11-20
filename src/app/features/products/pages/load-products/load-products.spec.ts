@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
+import { provideRouter } from '@angular/router';
 import { TranslocoTestingModule } from '@ngneat/transloco';
 import { of } from 'rxjs';
 
@@ -21,8 +22,10 @@ describe('LoadProducts', () => {
       'getLoadFileStatus'
     ]);
     localeRouteServiceSpy = jasmine.createSpyObj<LocaleRouteService>('LocaleRouteService', [
-      'navigateToRoute'
+      'navigateToRoute',
+      'getLocalizedUrl'
     ]);
+    localeRouteServiceSpy.getLocalizedUrl.and.returnValue('/en/products');
 
     const mockJob: LoadFileJob = {
       jobId: 'test-job',
@@ -62,6 +65,7 @@ describe('LoadProducts', () => {
       ],
       providers: [
         provideZonelessChangeDetection(),
+        provideRouter([]),
         { provide: ProductsService, useValue: productsServiceSpy },
         { provide: LocaleRouteService, useValue: localeRouteServiceSpy }
       ]
