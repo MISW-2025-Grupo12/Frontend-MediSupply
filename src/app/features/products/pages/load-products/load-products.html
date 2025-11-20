@@ -1,6 +1,16 @@
 <div class="page-container" *transloco="let t">
   <div class="page-header">
-    <h1 class="page-title">{{ t('loadProducts.title') }}</h1>
+    <div class="page-header__title-block">
+      <div class="page-header__title">
+        <a
+          class="page-back-link"
+          routerLink="../"
+          [attr.aria-label]="t('common.back')">
+          <mat-icon>arrow_back</mat-icon>
+        </a>
+        <h1 class="page-title">{{ t('loadProducts.title') }}</h1>
+      </div>
+    </div>
   </div>
 
   <div class="page-content">
@@ -71,6 +81,18 @@
         <div class="success-message" *ngIf="successMessage">
           <mat-icon>check_circle</mat-icon>
           <span>{{ t(successMessage) }}</span>
+        </div>
+
+        <!-- Report Download Button -->
+        <div class="report-download-section" *ngIf="reportUrl">
+          <button 
+            mat-stroked-button 
+            type="button"
+            (click)="downloadReport()"
+            class="download-report-button">
+            <mat-icon>download</mat-icon>
+            {{ t('loadProducts.actions.downloadReport') }}
+          </button>
         </div>
 
         <!-- Upload Progress -->

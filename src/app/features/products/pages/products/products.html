@@ -1,6 +1,12 @@
 <div class="page-container" *transloco="let t">
   <div class="page-header">
-    <h1 class="page-title">{{ t('header.products') }}</h1>
+    <div class="page-title-section">
+      <h1 class="page-title">{{ t('header.products') }}</h1>
+      <div class="products-count-indicator" *ngIf="productsStore.totalItems() > 0">
+        <mat-icon class="products-count-icon">inventory_2</mat-icon>
+        <span class="products-count-value">{{ productsStore.totalItems() | number }}</span>
+      </div>
+    </div>
     <div class="page-actions">
       <button 
         mat-raised-button 
