@@ -8,6 +8,9 @@ import { TranslocoTestingModule } from '@ngneat/transloco';
 import { SalesPlanComponent } from './sales-plan';
 import { LocaleRouteService } from '../../../../core/services/locale-route.service';
 import { SalesState } from '../../state/sales.store';
+import { AppStore } from '../../../../core/state/app.store';
+import { AppUser } from '../../../../shared/models/user.model';
+import { UserType } from '../../../../shared/enums/user-type';
 
 describe('SalesPlanComponent', () => {
   let component: SalesPlanComponent;
@@ -15,6 +18,7 @@ describe('SalesPlanComponent', () => {
   let mockLocaleRouteService: jasmine.SpyObj<LocaleRouteService>;
   let mockRouter: jasmine.SpyObj<Router>;
   let mockSalesState: jasmine.SpyObj<SalesState>;
+  let mockAppStore: jasmine.SpyObj<AppStore>;
 
   beforeEach(async () => {
     // Create spy objects
@@ -29,6 +33,18 @@ describe('SalesPlanComponent', () => {
       get: () => () => [],
       configurable: true
     });
+
+    mockAppStore = jasmine.createSpyObj('AppStore', ['user']);
+    const adminUser: AppUser = {
+      id: '1',
+      name: 'Admin User',
+      email: 'admin@test.com',
+      legalId: '12345678',
+      phone: '1234567890',
+      address: 'Test Address',
+      role: UserType.ADMIN
+    };
+    mockAppStore.user.and.returnValue(adminUser);
 
     await TestBed.configureTestingModule({
       imports: [
@@ -52,6 +68,10 @@ describe('SalesPlanComponent', () => {
         {
           provide: SalesState,
           useValue: mockSalesState
+        },
+        {
+          provide: AppStore,
+          useValue: mockAppStore
         }
       ]
     })
@@ -151,5 +171,30 @@ describe('SalesPlanComponent', () => {
     
     const total = component.getTotalCustomers(mockSalesPlan);
     expect(total).toBe(0);
+  });
+
+  it('should return true for isAdmin when user is admin', () => {
+    expect(component.isAdmin()).toBeTrue();
+  });
+
+  it('should return false for isAdmin when user is not admin', () => {
+    const nonAdminUser: AppUser = {
+      id: '2',
+      name: 'Seller User',
+      email: 'seller@test.com',
+      legalId: '87654321',
+      phone: '0987654321',
+      address: 'Test Address',
+      role: UserType.SELLER
+    };
+    mockAppStore.user.and.returnValue(nonAdminUser);
+    
+    expect(component.isAdmin()).toBeFalse();
+  });
+
+  it('should return false for isAdmin when no user is logged in', () => {
+    mockAppStore.user.and.returnValue(null);
+    
+    expect(component.isAdmin()).toBeFalse();
   });
 });

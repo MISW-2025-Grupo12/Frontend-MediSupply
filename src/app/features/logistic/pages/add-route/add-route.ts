@@ -1,6 +1,6 @@
 import { Component, DestroyRef, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { TranslocoDirective } from '@ngneat/transloco';
 import { LogisticStore } from '../../state/logistic.store';
 import { UnassignedDeliveries } from '../../ui/unassigned-deliveries/unassigned-deliveries';
@@ -25,6 +25,8 @@ import { UsersStore } from '../../../users/state/users.store';
 import { LogisticService } from '../../services/logistic.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LocaleRouteService } from '../../../../core/services/locale-route.service';
+import { AppStore } from '../../../../core/state/app.store';
+import { UserType } from '../../../../shared/enums/user-type';
 
 type RouteOriginMarker = {
   id: Warehouse['id'];
@@ -63,6 +65,7 @@ export class AddRoute implements OnInit {
   private readonly logisticService = inject(LogisticService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly localeRouteService = inject(LocaleRouteService);
+  private readonly appStore = inject(AppStore);
   private readonly googleMapsApiKey = environment.googleMapsApiKey;
 
   readonly routeForm = this.fb.group({
@@ -148,6 +151,13 @@ export class AddRoute implements OnInit {
   });
 
   ngOnInit(): void {
+    // Check if user is admin, if not redirect to logistic page
+    const currentUser = this.appStore.user();
+    if (!currentUser || currentUser.role !== UserType.ADMIN) {
+      this.localeRouteService.navigateToRoute('logistic');
+      return;
+    }
+
     if (!this.deliveries().length) {
       this.logisticStore.loadUnassignedDeliveries();
     }

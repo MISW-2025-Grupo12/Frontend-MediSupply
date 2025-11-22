@@ -58,7 +58,7 @@ export class LogisticService {
           return { items, pagination };
         })
       );
-  }
+  }  
 
   getWarehouses(): Observable<PaginatedResponseDTO<Warehouse>> {
     return this.apiClient
@@ -74,6 +74,12 @@ export class LogisticService {
 
   getRoutes(): Observable<Route[]> {
     return this.apiClient.get<RouteDTO[]>('/rutas', this.serviceType).pipe(
+      map(response => (response ?? []).map(route => this.mapRouteDtoToModel(route)))
+    );
+  }
+
+  getDeliveryUserRoutes(userId: string): Observable<Route[]> {
+    return this.apiClient.get<RouteDTO[]>(`/rutas/repartidor/${userId}`, this.serviceType).pipe(
       map(response => (response ?? []).map(route => this.mapRouteDtoToModel(route)))
     );
   }

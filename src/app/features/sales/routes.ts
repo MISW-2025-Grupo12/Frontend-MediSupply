@@ -4,6 +4,8 @@ import { SalesReportComponent } from "./pages/sales-report/sales-report.componen
 import { SalesPlanComponent } from "./pages/sales-plan/sales-plan";
 import { CreateSalesPlan } from "./pages/create-sales-plan/create-sales-plan";
 import { SalesPlanDetail } from "./pages/sales-plan-detail/sales-plan-detail";
+import { roleGuard } from "../../core/guards/role.guard";
+import { UserType } from "../../shared/enums/user-type";
 
 export const SALES_ROUTES: Routes = [
   { 
@@ -14,11 +16,13 @@ export const SALES_ROUTES: Routes = [
   {
     path: 'sales-report',
     component: SalesReportComponent,
+    canActivate: [roleGuard([UserType.ADMIN])],
     data: { titleKey: 'titles.salesReport' }
   },
   {
     path: 'reportes-de-ventas',
     component: SalesReportComponent,
+    canActivate: [roleGuard([UserType.ADMIN])],
     data: { titleKey: 'titles.salesReport' }
   },
   {
@@ -34,11 +38,13 @@ export const SALES_ROUTES: Routes = [
   {
     path: 'add-sales-plan',
     component: CreateSalesPlan,
+    canActivate: [roleGuard([UserType.ADMIN])],
     data: { titleKey: 'titles.addSalesPlan' }
   },
   {
     path: 'anadir-plan-de-ventas',
     component: CreateSalesPlan,
+    canActivate: [roleGuard([UserType.ADMIN])],
     data: { titleKey: 'titles.addSalesPlan' }
   },
   {

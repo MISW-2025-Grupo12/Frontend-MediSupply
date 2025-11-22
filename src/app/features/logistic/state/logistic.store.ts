@@ -7,6 +7,7 @@ import { LogisticService } from '../services/logistic.service';
 import { PaginatedResponseDTO } from '../../../shared/DTOs/paginatedResponseDTO.model';
 import { Warehouse } from '../../../shared/models/warehouse.model';
 import { Route } from '../../../shared/models/route.model';
+import { UserType } from '../../../shared/enums/user-type';
 
 type LogisticPaginationResponse = PaginatedResponseDTO<Delivery>;
 
@@ -70,10 +71,25 @@ export class LogisticStore {
     this.appStore.setApiBusy(true);
     this._routesLoading.set(true);
 
-    this.logisticService.getRoutes().subscribe({
-      next: (response) => this.handleRoutesResponse(response),
-      error: (err) => this.handleRoutesError(err)
-    });
+    const currentUser = this.appStore.user();
+    const isAdmin = currentUser?.role === UserType.ADMIN;
+
+    if (isAdmin) {
+      // Admin users can see all routes
+      this.logisticService.getRoutes().subscribe({
+        next: (response) => this.handleRoutesResponse(response),
+        error: (err) => this.handleRoutesError(err)
+      });
+    } else if (currentUser?.id) {
+      // Non-admin users can only see their assigned routes
+      this.logisticService.getDeliveryUserRoutes(currentUser.id).subscribe({
+        next: (response) => this.handleRoutesResponse(response),
+        error: (err) => this.handleRoutesError(err)
+      });
+    } else {
+      // No user logged in, clear routes
+      this.handleRoutesError('User not authenticated');
+    }
   }
 
   updateDeliveryLocation(deliveryId: Delivery['id'], location: Location | null | undefined): void {

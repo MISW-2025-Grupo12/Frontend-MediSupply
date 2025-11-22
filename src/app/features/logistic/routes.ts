@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 import { AddRoute } from './pages/add-route/add-route';
 import { LogisticPage } from './pages/logistic-page/logistic-page';
 import { RouteDetail } from './pages/route-detail/route-detail';
+import { roleGuard } from '../../core/guards/role.guard';
+import { UserType } from '../../shared/enums/user-type';
 
 export const LOGISTIC_ROUTES: Routes = [
   {
@@ -12,11 +14,13 @@ export const LOGISTIC_ROUTES: Routes = [
   {
     path: 'add-route',
     component: AddRoute,
+    canActivate: [roleGuard([UserType.ADMIN])],
     data: { titleKey: 'titles.logistic' }
   },
   {
     path: 'anadir-ruta',
     component: AddRoute,
+    canActivate: [roleGuard([UserType.ADMIN])],
     data: { titleKey: 'titles.logistic' }
   },
   {

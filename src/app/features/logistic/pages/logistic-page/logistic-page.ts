@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,6 +8,8 @@ import { LogisticStore } from '../../state/logistic.store';
 import { UnassignedDeliveries } from '../../ui/unassigned-deliveries/unassigned-deliveries';
 import { RoutesList } from '../../ui/routes-list/routes-list';
 import { UsersStore } from '../../../users/state/users.store';
+import { AppStore } from '../../../../core/state/app.store';
+import { UserType } from '../../../../shared/enums/user-type';
 
 @Component({
   selector: 'app-logistic-page',
@@ -18,6 +20,7 @@ import { UsersStore } from '../../../users/state/users.store';
 export class LogisticPage implements OnInit {
   private logisticStore = inject(LogisticStore);
   private usersStore = inject(UsersStore);
+  private appStore = inject(AppStore);
 
   ngOnInit(): void {
     // Always reload routes and deliveries to ensure data is up-to-date
@@ -36,4 +39,8 @@ export class LogisticPage implements OnInit {
   readonly isLoading = this.logisticStore.isLoading;
   readonly error = this.logisticStore.error;
   readonly deliveryUsers = this.usersStore.deliveryUsers;
+  readonly isAdmin = computed<boolean>(() => {
+    const user = this.appStore.user();
+    return user?.role === UserType.ADMIN;
+  });
 }

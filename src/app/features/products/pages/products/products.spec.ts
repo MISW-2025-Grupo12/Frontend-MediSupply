@@ -7,6 +7,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslocoTestingModule } from '@ngneat/transloco';
 import { Products } from './products';
 import { ProductsState } from '../../state/products.store';
+import { TEST_ROUTES } from '../../../../core/testing/test-routes';
 
 describe('Products', () => {
   let component: Products;
@@ -41,7 +42,7 @@ describe('Products', () => {
       ],
       providers: [
         provideZonelessChangeDetection(),
-        provideRouter([]),
+        provideRouter(TEST_ROUTES),
         provideHttpClient(),
         provideHttpClientTesting(),
         { provide: ProductsState, useValue: mockProductsState }

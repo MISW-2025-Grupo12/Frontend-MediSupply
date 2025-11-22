@@ -9,6 +9,7 @@ import { ProductsService } from '../../services/products.service';
 import { LocaleRouteService } from '../../../../core/services/locale-route.service';
 import type { LoadFileJob } from '../../../../shared/models/loadFileJob.model';
 import type { LoadFileStatus } from '../../../../shared/models/loadFileStatus.model';
+import { TEST_ROUTES } from '../../../../core/testing/test-routes';
 
 describe('LoadProducts', () => {
   let component: LoadProducts;
@@ -65,7 +66,7 @@ describe('LoadProducts', () => {
       ],
       providers: [
         provideZonelessChangeDetection(),
-        provideRouter([]),
+        provideRouter(TEST_ROUTES),
         { provide: ProductsService, useValue: productsServiceSpy },
         { provide: LocaleRouteService, useValue: localeRouteServiceSpy }
       ]

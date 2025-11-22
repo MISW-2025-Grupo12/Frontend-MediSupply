@@ -7,6 +7,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslocoTestingModule } from '@ngneat/transloco';
 import { Dashboard } from './dashboard';
 import { DashboardState } from '../../../state/dashboard.state';
+import { TEST_ROUTES } from '../../../../../core/testing/test-routes';
 
 describe('Dashboard', () => {
   let component: Dashboard;
@@ -84,7 +85,7 @@ describe('Dashboard', () => {
       ],
       providers: [
         provideZonelessChangeDetection(),
-        provideRouter([]),
+        provideRouter(TEST_ROUTES),
         provideHttpClient(),
         provideHttpClientTesting(),
         { provide: DashboardState, useValue: dashboardStateSpy }

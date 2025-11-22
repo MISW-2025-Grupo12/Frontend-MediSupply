@@ -439,6 +439,9 @@
       "startTime": "Start Time",
       "endDate": "End Date",
       "endTime": "End Time",
+      "seller": "Seller",
+      "sellerPlaceholder": "Select a seller",
+      "loadingSellers": "Loading sellers...",
       "required": "This field is required",
       "invalidDate": "Invalid date",
       "invalidTime": "Invalid time"
