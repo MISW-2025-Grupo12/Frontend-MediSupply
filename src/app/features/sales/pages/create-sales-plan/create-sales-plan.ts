@@ -1,14 +1,17 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoDirective } from '@ngneat/transloco';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { LocaleRouteService } from '../../../../core/services/locale-route.service';
 import { CreateSalesPlanForm } from '../../ui/create-sales-plan-form/create-sales-plan-form';
 import { SalesState } from '../../state/sales.store';
 import { AppStore } from '../../../../core/state/app.store';
 import { CreateSalesPlanModel, CreateVisitClient } from '../../../../shared/models/createSalesPlan.model';
 import { ScheduledVisit } from '../../../../shared/models/scheduledVisit.model';
+import { UsersStore } from '../../../users/state/users.store';
+import { UserType } from '../../../../shared/enums/user-type';
 
 @Component({
   selector: 'app-create-sales-plan',
@@ -22,10 +25,25 @@ import { ScheduledVisit } from '../../../../shared/models/scheduledVisit.model';
   templateUrl: './create-sales-plan.html',
   styleUrl: './create-sales-plan.scss'
 })
-export class CreateSalesPlan {
+export class CreateSalesPlan implements OnInit {
   private localeRouteService = inject(LocaleRouteService);
   private salesState = inject(SalesState);
   private appStore = inject(AppStore);
+  private usersStore = inject(UsersStore);
+  private router = inject(Router);
+
+  ngOnInit(): void {
+    // Check if user is admin, redirect if not
+    const currentUser = this.appStore.user();
+    if (!currentUser || currentUser.role !== UserType.ADMIN) {
+      const locale = this.localeRouteService.getCurrentLocale();
+      const dashboardPath = locale === 'en' ? 'dashboard' : 'panel';
+      this.router.navigate([`/${locale}/${dashboardPath}`]);
+      return;
+    }
+
+    this.usersStore.loadSellerUsers();
+  }
 
   onFormSubmit(formData: any): void {
     const currentUser = this.appStore.user();
@@ -56,11 +74,14 @@ export class CreateSalesPlan {
     }));
 
     // Create the sales plan model
+    // Use selected sellerId if provided, otherwise fall back to current user
+    const userId = formData.sellerId || currentUser.id;
+    
     const salesPlan: CreateSalesPlanModel = {
       name: formData.name,
       startDate: formData.startDate instanceof Date ? formData.startDate : new Date(formData.startDate),
       endDate: formData.endDate instanceof Date ? formData.endDate : new Date(formData.endDate),
-      userId: currentUser.id,
+      userId: userId,
       visits
     };
 

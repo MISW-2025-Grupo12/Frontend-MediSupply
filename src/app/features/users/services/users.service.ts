@@ -39,6 +39,17 @@ export class UsersService {
       );
   }
 
+  getSellerUsers(): Observable<PaginatedResponseDTO<AppUser>> {
+    return this.apiClient
+      .get<PaginatedResponseDTO<AppUserDTO>>('/vendedores', 'users')
+      .pipe(
+        map(response => ({
+          items: response.items.map(user => this.mapAppUserDtoToModel(user)),
+          pagination: response.pagination
+        }))
+      );
+  }
+
   private mapAppUserDtoToModel(user: AppUserDTO): AppUser {
     return {
       id: String(user.id ?? ''),

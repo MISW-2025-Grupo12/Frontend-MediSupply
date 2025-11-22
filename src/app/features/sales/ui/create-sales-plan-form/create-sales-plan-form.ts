@@ -53,7 +53,8 @@ export class CreateSalesPlanForm implements OnInit {
     this.salesPlanForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
       startDate: ['', Validators.required],
-      endDate: ['', Validators.required]
+      endDate: ['', Validators.required],
+      sellerId: ['', Validators.required]
     });
   }
 

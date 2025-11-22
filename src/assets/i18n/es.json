@@ -439,6 +439,9 @@
       "startTime": "Hora de Inicio",
       "endDate": "Fecha de Fin",
       "endTime": "Hora de Fin",
+      "seller": "Vendedor",
+      "sellerPlaceholder": "Seleccione un vendedor",
+      "loadingSellers": "Cargando vendedores...",
       "required": "Este campo es requerido",
       "invalidDate": "Fecha inválida",
       "invalidTime": "Hora inválida"
