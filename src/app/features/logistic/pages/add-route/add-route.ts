@@ -126,6 +126,7 @@ export class AddRoute implements OnInit {
 
     this.routeForm.controls.deliveries.setValue(deliveries, { emitEvent: false });
     this.routeForm.controls.deliveries.updateValueAndValidity({ emitEvent: false });
+    this.routeForm.updateValueAndValidity({ emitEvent: false });
   });
 
   private readonly syncRouteDateControl = effect(() => {
@@ -135,8 +136,10 @@ export class AddRoute implements OnInit {
 
     if (shouldEnable && control.disabled) {
       control.enable({ emitEvent: false });
+      this.routeForm.updateValueAndValidity({ emitEvent: false });
     } else if (!shouldEnable && control.enabled) {
       control.disable({ emitEvent: false });
+      this.routeForm.updateValueAndValidity({ emitEvent: false });
     }
 
     const current = control.value;
@@ -147,6 +150,7 @@ export class AddRoute implements OnInit {
     if (shouldUpdate) {
       control.setValue(date, { emitEvent: false });
       control.updateValueAndValidity({ emitEvent: false });
+      this.routeForm.updateValueAndValidity({ emitEvent: false });
     }
   });
 
