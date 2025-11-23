@@ -1,0 +1,41 @@
+<div class="sellers-report" *transloco="let t">
+  <div *ngIf="tableData().length === 0" class="no-data-message">
+    {{ t('salesReport.table.noData') }}
+  </div>
+  
+  <table mat-table [dataSource]="tableData()" class="sellers-table" *ngIf="tableData().length > 0">
+    <!-- Position Column -->
+    <ng-container matColumnDef="position">
+      <th mat-header-cell *matHeaderCellDef>{{ t('salesReport.table.position') }}</th>
+      <td mat-cell *matCellDef="let row">{{ row.position }}</td>
+    </ng-container>
+
+    <!-- Seller Name Column -->
+    <ng-container matColumnDef="sellerName">
+      <th mat-header-cell *matHeaderCellDef>{{ t('salesReport.table.sellerName') }}</th>
+      <td mat-cell *matCellDef="let row">{{ row.sellerName }}</td>
+    </ng-container>
+
+    <!-- Total Orders Column -->
+    <ng-container matColumnDef="totalOrders">
+      <th mat-header-cell *matHeaderCellDef>{{ t('salesReport.table.totalOrders') }}</th>
+      <td mat-cell *matCellDef="let row">{{ row.totalOrders }}</td>
+    </ng-container>
+
+    <!-- Total Sales Column -->
+    <ng-container matColumnDef="totalSales">
+      <th mat-header-cell *matHeaderCellDef>{{ t('salesReport.table.totalSales') }}</th>
+      <td mat-cell *matCellDef="let row">{{ row.totalSales | currency:'USD':'symbol':'1.2-2' }}</td>
+    </ng-container>
+
+    <!-- Total Customers Column -->
+    <ng-container matColumnDef="totalCustomers">
+      <th mat-header-cell *matHeaderCellDef>{{ t('salesReport.table.totalCustomers') }}</th>
+      <td mat-cell *matCellDef="let row">{{ row.totalCustomers }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+

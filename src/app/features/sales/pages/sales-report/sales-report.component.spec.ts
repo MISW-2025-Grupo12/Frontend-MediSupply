@@ -40,12 +40,16 @@ describe('SalesReportComponent', () => {
     mockLocaleRouteService = jasmine.createSpyObj('LocaleRouteService', ['getCurrentLocale']);
     mockLocaleRouteService.getCurrentLocale.and.returnValue('en');
 
-    mockSalesState = jasmine.createSpyObj('SalesState', ['loadReportCustomerVisits', 'isLoading', 'reportCustomerVisits']);
+    mockSalesState = jasmine.createSpyObj('SalesState', ['loadReportCustomerVisits', 'loadSellersReport', 'isLoading', 'reportCustomerVisits', 'sellersReport']);
     Object.defineProperty(mockSalesState, 'isLoading', {
       get: () => () => false,
       configurable: true
     });
     Object.defineProperty(mockSalesState, 'reportCustomerVisits', {
+      get: () => () => [],
+      configurable: true
+    });
+    Object.defineProperty(mockSalesState, 'sellersReport', {
       get: () => () => [],
       configurable: true
     });
@@ -135,5 +139,36 @@ describe('SalesReportComponent', () => {
     newComponent.ngOnInit();
 
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/en/dashboard']);
+  });
+
+  it('should load sellers report when user is admin', () => {
+    component.loadSellersReport();
+
+    expect(mockSalesState.loadSellersReport).toHaveBeenCalled();
+    expect(component.showSellersReport()).toBe(true);
+  });
+
+  it('should not load sellers report when user is not admin', () => {
+    const nonAdminUser: AppUser = {
+      ...adminUser,
+      role: UserType.SELLER
+    };
+    mockAppStore.user.and.returnValue(nonAdminUser);
+
+    const consoleSpy = spyOn(console, 'error');
+    component.loadSellersReport();
+
+    expect(mockSalesState.loadSellersReport).not.toHaveBeenCalled();
+    expect(consoleSpy).toHaveBeenCalledWith('Unauthorized: Only admin users can access sellers report');
+  });
+
+  it('should not load sellers report when no user is logged in', () => {
+    mockAppStore.user.and.returnValue(null);
+
+    const consoleSpy = spyOn(console, 'error');
+    component.loadSellersReport();
+
+    expect(mockSalesState.loadSellersReport).not.toHaveBeenCalled();
+    expect(consoleSpy).toHaveBeenCalledWith('Unauthorized: Only admin users can access sellers report');
   });
 });

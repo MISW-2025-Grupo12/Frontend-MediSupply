@@ -16,6 +16,8 @@ import { ReportCustomerVisit } from '../../../shared/models/reportCustomerVisit.
 import { ReportCustomerVisitDTO } from '../../../shared/DTOs/reportCustomerVisitDTO.model';
 import { PaginationRequestDTO } from '../../../shared/DTOs/paginationRequestDTO.model';
 import { Pagination } from '../../../shared/types/pagination';
+import { SellerReport } from '../../../shared/models/sellerReport.model';
+import { SellerReportDTO } from '../../../shared/DTOs/sellerReportDTO.model';
 
 @Injectable({
   providedIn: 'root'
@@ -166,6 +168,17 @@ export class SalesDataService {
       );
   }
 
+  getSellersReport(): Observable<PaginatedResponseDTO<SellerReport>> {
+    return this.apiClient.get<PaginatedResponseDTO<SellerReportDTO>>('/informes/vendedores', 'sales')
+      .pipe(
+        map(response => {
+          const items = (response?.items ?? []).map(seller => this.mapSellerReportDtoToModel(seller));
+          const pagination = response?.pagination ?? { ...this.emptyPagination };
+          return { items, pagination };
+        })
+      );
+  }
+
   private mapReportCustomerVisitDtoToModel(visit: ReportCustomerVisitDTO): ReportCustomerVisit {
     return {
       id: visit.id,
@@ -188,6 +201,16 @@ export class SalesDataService {
       phone: user.telefono,
       address: user.direccion,
       role: user.tipo_usuario as UserType
+    };
+  }
+
+  private mapSellerReportDtoToModel(seller: SellerReportDTO): SellerReport {
+    return {
+      sellerId: seller.vendedor_id,
+      sellerName: seller.vendedor_nombre,
+      totalOrders: seller.numero_pedidos ?? 0,
+      totalSales: seller.total_ventas ?? 0,
+      totalCustomers: seller.clientes_atendidos ?? 0
     };
   }
 }
