@@ -137,13 +137,13 @@ export class AddProduct implements OnInit {
       this.productsService.addProduct(product).subscribe({
         next: (product) => {
           console.log('Product added:', product);
+          // Navigate back to products page (products will refresh automatically)
+          this.onCancel();
         },
         error: (error) => {
           console.error('Error adding product:', error);
         }
       });
-
-      this.onCancel();
     } else {
       Object.keys(this.productForm.controls).forEach(key => {
         this.productForm.get(key)?.markAsTouched();
