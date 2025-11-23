@@ -7,6 +7,27 @@
   gap: 2rem;
 }
 
+.page-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+
+  .page-action-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+    
+    .page-action-button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}
+
 // Filters Section
 .filters-card {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;

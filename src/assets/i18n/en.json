@@ -490,6 +490,7 @@
   },
   "salesReport": {
     "loadCustomerVisits": "Load Customer Visits",
+    "loadSellersReport": "Load Sellers Report",
     "loading": "Loading customer visits...",
     "filters": {
       "title": "Date Filters",
@@ -506,7 +507,14 @@
       "customerName": "Customer Name",
       "visitStatus": "Visit Status",
       "visitDate": "Visit Date",
+      "totalOrders": "Total Orders",
+      "totalSales": "Total Sales",
+      "totalCustomers": "Total Customers",
       "noData": "No customer visits data available"
+    },
+    "sellersTable": {
+      "title": "Sellers Report",
+      "subtitle": "Showing {{ count }} seller(s)"
     },
     "empty": {
       "title": "No Visits Found",

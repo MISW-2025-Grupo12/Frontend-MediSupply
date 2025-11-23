@@ -12,6 +12,7 @@ import { UserType } from '../../../shared/enums/user-type';
 import { ReportCustomerVisit } from '../../../shared/models/reportCustomerVisit.model';
 import { PaginationRequestDTO } from '../../../shared/DTOs/paginationRequestDTO.model';
 import { Pagination } from '../../../shared/types/pagination';
+import { SellerReport } from '../../../shared/models/sellerReport.model';
 
 @Injectable({ providedIn: 'root' })
 export class SalesState {
@@ -39,6 +40,15 @@ export class SalesState {
     total_items: 0,
     total_pages: 0
   });
+  private _sellersReport = signal<SellerReport[]>([]);
+  private _sellersReportPagination = signal<Pagination>({
+    has_next: false,
+    has_prev: false,
+    page: 1,
+    page_size: 0,
+    total_items: 0,
+    total_pages: 0
+  });
 
   readonly salesReport = computed(() => this._salesReport());
   readonly isLoading = computed(() => this._isLoading());
@@ -47,6 +57,8 @@ export class SalesState {
   readonly salesPlans = computed(() => this._salesPlans());
   readonly reportCustomerVisits = computed(() => this._reportCustomerVisits());
   readonly reportCustomerVisitsPagination = computed(() => this._reportCustomerVisitsPagination());
+  readonly sellersReport = computed(() => this._sellersReport());
+  readonly sellersReportPagination = computed(() => this._sellersReportPagination());
 
   loadCustomers(): void {
     this.salesDataService.getCustomers().subscribe(customers => {
@@ -121,6 +133,30 @@ export class SalesState {
       },
       error: (error) => {
         console.error('Error loading report customer visits:', error);
+        this._isLoading.set(false);
+      }
+    });
+  }
+
+  loadSellersReport(): void {
+    const user = this.appStore.user();
+    
+    // Only allow admin users to load sellers report
+    if (!user || user.role !== UserType.ADMIN) {
+      console.error('Unauthorized: Only admin users can access sellers report');
+      this._isLoading.set(false);
+      return;
+    }
+
+    this._isLoading.set(true);
+    this.salesDataService.getSellersReport().subscribe({
+      next: (response) => {
+        this._sellersReport.set(response.items);
+        this._sellersReportPagination.set(response.pagination);
+        this._isLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Error loading sellers report:', error);
         this._isLoading.set(false);
       }
     });

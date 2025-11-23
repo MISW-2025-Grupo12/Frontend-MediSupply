@@ -490,6 +490,7 @@
   },
   "salesReport": {
     "loadCustomerVisits": "Cargar Visitas de Clientes",
+    "loadSellersReport": "Cargar Reporte de Vendedores",
     "loading": "Cargando visitas de clientes...",
     "filters": {
       "title": "Filtros de Fecha",
@@ -506,7 +507,14 @@
       "customerName": "Nombre del Cliente",
       "visitStatus": "Estado de la Visita",
       "visitDate": "Fecha de la Visita",
+      "totalOrders": "Total de Pedidos",
+      "totalSales": "Total de Ventas",
+      "totalCustomers": "Total de Clientes",
       "noData": "No hay datos de visitas de clientes disponibles"
+    },
+    "sellersTable": {
+      "title": "Reporte de Vendedores",
+      "subtitle": "Mostrando {{ count }} vendedor(es)"
     },
     "empty": {
       "title": "No Se Encontraron Visitas",

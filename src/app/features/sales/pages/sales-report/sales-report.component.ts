@@ -13,6 +13,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { SalesState } from '../../state/sales.store';
 import { CustomerVisitsReport } from '../../ui/customer-visits-report/customer-visits-report';
+import { SellersReport } from '../../ui/sellers-report/sellers-report';
 import { AppStore } from '../../../../core/state/app.store';
 import { LocaleRouteService } from '../../../../core/services/locale-route.service';
 import { UserType } from '../../../../shared/enums/user-type';
@@ -31,7 +32,8 @@ import { UserType } from '../../../../shared/enums/user-type';
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    CustomerVisitsReport
+    CustomerVisitsReport,
+    SellersReport
   ],
   templateUrl: './sales-report.component.html',
   styleUrl: './sales-report.component.scss'
@@ -43,10 +45,12 @@ export class SalesReportComponent implements OnInit {
   private localeRouteService = inject(LocaleRouteService);
 
   showCustomerVisitsReport = signal<boolean>(false);
+  showSellersReport = signal<boolean>(false);
   startDate: Date | null = null;
   endDate: Date | null = null;
 
   visitCount = computed(() => this.salesState.reportCustomerVisits().length);
+  sellerCount = computed(() => this.salesState.sellersReport().length);
 
   ngOnInit(): void {
     // Check if user is admin, redirect if not
@@ -79,5 +83,17 @@ export class SalesReportComponent implements OnInit {
     this.startDate = null;
     this.endDate = null;
     this.loadReportCustomerVisits();
+  }
+
+  loadSellersReport(): void {
+    // Check if user is admin before loading sellers report
+    const currentUser = this.appStore.user();
+    if (!currentUser || currentUser.role !== UserType.ADMIN) {
+      console.error('Unauthorized: Only admin users can access sellers report');
+      return;
+    }
+    
+    this.salesState.loadSellersReport();
+    this.showSellersReport.set(true);
   }
 }
