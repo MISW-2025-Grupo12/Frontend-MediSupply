@@ -137,6 +137,7 @@ export class LoadProducts implements OnDestroy {
     this.resetProgressIndicators();
     this.clearFeedback();
     this.reportUrl = null;
+    // Navigate back to products page (products will refresh automatically)
     this.localeRouteService.navigateToRoute('products');
   }
 
@@ -369,6 +370,7 @@ export class LoadProducts implements OnDestroy {
     }
     this.reportUrl = this.loadFileStatus?.resultUrl || null;
     this.showSuccess('loadProducts.success.uploadComplete');
+    // Note: User can click cancel/back button which will navigate with refresh parameter
   }
 
   private finalizeUploadWithFailure(): void {

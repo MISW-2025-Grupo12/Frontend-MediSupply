@@ -25,19 +25,17 @@ export class Products implements OnInit, OnDestroy {
   productsStore = inject(ProductsState);
 
   ngOnInit(): void {
-    // Load products initially
+    // Load products when component is initialized
     this.productsStore.loadInitialProducts();
 
     // Subscribe to router events to refresh products when navigating to this route
     this.router.events
       .pipe(
         filter(event => event instanceof NavigationEnd),
-        filter(() => {
-          // Check if current route is the base products route (not a child route)
-          const url = this.router.url;
-          // Match pattern: /en/products or /es/productos (exactly, no additional segments)
-          const baseProductsPattern = /^\/(en|es)\/(products|productos)$/;
-          return baseProductsPattern.test(url);
+        filter((event: NavigationEnd) => {
+          // Only refresh when we're on the base products route (not a child route)
+          const url = event.urlAfterRedirects;
+          return /^\/(en|es)\/(products|productos)(\?|$)/.test(url);
         }),
         takeUntil(this.destroy$)
       )
