@@ -1,0 +1,319 @@
+@use 'sass:color';
+@import '../../../../../styles/page.scss';
+@import '../../../../../styles/colors.scss';
+
+.route-detail-page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding-bottom: 3rem;
+}
+
+.route-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.route-detail-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  border: 1px solid $gray-300;
+  color: $primary-color;
+  background-color: $white;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+
+  mat-icon {
+    font-size: 1.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  &:hover,
+  &:focus-visible {
+    background-color: color.scale($primary-color, $lightness: 45%);
+    border-color: $primary-color;
+    color: $primary-color;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px color.scale($primary-color, $lightness: 55%);
+  }
+}
+
+.route-detail-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.route-detail-title {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: $gray-900;
+}
+
+.route-detail-subtitle {
+  margin: 0;
+  color: $gray-500;
+  font-size: 1rem;
+}
+
+.route-detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.route-detail-state {
+  padding: 2rem;
+  border-radius: 1rem;
+  border: 1px dashed $gray-200;
+  background-color: $gray-50;
+  text-align: center;
+  color: $gray-600;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.route-detail-state--error {
+  border-color: color.scale($error-color, $lightness: 20%);
+  background-color: color.scale($error-color, $lightness: 55%);
+  color: color.scale($error-color, $lightness: -20%);
+}
+
+.route-detail-state--warning {
+  border-color: color.scale($warning-color, $lightness: 20%);
+  background-color: color.scale($warning-color, $lightness: 60%);
+  color: color.scale($warning-color, $lightness: -30%);
+}
+
+.route-detail-state__message {
+  font-size: 0.875rem;
+  color: inherit;
+}
+
+.route-detail-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.route-summary-card,
+.route-map-card,
+.route-deliveries-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  border-radius: 0.85rem;
+  border: 1px solid $gray-200;
+  background-color: $white;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
+}
+
+.route-summary-card__header,
+.route-map-card__header,
+.route-deliveries-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.route-summary-card__title,
+.route-map-card__title,
+.route-deliveries-card__title {
+  margin: 0;
+  font-size: 1.375rem;
+  font-weight: 600;
+  color: $gray-900;
+}
+
+.route-summary-card__subtitle,
+.route-map-card__description,
+.route-deliveries-card__description {
+  margin: 0;
+  color: $gray-600;
+  font-size: 0.95rem;
+}
+
+.route-summary-card__list {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  margin: 0;
+}
+
+.route-summary-card__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+
+  dt {
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: $gray-500;
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 600;
+    color: $gray-900;
+    font-size: 1rem;
+  }
+}
+
+.route-map-card__body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.route-map-card__map {
+  width: 100%;
+  height: 360px;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid $gray-200;
+}
+
+.route-map-card__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.86);
+  border-radius: 0.75rem;
+  z-index: 1;
+  font-weight: 500;
+  color: $gray-700;
+}
+
+.route-map-card__notice {
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background-color: color.scale($warning-color, $lightness: 62%);
+  border: 1px solid color.scale($warning-color, $lightness: 30%);
+  color: color.scale($warning-color, $lightness: -30%);
+  font-size: 0.9rem;
+}
+
+.route-deliveries-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.route-deliveries-card__empty {
+  padding: 1.5rem;
+  text-align: center;
+  border: 1px dashed $gray-200;
+  border-radius: 0.75rem;
+  color: $gray-600;
+  background-color: $gray-50;
+}
+
+.route-deliveries-card__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0;
+  margin: 0;
+}
+
+.route-delivery {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid $gray-200;
+  border-radius: 0.75rem;
+  background-color: $gray-50;
+}
+
+.route-delivery__index {
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1.125rem;
+  background-color: $primary-color;
+  color: $white;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.route-delivery__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.route-delivery__primary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.route-delivery__label {
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: $gray-500;
+}
+
+.route-delivery__value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: $gray-900;
+}
+
+.route-delivery__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  color: $gray-600;
+  font-size: 0.9rem;
+
+  strong {
+    color: $gray-800;
+    font-weight: 600;
+  }
+}
+
+@media (max-width: 768px) {
+  .route-map-card__map {
+    height: 300px;
+  }
+
+  .route-detail-title {
+    font-size: 1.75rem;
+  }
+
+  .route-delivery {
+    grid-template-columns: 1fr;
+  }
+
+  .route-delivery__index {
+    align-self: flex-start;
+  }
+}
+

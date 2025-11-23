@@ -1,6 +1,12 @@
 <div class="page-container" *transloco="let t">
   <div class="page-header">
-    <h1 class="page-title">{{ t('header.products') }}</h1>
+    <div class="page-title-section">
+      <h1 class="page-title">{{ t('header.products') }}</h1>
+      <div class="products-count-indicator" *ngIf="productsStore.totalItems() > 0">
+        <mat-icon class="products-count-icon">inventory_2</mat-icon>
+        <span class="products-count-value">{{ productsStore.totalItems() | number }}</span>
+      </div>
+    </div>
     <div class="page-actions">
       <button 
         mat-raised-button 
@@ -17,10 +23,36 @@
         <mat-icon>category</mat-icon>
         {{ t('addCategory.title') }}
       </button>
+      <button 
+        mat-stroked-button
+        class="page-action-button"
+        (click)="navigateToLoadProducts()">
+        <mat-icon>upload_file</mat-icon>
+        {{ t('loadProducts.title') }}
+      </button>
     </div>
   </div>
   
   <div class="page-content">
     <app-product-list [products]="productsStore.products()" />
+
+    <div class="loading-container" *ngIf="productsStore.isLoading()">
+      <mat-progress-spinner mode="indeterminate" diameter="32"></mat-progress-spinner>
+    </div>
+
+    <div class="load-more-container" *ngIf="productsStore.hasMore()">
+      <button
+        mat-stroked-button
+        color="primary"
+        class="load-more-button"
+        (click)="productsStore.loadNextPage()"
+        [disabled]="productsStore.isLoading()">
+        Load more products
+      </button>
+    </div>
+
+    <div class="end-of-results" *ngIf="!productsStore.isLoading() && !productsStore.hasMore() && productsStore.products().length">
+      No more products to load.
+    </div>
   </div>
 </div>

@@ -6,6 +6,7 @@ import { provideRouter } from '@angular/router';
 import { TranslocoTestingModule } from '@ngneat/transloco';
 
 import { SalesComponent } from './sales.component';
+import { TEST_ROUTES } from '../../../../core/testing/test-routes';
 
 describe('SalesComponent', () => {
   let component: SalesComponent;
@@ -42,7 +43,7 @@ describe('SalesComponent', () => {
         provideZonelessChangeDetection(),
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter([])
+        provideRouter(TEST_ROUTES)
       ]
     })
     .compileComponents();

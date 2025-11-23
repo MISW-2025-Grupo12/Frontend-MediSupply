@@ -8,6 +8,7 @@ import { TranslocoTestingModule } from '@ngneat/transloco';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { App } from './app';
+import { TEST_ROUTES } from './core/testing/test-routes';
 
 describe('App', () => {
   beforeEach(async () => {
@@ -28,7 +29,7 @@ describe('App', () => {
       ],
       providers: [
         provideZonelessChangeDetection(),
-        provideRouter([]),
+        provideRouter(TEST_ROUTES),
         provideHttpClient(),
         provideHttpClientTesting()
       ]

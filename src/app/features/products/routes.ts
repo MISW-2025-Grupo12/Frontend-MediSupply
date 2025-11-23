@@ -2,6 +2,7 @@ import { Routes } from "@angular/router";
 import { Products } from "./pages/products/products";
 import { AddProduct } from "./ui/add-product/add-product";
 import { AddCategory } from "./pages/add-category/add-category";
+import { LoadProducts } from "./pages/load-products/load-products";
 
 export const PRODUCTS_ROUTES: Routes = [
   { 
@@ -28,5 +29,15 @@ export const PRODUCTS_ROUTES: Routes = [
     path: 'anadir-categoria',
     component: AddCategory,
     data: { titleKey: 'titles.addCategory' }
+  },
+  {
+    path: 'load-products',
+    component: LoadProducts,
+    data: { titleKey: 'titles.loadProducts' }
+  },
+  {
+    path: 'cargar-productos',
+    component: LoadProducts,
+    data: { titleKey: 'titles.loadProducts' }
   }
 ];

@@ -43,10 +43,15 @@ export class ApiClientService {
 
   /**
    * Build headers with bearer token from AppStore
+   * @param options - Request options
+   * @param body - Request body (to detect FormData)
    */
-  private buildHeaders(options?: ApiRequestOptions): HttpHeaders | { [header: string]: string | string[] } {
+  private buildHeaders(options?: ApiRequestOptions, body?: any): HttpHeaders | { [header: string]: string | string[] } {
     const token = this.appStore.accessToken();
     let headers: HttpHeaders | { [header: string]: string | string[] };
+
+    // Check if body is FormData - if so, don't set Content-Type (browser will set it with boundary)
+    const isFormData = body instanceof FormData;
 
     if (options?.headers) {
       if (options.headers instanceof HttpHeaders) {
@@ -64,6 +69,15 @@ export class ApiClientService {
         headers = headers.set('Authorization', `Bearer ${token}`);
       } else {
         headers['Authorization'] = `Bearer ${token}`;
+      }
+    }
+
+    // For FormData, remove Content-Type if it exists (browser will set it automatically)
+    if (isFormData) {
+      if (headers instanceof HttpHeaders) {
+        headers = headers.delete('Content-Type');
+      } else {
+        delete headers['Content-Type'];
       }
     }
 
@@ -87,7 +101,7 @@ export class ApiClientService {
    */
   post<T>(endpoint: string, body: any, serviceType?: ServiceType, options?: ApiRequestOptions): Observable<T> {
     const baseUrl = this.resolveServiceUrl(serviceType);
-    const headers = this.buildHeaders(options);
+    const headers = this.buildHeaders(options, body);
     
     return this.http
       .post<T>(`${baseUrl}${endpoint}`, body, { ...options, headers })
@@ -99,7 +113,7 @@ export class ApiClientService {
    */
   put<T>(endpoint: string, body: any, serviceType?: ServiceType, options?: ApiRequestOptions): Observable<T> {
     const baseUrl = this.resolveServiceUrl(serviceType);
-    const headers = this.buildHeaders(options);
+    const headers = this.buildHeaders(options, body);
     
     return this.http
       .put<T>(`${baseUrl}${endpoint}`, body, { ...options, headers })
@@ -111,7 +125,7 @@ export class ApiClientService {
    */
   patch<T>(endpoint: string, body: any, serviceType?: ServiceType, options?: ApiRequestOptions): Observable<T> {
     const baseUrl = this.resolveServiceUrl(serviceType);
-    const headers = this.buildHeaders(options);
+    const headers = this.buildHeaders(options, body);
     
     return this.http
       .patch<T>(`${baseUrl}${endpoint}`, body, { ...options, headers })

@@ -4,7 +4,7 @@ import { TranslocoService } from '@ngneat/transloco';
 import { AppStore } from '../state/app.store';
 
 type SupportedLocale = 'en' | 'es';
-type RouteKey = 'dashboard' | 'products' | 'sales' | 'salesReport' | 'salesPlan' | 'addSalesPlan' | 'salesPlanDetail' | 'add' | 'clients' | 'login' | 'orders' | 'users' | 'addUser' | 'register';
+type RouteKey = 'dashboard' | 'products' | 'logistic' | 'sales' | 'salesReport' | 'salesPlan' | 'addSalesPlan' | 'salesPlanDetail' | 'add' | 'clients' | 'login' | 'orders' | 'users' | 'addUser' | 'register';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +24,7 @@ export class LocaleRouteService {
     'en': {
       'dashboard': 'dashboard',
       'products': 'products',
+      'logistic': 'logistic',
       'sales': 'sales',
       'salesReport': 'sales-report',
       'salesPlan': 'sales-plan',
@@ -40,6 +41,7 @@ export class LocaleRouteService {
     'es': {
       'dashboard': 'panel',
       'products': 'productos',
+      'logistic': 'logistica',
       'sales': 'ventas',
       'salesReport': 'reportes-de-ventas',
       'salesPlan': 'plan-de-ventas',
@@ -136,7 +138,12 @@ export class LocaleRouteService {
       routeSegments.push(params);
     }
     
-    this.router.navigate(routeSegments);
+    const navigatePromise = this.router.navigate(routeSegments);
+    if (navigatePromise) {
+      navigatePromise.catch(() => {
+        // Silently handle navigation errors (e.g., in test environments)
+      });
+    }
   }
 
   /**
@@ -163,10 +170,14 @@ export class LocaleRouteService {
       navigationExtras.queryParams = queryParams;
     }
     
-    if (params) {
-      this.router.navigate([`/${pathSegments.join('/')}`, params], navigationExtras);
-    } else {
-      this.router.navigate([`/${pathSegments.join('/')}`], navigationExtras);
+    const navigatePromise = params
+      ? this.router.navigate([`/${pathSegments.join('/')}`, params], navigationExtras)
+      : this.router.navigate([`/${pathSegments.join('/')}`], navigationExtras);
+    
+    if (navigatePromise) {
+      navigatePromise.catch(() => {
+        // Silently handle navigation errors (e.g., in test environments)
+      });
     }
   }
 
@@ -186,7 +197,12 @@ export class LocaleRouteService {
       navigationExtras.queryParams = queryParams;
     }
     
-    this.router.navigate([`/${locale}/${translatedPath}`, params], navigationExtras);
+    const navigatePromise = this.router.navigate([`/${locale}/${translatedPath}`, params], navigationExtras);
+    if (navigatePromise) {
+      navigatePromise.catch(() => {
+        // Silently handle navigation errors (e.g., in test environments)
+      });
+    }
   }
 
   /**
@@ -229,7 +245,12 @@ export class LocaleRouteService {
     this.translocoService.setActiveLang(newLocale);
     
     // Navigate to the new URL
-    void this.router.navigateByUrl(finalUrl);
+    const navigatePromise = this.router.navigateByUrl(finalUrl);
+    if (navigatePromise) {
+      navigatePromise.catch(() => {
+        // Silently handle navigation errors (e.g., in test environments)
+      });
+    }
   }
 
   /**

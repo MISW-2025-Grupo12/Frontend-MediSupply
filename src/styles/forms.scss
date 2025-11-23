@@ -290,11 +290,22 @@
   }
 
   &:disabled {
-    background-color: $gray-400 !important;
-    color: $gray-600 !important;
     cursor: not-allowed;
     transform: none !important;
     box-shadow: none !important;
+  }
+
+  &--primary:disabled,
+  &--danger:disabled {
+    background-color: $gray-400 !important;
+    color: $gray-600 !important;
+  }
+
+  &--secondary:disabled {
+    background-color: transparent !important;
+    border-color: $gray-300 !important;
+    color: $gray-600 !important;
+    opacity: 1 !important;
   }
 
   // Button content with loading state

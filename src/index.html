@@ -10,6 +10,52 @@
   <link rel="icon" type="image/x-icon" href="assets/icons/logo-header.svg">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script>
+    // Handle chunk loading errors - reload with cache bypass (like hard refresh)
+    (function() {
+      let hasReloaded = false;
+
+      function handleChunkError() {
+        if (hasReloaded) return; // Prevent infinite reload loop
+        hasReloaded = true;
+        console.warn('Chunk loading error detected. Reloading page...');
+        // Reload the page - if server has proper cache headers, this will get fresh index.html
+        window.location.reload();
+      }
+
+      // Intercept script loading errors
+      window.addEventListener('error', function(event) {
+        const target = event.target || event.srcElement;
+        const isScriptError = target && (target.tagName === 'SCRIPT' || target.tagName === 'LINK');
+        const isChunkError = isScriptError && (
+          target.src && (target.src.includes('.js') || target.src.includes('chunk-')) ||
+          target.href && (target.href.includes('.css') || target.href.includes('chunk-'))
+        );
+
+        if (isChunkError) {
+          event.preventDefault();
+          handleChunkError();
+        }
+      }, true);
+
+      // Handle unhandled promise rejections (common with dynamic imports)
+      window.addEventListener('unhandledrejection', function(event) {
+        const error = event.reason;
+        const errorMessage = error && (error.message || error.toString() || '');
+        const isChunkError = errorMessage && (
+          errorMessage.includes('Loading chunk') ||
+          errorMessage.includes('ChunkLoadError') ||
+          errorMessage.includes('Failed to fetch dynamically imported module') ||
+          errorMessage.includes('Importing a module script failed')
+        );
+
+        if (isChunkError) {
+          event.preventDefault();
+          handleChunkError();
+        }
+      });
+    })();
+  </script>
 </head>
 <body>
   <app-root></app-root>

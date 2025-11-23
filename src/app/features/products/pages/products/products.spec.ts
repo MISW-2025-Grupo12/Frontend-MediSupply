@@ -7,20 +7,23 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslocoTestingModule } from '@ngneat/transloco';
 import { Products } from './products';
 import { ProductsState } from '../../state/products.store';
+import { TEST_ROUTES } from '../../../../core/testing/test-routes';
 
 describe('Products', () => {
   let component: Products;
   let fixture: ComponentFixture<Products>;
+  let mockProductsState: jasmine.SpyObj<ProductsState>;
 
   beforeEach(async () => {
     // Mock ProductsState to prevent actual HTTP calls
-    const mockProductsState = jasmine.createSpyObj('ProductsState', ['loadProducts']);
-    
-    // Mock the products signal
-    Object.defineProperty(mockProductsState, 'products', {
-      get: () => () => [],
-      configurable: true
-    });
+    mockProductsState = jasmine.createSpyObj(
+      'ProductsState',
+      ['loadInitialProducts', 'loadNextPage', 'products', 'isLoading', 'hasMore', 'totalItems']
+    );
+    mockProductsState.products.and.returnValue([]);
+    mockProductsState.isLoading.and.returnValue(false);
+    mockProductsState.hasMore.and.returnValue(false);
+    mockProductsState.totalItems.and.returnValue(0);
 
     await TestBed.configureTestingModule({
       imports: [
@@ -39,7 +42,7 @@ describe('Products', () => {
       ],
       providers: [
         provideZonelessChangeDetection(),
-        provideRouter([]),
+        provideRouter(TEST_ROUTES),
         provideHttpClient(),
         provideHttpClientTesting(),
         { provide: ProductsState, useValue: mockProductsState }
@@ -53,6 +56,10 @@ describe('Products', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should load initial products on init', () => {
+    expect(mockProductsState.loadInitialProducts).toHaveBeenCalled();
   });
 
   it('should navigate to add product page', () => {

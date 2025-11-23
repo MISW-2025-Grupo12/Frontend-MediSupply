@@ -1,6 +1,7 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppStore } from '../../../core/state/app.store';
+import { UserType } from '../../../shared/enums/user-type';
 import { LocaleRouteService } from '../../../core/services/locale-route.service';
 
 export interface DashboardCard {
@@ -30,6 +31,15 @@ export class DashboardState {
       icon: 'inventory_2',
       route: 'products',
       color: '#646116',
+      enabled: true
+    },
+    {
+      id: 'logistic',
+      titleKey: 'dashboard.cards.logistic.title',
+      descriptionKey: 'dashboard.cards.logistic.description',
+      icon: 'local_shipping',
+      route: 'logistic',
+      color: '#0ea5e9',
       enabled: true
     },
     {
@@ -73,9 +83,31 @@ export class DashboardState {
   // Computed values
   readonly isLoading = computed(() => this._isLoading());
   readonly error = computed(() => this._error());
-  readonly availableFeatures = computed(() => this._availableFeatures());
-  readonly enabledFeatures = computed(() => 
-    this._availableFeatures().filter(f => f.enabled)
+  readonly availableFeatures = computed(() => {
+    const userRole = this.appStore.user()?.role;
+    return this._availableFeatures().filter(card => {
+      if (!userRole) {
+        return false;
+      }
+
+      switch (card.id) {
+        case 'products':
+          return [UserType.ADMIN, UserType.PROVIDER].includes(userRole);
+        case 'logistic':
+          return [UserType.ADMIN, UserType.DELIVERY].includes(userRole);
+        case 'sales':
+          return [UserType.ADMIN, UserType.SELLER].includes(userRole);
+        case 'clients':
+        case 'orders':
+        case 'users':
+          return userRole === UserType.ADMIN;
+        default:
+          return true;
+      }
+    });
+  });
+  readonly enabledFeatures = computed(() =>
+    this.availableFeatures().filter(f => f.enabled)
   );
   readonly user = computed(() => this.appStore.user());
   readonly userName = computed(() => this.appStore.user()?.name || '');

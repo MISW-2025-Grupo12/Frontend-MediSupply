@@ -1,0 +1,163 @@
+<div class="route-detail-page" *transloco="let t">
+  <header class="route-detail-header">
+    <a
+      class="route-detail-back"
+      [routerLink]="backLink"
+      [attr.aria-label]="t('common.back')">
+      <mat-icon fontIcon="arrow_back"></mat-icon>
+    </a>
+
+    @if (currentRoute(); as routeDetail) {
+      <div class="route-detail-heading">
+        <h1 class="route-detail-title">
+          {{ t('logistic.routeDetail.header.title', { id: shortId(routeDetail.id) }) }}
+        </h1>
+        <p class="route-detail-subtitle">
+          {{ t('logistic.routeDetail.header.subtitle', { date: (routeDetail.date | date: 'shortDate') }) }}
+        </p>
+      </div>
+    } @else {
+      <h1 class="route-detail-title">
+        {{ t('logistic.routeDetail.header.defaultTitle') }}
+      </h1>
+    }
+  </header>
+
+  <section class="route-detail-content">
+    @if (isLoadingRoutes()) {
+      <div class="route-detail-state">
+        {{ t('logistic.routeDetail.loading') }}
+      </div>
+    } @else if (routeError()) {
+      <div class="route-detail-state route-detail-state--error">
+        <span>{{ t('logistic.routeDetail.error') }}</span>
+        <span class="route-detail-state__message">{{ routeError() }}</span>
+      </div>
+    } @else if (hasRouteNotFound()) {
+      <div class="route-detail-state route-detail-state--warning">
+        {{ t('logistic.routeDetail.notFound') }}
+      </div>
+    } @else if (currentRoute(); as routeDetail) {
+      <div class="route-detail-grid">
+        <section class="route-summary-card">
+          <header class="route-summary-card__header">
+            <h2 class="route-summary-card__title">{{ t('logistic.routeDetail.summary.title') }}</h2>
+            <p class="route-summary-card__subtitle">
+              {{ t('logistic.routeDetail.summary.description') }}
+            </p>
+          </header>
+          <dl class="route-summary-card__list">
+            <div class="route-summary-card__item">
+              <dt>{{ t('logistic.routeDetail.summary.routeId') }}</dt>
+              <dd>#{{ shortId(routeDetail.id) }}</dd>
+            </div>
+            <div class="route-summary-card__item">
+              <dt>{{ t('logistic.routeDetail.summary.date') }}</dt>
+              <dd>{{ routeDetail.date | date: 'fullDate' }}</dd>
+            </div>
+            <div class="route-summary-card__item">
+              <dt>{{ t('logistic.routeDetail.summary.driver') }}</dt>
+              <dd>{{ driverDisplay() }}</dd>
+            </div>
+            <div class="route-summary-card__item">
+              <dt>{{ t('logistic.routeDetail.summary.warehouse') }}</dt>
+              <dd>{{ routeDetail.warehouse.name }}</dd>
+            </div>
+            <div class="route-summary-card__item">
+              <dt>{{ t('logistic.routeDetail.summary.deliveries') }}</dt>
+              <dd>{{ routeDetail.deliveries.length }}</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="route-map-card">
+          <header class="route-map-card__header">
+            <div>
+              <h2 class="route-map-card__title">{{ t('logistic.routeDetail.map.title') }}</h2>
+              <p class="route-map-card__description">
+                {{ t('logistic.routeDetail.map.description') }}
+              </p>
+            </div>
+          </header>
+
+          <div class="route-map-card__body">
+            @if (isComputingPath()) {
+              <div class="route-map-card__overlay">
+                {{ t('logistic.routeDetail.map.computing') }}
+              </div>
+            }
+
+            <app-maps
+              class="route-map-card__map"
+              [deliveries]="mapDeliveries()"
+              [origin]="mapOrigin()"
+              [routePath]="mapRoutePath()"
+              [routeOrder]="mapRouteOrder()"
+              [missingKeyMessage]="t('logistic.routeDetail.map.missingKey')"
+              [loadingMessage]="t('logistic.routeDetail.map.loading')"
+              [emptyMessage]="t('logistic.routeDetail.map.empty')" />
+
+            @if (mapWarningKey()) {
+              <div class="route-map-card__notice">
+                {{ t(mapWarningKey()!) }}
+              </div>
+            }
+          </div>
+        </section>
+
+        <section class="route-deliveries-card">
+          <header class="route-deliveries-card__header">
+            <div>
+              <h2 class="route-deliveries-card__title">{{ t('logistic.routeDetail.deliveries.title') }}</h2>
+              <p class="route-deliveries-card__description">
+                {{ t('logistic.routeDetail.deliveries.description', { count: routeDetail.deliveries.length }) }}
+              </p>
+            </div>
+          </header>
+          <div class="route-deliveries-card__body">
+            @if (!routeDetail.deliveries.length) {
+              <div class="route-deliveries-card__empty">
+                {{ t('logistic.routeDetail.deliveries.empty') }}
+              </div>
+            } @else {
+              <ol class="route-deliveries-card__list">
+                @for (delivery of routeDetail.deliveries; track delivery.id; let index = $index) {
+                  <li class="route-delivery">
+                    <div class="route-delivery__index">{{ index + 1 }}</div>
+                    <div class="route-delivery__content">
+                      <div class="route-delivery__primary">
+                        <span class="route-delivery__label">{{ t('logistic.routeDetail.deliveries.address') }}</span>
+                        <span class="route-delivery__value">{{ delivery.address }}</span>
+                      </div>
+                      <div class="route-delivery__meta">
+                        <span>
+                          {{ t('logistic.routeDetail.deliveries.deliveryDate') }}:
+                          <strong>{{ delivery.deliveryDate | date: 'medium' }}</strong>
+                        </span>
+                        <span>
+                          {{ t('logistic.routeDetail.deliveries.orderId') }}:
+                          <strong>#{{ shortId(delivery.order.id) }}</strong>
+                        </span>
+                        <span>
+                          {{ t('logistic.routeDetail.deliveries.customer') }}:
+                          <strong>{{ delivery.order.customer.name }}</strong>
+                        </span>
+                        <span>
+                          {{ t('logistic.routeDetail.deliveries.products', { count: delivery.order.products.length }) }}
+                        </span>
+                      </div>
+                    </div>
+                  </li>
+                }
+              </ol>
+            }
+          </div>
+        </section>
+      </div>
+    } @else {
+      <div class="route-detail-state">
+        {{ t('logistic.routeDetail.notFound') }}
+      </div>
+    }
+  </section>
+</div>

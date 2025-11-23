@@ -3,6 +3,7 @@ import { provideRouter } from '@angular/router';
 import { provideZonelessChangeDetection } from '@angular/core';
 import { TranslocoTestingModule } from '@ngneat/transloco';
 import { LocaleRouteService } from './locale-route.service';
+import { TEST_ROUTES } from '../testing/test-routes';
 
 describe('LocaleRouteService', () => {
   let service: LocaleRouteService;
@@ -20,7 +21,7 @@ describe('LocaleRouteService', () => {
       ],
       providers: [
         provideZonelessChangeDetection(),
-        provideRouter([])
+        provideRouter(TEST_ROUTES)
       ]
     });
     service = TestBed.inject(LocaleRouteService);

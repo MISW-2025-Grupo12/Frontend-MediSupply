@@ -5,3 +5,13 @@ env:
     availability:
       - BUILD # Make it available during the build step
       - RUNTIME # Also good to have if your app might check it at runtime (though for client-side, BUILD is critical)
+  - variable: GOOGLE_MAPS_API_KEY
+    value: "AIzaSyA1P6eCehVoLh-l6_N3nnrjz8zyjSu2NYE"
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: GOOGLE_MAPS_MAP_ID
+    value: "medisupplyg4-production"
+    availability:
+      - BUILD
+      - RUNTIME

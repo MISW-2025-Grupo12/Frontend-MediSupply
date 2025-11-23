@@ -1,0 +1,50 @@
+@use 'sass:color';
+@import '../../../../styles/colors.scss';
+
+.map-view__container {
+  position: relative;
+  min-height: 320px;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid $gray-200;
+  background-color: $gray-50;
+}
+
+.map-view__canvas {
+  width: 100%;
+  height: 320px;
+}
+
+.map-view__message {
+  margin: 0;
+  padding: 1.25rem;
+  font-size: 0.95rem;
+  border-radius: 0.75rem;
+  border: 1px dashed $gray-200;
+  background-color: $gray-50;
+  color: $gray-600;
+  text-align: center;
+}
+
+.map-view__message--warning {
+  border-color: color.scale($warning-color, $lightness: 15%);
+  background-color: color.scale($warning-color, $lightness: 45%);
+  color: color.scale($warning-color, $lightness: -20%);
+}
+
+.map-view__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  text-align: center;
+  font-size: 0.95rem;
+  color: $gray-700;
+  background: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85));
+}
+
+.map-view__overlay--error {
+  color: color.scale($error-color, $lightness: -15%);
+}

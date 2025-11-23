@@ -2,8 +2,8 @@
   <mat-card-content>
     <form [formGroup]="salesPlanForm" class="sales-plan-form">
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <!-- Sales Plan Name - Full width on all screens -->
-        <mat-form-field class="app-form-field col-span-1 sm:col-span-2">
+        <!-- Sales Plan Name - Row 1, Col 1 -->
+        <mat-form-field class="app-form-field col-span-1">
           <mat-label>{{ t('addSalesPlan.form.name') }}</mat-label>
           <input 
             matInput 
@@ -15,7 +15,26 @@
           </mat-error>
         </mat-form-field>
 
-        <!-- Start Date -->
+        <!-- Seller Selection - Row 1, Col 2 -->
+        <mat-form-field class="app-form-field col-span-1">
+          <mat-label>{{ t('addSalesPlan.form.seller') }}</mat-label>
+          <mat-select 
+            formControlName="sellerId"
+            [placeholder]="t('addSalesPlan.form.sellerPlaceholder')"
+            required>
+            <mat-option *ngIf="isLoadingSellerUsers()" disabled>
+              {{ t('addSalesPlan.form.loadingSellers') }}
+            </mat-option>
+            <mat-option *ngFor="let seller of sellerUsers()" [value]="seller.id">
+              {{ seller.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="salesPlanForm.get('sellerId')?.invalid && salesPlanForm.get('sellerId')?.touched">
+            {{ t(getErrorMessage('sellerId')) }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Start Date - Row 2, Col 1 -->
         <mat-form-field class="app-form-field col-span-1">
           <mat-label>{{ t('addSalesPlan.form.startDate') }}</mat-label>
           <input 
@@ -30,7 +49,7 @@
           </mat-error>
         </mat-form-field>
 
-        <!-- End Date -->
+        <!-- End Date - Row 2, Col 2 -->
         <mat-form-field class="app-form-field col-span-1">
           <mat-label>{{ t('addSalesPlan.form.endDate') }}</mat-label>
           <input 

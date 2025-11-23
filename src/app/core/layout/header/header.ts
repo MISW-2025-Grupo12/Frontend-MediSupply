@@ -61,6 +61,10 @@ export class Header implements OnInit {
     return this.localeRouteService.getLocalizedUrl('products');
   }
 
+  getLogisticRoute(): string {
+    return this.localeRouteService.getLocalizedUrl('logistic');
+  }
+
   getClientsRoute(): string {
     return this.localeRouteService.getLocalizedUrl('clients');
   }
@@ -73,10 +77,23 @@ export class Header implements OnInit {
     return this.localeRouteService.getLocalizedUrl('users');
   }
 
-  // Check if user can access sales module
-  canAccessSales(): boolean {
+  private getUserRole(): UserType | null {
     const user = this.appStore.user();
-    if (!user) return false;
-    return user.role === UserType.SELLER || user.role === UserType.ADMIN;
+    return user?.role ?? null;
+  }
+
+  canAccessProducts(): boolean {
+    const role = this.getUserRole();
+    return !!role && [UserType.ADMIN, UserType.PROVIDER].includes(role);
+  }
+
+  canAccessLogistic(): boolean {
+    const role = this.getUserRole();
+    return !!role && [UserType.ADMIN, UserType.DELIVERY].includes(role);
+  }
+
+  canAccessSales(): boolean {
+    const role = this.getUserRole();
+    return !!role && [UserType.SELLER, UserType.ADMIN].includes(role);
   }
 }

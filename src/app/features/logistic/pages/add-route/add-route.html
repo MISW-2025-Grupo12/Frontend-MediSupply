@@ -1,0 +1,122 @@
+<div class="page-container" *transloco="let t">
+  <div class="page-header">
+    <div class="page-header__title-block">
+      <div class="page-header__title">
+        <a
+          class="page-back-link"
+          routerLink="../"
+          [attr.aria-label]="t('common.back')">
+          <mat-icon>arrow_back</mat-icon>
+        </a>
+        <h1 class="page-title">{{ t('logistic.actions.createRoute') }}</h1>
+      </div>
+      <p class="page-subtitle">
+        {{ t('logistic.addRoute.subtitle') }}
+      </p>
+    </div>
+  </div>
+
+  <div class="page-content">
+    <form class="route-form" [formGroup]="routeForm" (ngSubmit)="onSubmit()">
+      <mat-card class="route-form-card">
+        <mat-card-content>
+          <div class="form-grid">
+            <mat-form-field class="form-field">
+              <mat-label>{{ t('logistic.addRoute.fields.date') }}</mat-label>
+              <input matInput [matDatepicker]="routeDatePicker" formControlName="date" />
+              <mat-datepicker-toggle matIconSuffix [for]="routeDatePicker" [disabled]="true"></mat-datepicker-toggle>
+              <mat-datepicker #routeDatePicker [disabled]="true"></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="form-field">
+              <mat-label>{{ t('logistic.addRoute.fields.driver') }}</mat-label>
+              <mat-select formControlName="driverId">
+                @if (isLoadingDeliveryUsers()) {
+                  <mat-option value="" disabled>{{ t('logistic.addRoute.fields.loadingDrivers') }}</mat-option>
+                } @else if (!deliveryUsers().length) {
+                  <mat-option value="" disabled>{{ t('logistic.addRoute.fields.noDrivers') }}</mat-option>
+                } @else {
+                  <mat-option value="" disabled>{{ t('logistic.addRoute.fields.driverPlaceholder') }}</mat-option>
+                  <mat-option *ngFor="let driver of deliveryUsers()" [value]="driver.id">
+                    {{ driver.name }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <app-selected-deliveries
+            [deliveries]="selectedDeliveries()"
+            [count]="selectedDeliveriesCount()"
+            (deliveryToggled)="onDeliveryToggled($event)" />
+
+          <section class="delivery-map">
+            <header class="delivery-map__header">
+              <h3 class="delivery-map__title">
+                {{ t('logistic.addRoute.map.title') }}
+              </h3>
+              <p class="delivery-map__description">
+                {{ t('logistic.addRoute.map.description') }}
+              </p>
+            </header>
+
+            <app-maps
+              [deliveries]="selectedDeliveries()"
+              [ariaLabel]="t('logistic.addRoute.map.title')"
+              [loadingMessage]="t('logistic.addRoute.map.loading')"
+              [loadErrorMessage]="t('logistic.addRoute.map.loadError')"
+              [emptyMessage]="t('logistic.addRoute.map.noDeliveries')"
+              [missingKeyMessage]="t('logistic.addRoute.map.missingKey')"
+              [origin]="routeOrigin()"
+              [routePath]="calculatedRoutePath()"
+              [routeOrder]="calculatedRouteOrder()" />
+          </section>
+        </mat-card-content>
+
+        <mat-card-actions class="form-actions">
+          <button
+            type="button"
+            class="page-action-button page-action-button--secondary"
+            [disabled]="selectedDeliveriesCount() < 1 || isCalculatingRoutes()"
+            (click)="onCalculateRoutes()">
+            {{ t('logistic.actions.calculateRoute') }}
+          </button>
+
+          <button type="submit" class="page-action-button" [disabled]="routeForm.invalid">
+            {{ t('logistic.actions.createRoute') }}
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </form>
+
+    <section class="deliveries-section">
+      <header class="deliveries-section__header">
+        <h2 class="deliveries-section__title">
+          {{ t('logistic.unassigned.sectionTitle') }}
+        </h2>
+        <p class="deliveries-section__description">
+          {{ t('logistic.unassigned.sectionDescription') }}
+        </p>
+      </header>
+
+      <div class="deliveries-section__body">
+        @if (isLoading()) {
+          <div class="deliveries-section__state">
+            {{ t('logistic.states.loading') }}
+          </div>
+        } @else if (error()) {
+          <div class="deliveries-section__state deliveries-section__state--error">
+            {{ t('logistic.states.error') }}
+            <span class="deliveries-section__state-message">{{ error() }}</span>
+          </div>
+        } @else {
+          <app-unassigned-deliveries
+            [deliveries]="availableDeliveries()"
+            [selectable]="true"
+            [selectedDeliveryIds]="selectedDeliveryIds()"
+            (deliveryToggled)="onDeliveryToggled($event)" />
+        }
+      </div>
+    </section>
+  </div>
+</div>

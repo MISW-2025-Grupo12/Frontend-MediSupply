@@ -24,7 +24,7 @@ export class AuthService {
         tap(response => {
           // Transform user info
           const user: AppUser = {
-            id: response.user_info.id?.toString() || '',
+            id: response.user_info.entidad_id?.toString() || '',
             name: response.user_info.nombre || '',
             email: response.user_info.email || '',
             legalId: response.user_info.identificacion || '',
@@ -38,7 +38,7 @@ export class AuthService {
         }),
         map(response => {
           const user: AppUser = {
-            id: response.user_info.id?.toString() || '',
+            id: response.user_info.entidad_id?.toString() || '',
             name: response.user_info.nombre || '',
             email: response.user_info.email || '',
             legalId: response.user_info.identificacion || '',

@@ -1,12 +1,49 @@
 <div class="product-list" *transloco="let t">
-  <div class="search-container">
-    <div class="search-input-wrapper">
-      <mat-icon class="search-icon">search</mat-icon>
-      <input 
-        type="text" 
-        class="search-input"
-        (input)="onSearchChange($any($event.target).value)"
-        [placeholder]="t('productList.searchPlaceholder')">
+  <div class="filters items-end">
+    <div class="filter control-text">
+      <label class="visually-hidden" for="product-name-filter">{{ t('productList.filters.nameLabel') }}</label>
+      <div class="input-wrapper">
+        <mat-icon class="filter-icon">search</mat-icon>
+        <input
+          id="product-name-filter"
+          type="text"
+          class="filter-input"
+          [value]="searchTerm()"
+          (input)="onSearchChange($any($event.target).value)"
+          [placeholder]="t('productList.filters.namePlaceholder')">
+      </div>
+    </div>
+
+    <div class="filter control-select">
+      <label class="filter-label" for="product-category-filter">{{ t('productList.filters.categoryLabel') }}</label>
+      <div class="select-wrapper">
+        <select
+          id="product-category-filter"
+          class="filter-select"
+          [value]="selectedCategory()"
+          (change)="onCategoryChange($any($event.target).value)">
+          <option value="">{{ t('productList.filters.categoryAll') }}</option>
+          @for (category of categories(); track category) {
+            <option [value]="category">{{ category }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <div class="filter control-select">
+      <label class="filter-label" for="product-warehouse-filter">{{ t('productList.filters.warehouseLabel') }}</label>
+      <div class="select-wrapper">
+        <select
+          id="product-warehouse-filter"
+          class="filter-select"
+          [value]="selectedWarehouse()"
+          (change)="onWarehouseChange($any($event.target).value)">
+          <option value="">{{ t('productList.filters.warehouseAll') }}</option>
+          @for (warehouse of warehouses(); track warehouse) {
+            <option [value]="warehouse">{{ warehouse }}</option>
+          }
+        </select>
+      </div>
     </div>
   </div>
   

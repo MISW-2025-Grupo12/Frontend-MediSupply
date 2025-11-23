@@ -1,0 +1,53 @@
+<div class="page-container" *transloco="let t">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">{{ t('logistic.title') }}</h1>
+    </div>
+
+    <div class="page-actions">
+      @if (isAdmin()) {
+        <a
+          mat-raised-button
+          color="primary"
+          class="page-action-button"
+          routerLink="add-route">
+          <mat-icon>add</mat-icon>
+          {{ t('logistic.actions.createRoute') }}
+        </a>
+      }
+    </div>
+  </div>
+
+  <div class="page-content">
+    <app-routes-list
+      [routes]="routes()"
+      [routesLoading]="routesLoading()"
+      [deliveryUsers]="deliveryUsers()" />
+
+    <section class="deliveries-section mt-4">
+      <header class="deliveries-section__header">
+        <h2 class="deliveries-section__title">
+          {{ t('logistic.unassigned.sectionTitle') }}
+        </h2>
+        <p class="deliveries-section__description">
+          {{ t('logistic.unassigned.sectionDescription') }}
+        </p>
+      </header>
+
+      <div class="deliveries-section__body">
+        @if (isLoading()) {
+          <div class="deliveries-section__state">
+            {{ t('logistic.states.loading') }}
+          </div>
+        } @else if (error()) {
+          <div class="deliveries-section__state deliveries-section__state--error">
+            {{ t('logistic.states.error') }}
+            <span class="deliveries-section__state-message">{{ error() }}</span>
+          </div>
+        } @else {
+          <app-unassigned-deliveries [deliveries]="deliveries()" />
+        }
+      </div>
+    </section>
+  </div>
+</div>

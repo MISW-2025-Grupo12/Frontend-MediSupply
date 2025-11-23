@@ -1,0 +1,72 @@
+<section class="selected-deliveries">
+  <header class="selected-deliveries__header">
+    <h3 class="selected-deliveries__title">
+      {{ 'logistic.addRoute.selectedDeliveries' | transloco }}
+    </h3>
+    <span class="selected-deliveries__count">
+      {{ 'logistic.addRoute.selectedCount' | transloco: { count: count } }}
+    </span>
+  </header>
+
+  @if (count) {
+    <div class="selected-deliveries__list" role="list">
+      @for (delivery of deliveries; track delivery.id) {
+        <article class="selected-deliveries__card" role="listitem">
+          <header class="selected-deliveries__card-header">
+            <span class="selected-deliveries__card-id">
+              {{ (delivery.id + '') | slice:-6 }}
+            </span>
+            <button
+              type="button"
+              class="selected-deliveries__remove-button"
+              (click)="deliveryToggled.emit(delivery)">
+              {{ 'logistic.actions.removeFromRoute' | transloco }}
+            </button>
+          </header>
+
+          <div class="selected-deliveries__card-body">
+            <p class="selected-deliveries__card-row">
+              <span class="selected-deliveries__card-label">
+                {{ 'logistic.unassigned.labels.deliveryAddress' | transloco }}
+              </span>
+              <span class="selected-deliveries__card-value">
+                {{ delivery.address }}
+              </span>
+            </p>
+
+            <p class="selected-deliveries__card-row">
+              <span class="selected-deliveries__card-label">
+                {{ 'logistic.unassigned.labels.deliveryDate' | transloco }}
+              </span>
+              <span class="selected-deliveries__card-value">
+                {{ delivery.deliveryDate | date: 'dd MMM yyyy' }}
+              </span>
+            </p>
+
+            <p class="selected-deliveries__card-row">
+              <span class="selected-deliveries__card-label">
+                {{ 'logistic.unassigned.labels.orderTotal' | transloco }}
+              </span>
+              <span class="selected-deliveries__card-value">
+                {{ delivery.order.total | currency:'COP':'symbol':'1.0-0' }}
+              </span>
+            </p>
+
+            <p class="selected-deliveries__card-row">
+              <span class="selected-deliveries__card-label">
+                {{ 'logistic.unassigned.labels.customer' | transloco }}
+              </span>
+              <span class="selected-deliveries__card-value">
+                {{ delivery.order.customer.name }}
+              </span>
+            </p>
+          </div>
+        </article>
+      }
+    </div>
+  } @else {
+    <p class="selected-deliveries__empty">
+      {{ 'logistic.addRoute.noDeliveriesSelected' | transloco }}
+    </p>
+  }
+</section>

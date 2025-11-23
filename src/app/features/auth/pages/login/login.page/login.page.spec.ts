@@ -9,6 +9,7 @@ import { signal } from '@angular/core';
 import { LoginPage } from './login.page';
 import { AuthStore } from '../../../state/auth.store';
 import { AppStore } from '../../../../../core/state/app.store';
+import { TEST_ROUTES } from '../../../../../core/testing/test-routes';
 
 describe('LoginPage', () => {
   let component: LoginPage;
@@ -73,7 +74,7 @@ describe('LoginPage', () => {
       ],
       providers: [
         provideZonelessChangeDetection(),
-        provideRouter([]),
+        provideRouter(TEST_ROUTES),
         provideHttpClient(),
         provideHttpClientTesting(),
         { provide: AuthStore, useValue: authStoreSpy },

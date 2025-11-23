@@ -1,0 +1,26 @@
+@if (!isMapConfigured) {
+  <p class="map-view__message map-view__message--warning">
+    {{ missingKeyMessage() }}
+  </p>
+} @else {
+  <div class="map-view__container">
+    <div
+      class="map-view__canvas"
+      #mapContainer
+      [attr.aria-label]="ariaLabel()"></div>
+
+    @if (isMapLoading()) {
+      <div class="map-view__overlay">
+        <span>{{ loadingMessage() }}</span>
+      </div>
+    } @else if (mapError() === 'loadFailure') {
+      <div class="map-view__overlay map-view__overlay--error">
+        <span>{{ loadErrorMessage() }}</span>
+      </div>
+    } @else if (!hasDeliveries()) {
+      <div class="map-view__overlay">
+        <span>{{ emptyMessage() }}</span>
+      </div>
+    }
+  </div>
+}

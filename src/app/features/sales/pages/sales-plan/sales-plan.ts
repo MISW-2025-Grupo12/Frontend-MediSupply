@@ -9,6 +9,8 @@ import { LocaleRouteService } from '../../../../core/services/locale-route.servi
 import { SalesState } from '../../state/sales.store';
 import { SalesPlan } from '../../../../shared/models/salesPlan.model';
 import { CustomerVisit } from '../../../../shared/models/customerVisit.model';
+import { AppStore } from '../../../../core/state/app.store';
+import { UserType } from '../../../../shared/enums/user-type';
 
 @Component({
   selector: 'app-sales-plan',
@@ -20,8 +22,14 @@ export class SalesPlanComponent implements OnInit {
   private localeRouteService = inject(LocaleRouteService);
   private router = inject(Router);
   private salesState = inject(SalesState);
+  private appStore = inject(AppStore);
 
   salesPlans = this.salesState.salesPlans;
+
+  isAdmin(): boolean {
+    const user = this.appStore.user();
+    return user?.role === UserType.ADMIN;
+  }
 
   ngOnInit(): void {
     this.salesState.loadSalesPlans();

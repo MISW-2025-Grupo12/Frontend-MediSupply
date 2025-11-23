@@ -11,6 +11,7 @@ import { Provider } from '../../../../shared/models/provider.model';
 import { Category } from '../../../../shared/models/category.model';
 import { TranslocoTestingModule } from '@ngneat/transloco';
 import { Product } from '../../../../shared/models/product.model';
+import { TEST_ROUTES } from '../../../../core/testing/test-routes';
 
 describe('AddProduct', () => {
   let component: AddProduct;
@@ -58,7 +59,7 @@ describe('AddProduct', () => {
       ],
       providers: [
         provideZonelessChangeDetection(),
-        provideRouter([]),
+        provideRouter(TEST_ROUTES),
         { provide: ProductsService, useValue: productsServiceSpy },
         { provide: LocaleRouteService, useValue: localeRouteServiceSpy },
         { provide: ApiClientService, useValue: apiClientServiceSpy }
