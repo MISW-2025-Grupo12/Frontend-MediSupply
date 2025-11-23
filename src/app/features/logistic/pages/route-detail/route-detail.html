@@ -13,7 +13,7 @@
           {{ t('logistic.routeDetail.header.title', { id: shortId(routeDetail.id) }) }}
         </h1>
         <p class="route-detail-subtitle">
-          {{ t('logistic.routeDetail.header.subtitle', { date: (routeDetail.date | date: 'shortDate') }) }}
+          {{ t('logistic.routeDetail.header.subtitle', { date: (routeDetail.date | date: 'mediumDate') }) }}
         </p>
       </div>
     } @else {
@@ -132,7 +132,7 @@
                       <div class="route-delivery__meta">
                         <span>
                           {{ t('logistic.routeDetail.deliveries.deliveryDate') }}:
-                          <strong>{{ delivery.deliveryDate | date: 'medium' }}</strong>
+                          <strong>{{ delivery.deliveryDate | date: 'mediumDate' }}</strong>
                         </span>
                         <span>
                           {{ t('logistic.routeDetail.deliveries.orderId') }}:
